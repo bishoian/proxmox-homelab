@@ -6,7 +6,7 @@ A hands-on homelab project focused on virtualization, Linux administration, netw
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. The extended self-test was started but will be stopped early by choice; only the initial SMART snapshot will be used for this first media-storage setup. The host reports an Intel Core i5-8500, six CPUs, and 15.46 GiB of usable RAM. The onboard Ethernet link (`nic0`) is currently negotiating at 1 Gbps. The Proxmox VE and Ceph Tentacle no-subscription repositories are enabled alongside Debian Trixie and Debian Security. Package upgrades have been applied successfully, and the Updates view now reports no available updates. A reboot is pending to activate the updated Proxmox kernel; the running kernel and manager version will be checked afterward. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), [Hardware Inventory](docs/hardware-inventory.md), and the [Media Storage Design](storage/storage-layout.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. The extended self-test was intentionally stopped early; its log records Aborted by host with 80% remaining. Only the initial SMART snapshot is available for the first media-storage setup, so the drive will be monitored and important data backed up. The host reports an Intel Core i5-8500, six CPUs, and 15.46 GiB of usable RAM. The onboard Ethernet link (`nic0`) is currently negotiating at 1 Gbps. The Proxmox VE and Ceph Tentacle no-subscription repositories are enabled alongside Debian Trixie and Debian Security. Package upgrades have been applied successfully, and the Updates view now reports no available updates. A reboot is pending to activate the updated Proxmox kernel; the running kernel and manager version will be checked afterward. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), [Hardware Inventory](docs/hardware-inventory.md), and the [Media Storage Design](storage/storage-layout.md).
 
 ## Project goals
 
@@ -81,7 +81,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Configure Proxmox VE and Ceph no-subscription repositories.
    - [x] Refresh package lists successfully.
    - [x] Review and apply available package upgrades.
-   - [ ] Reboot after the extended Seagate SMART self-test finishes and verify the active kernel and Proxmox version.
+   - [ ] Reboot to activate the updated kernel and verify the active kernel and Proxmox version.
    - [ ] Configure time and administrative settings.
    - [ ] Create a Debian virtual machine.
    - [ ] Establish and test a backup approach before relying on hosted services.
@@ -89,7 +89,8 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Connect the D4-320 to the Proxmox host.
    - [x] Verify disk detection and confirm SMART overall status is `PASSED`.
    - [x] Review the initial SMART attributes and record the reported power-on counters.
-   - [ ] Complete the running extended SMART self-test and review its result.
+   - [x] Stop the extended SMART self-test early and record its incomplete result.
+   - [ ] Consider a completed extended test during a later maintenance window.
    - [ ] Configure a filesystem, mount point, and storage layout.
    - [ ] Deploy Jellyfin.
 4. **Application hosting and monitoring**
