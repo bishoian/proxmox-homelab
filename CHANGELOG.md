@@ -25,6 +25,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Recorded the displayed power-on-hours and head-flying-hours counters.
 - Started an extended SMART self-test on the Seagate; the drive estimated approximately 10 hours to completion.
 
+### Host baseline
+- Reviewed the Proxmox node Summary: six CPUs, 15.46 GiB usable RAM, EFI boot, and Proxmox manager 9.2.2.
+- Noted a CPU model discrepancy between the original listing (i5-8500T) and the Summary label (i5-8500 @ 3.00 GHz); shell verification is pending.
+- Identified that the Enterprise package repository is enabled but requires a subscription; repository configuration for the unsubscribed lab is pending.
+
 ### Current state
 - Proxmox VE 9.2.2 is installed and accessible through the web interface.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
