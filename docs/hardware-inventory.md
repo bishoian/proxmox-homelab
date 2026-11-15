@@ -27,7 +27,8 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 - The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
 - The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
 - The extended SMART self-test was intentionally stopped early; the self-test log reports Aborted by host with 80% remaining. A complete extended test has not passed.
-- The `lsblk` output shows no partitions, filesystem, or mount point on `/dev/sda`. It has not been initialized or formatted.
+- The `lsblk` output shows no partitions, filesystem, or mount point on the Seagate device. It has not been initialized or formatted.
+- A persistent model-based `/dev/disk/by-id` link has been identified for passing the physical disk to VM 100. The exact device identifier and drive serial are retained locally rather than published.
 - The second matching 6 TB drive is awaiting delivery.
 - Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
 - Selected layout: the first 6 TB drive will be dedicated to the Debian media-services VM as a standalone ext4 filesystem. The second matching drive will remain unused for later expansion.
@@ -80,5 +81,6 @@ The HDMI cables are for displays, not network connections. The RJ45/HDMI pass-th
 - [x] Confirm SMART overall status reports `PASSED`.
 - [x] Review initial SMART attributes and record the reported power-on counters.
 - [ ] Run an extended SMART self-test.
-- [ ] Configure a safe storage mount and backup strategy.
+- [x] Identify the Seagate's persistent `/dev/disk/by-id` link for VM passthrough.
+- [ ] Pass the physical disk through to VM 100 and configure a safe storage mount and backup strategy.
 - [ ] Verify PDU load and airflow under normal operating conditions.
