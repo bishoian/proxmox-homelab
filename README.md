@@ -6,7 +6,7 @@ I am building this homelab as a practical learning environment for virtualizatio
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow incrementally from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** I have created the bootable Proxmox installer USB and enabled Intel Virtualization Technology (VT-x) and Intel VT-d in the M920q BIOS. Proxmox has not yet been installed or configured. See [Project Status](docs/project-status.md) for the current milestone and [Hardware Inventory](docs/hardware-inventory.md) for the equipment in my build.
+> **Current status:** I created the bootable Proxmox installer USB, enabled Intel VT-x and Intel VT-d in the M920q BIOS, and successfully booted to the Proxmox installer. Proxmox has not yet been installed or configured. See [Project Status](docs/project-status.md) for the current milestone and [Hardware Inventory](docs/hardware-inventory.md) for the equipment in my build.
 
 ## My project objectives
 
@@ -75,8 +75,9 @@ This diagram represents my target design, not a claim that these services are al
 1. **Preparation and installation**
    - [x] Create bootable Proxmox installer USB.
    - [x] Enable Intel Virtualization Technology (VT-x) and Intel VT-d in BIOS.
-   - [ ] Boot the installer USB and verify the installer starts.
-   - [ ] Install Proxmox VE to the 256 GB NVMe.
+   - [x] Boot from the USB and reach the Proxmox installer.
+   - [ ] Select and verify the 256 GB NVMe installation target.
+   - [ ] Install Proxmox VE.
    - [ ] Record host network configuration and confirm web UI access.
 2. **Foundational administration**
    - [ ] Configure updates, time, administrative access, and storage.
