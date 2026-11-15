@@ -6,7 +6,7 @@ A hands-on homelab project focused on virtualization, Linux administration, netw
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB; disk detection and health checks are the next storage tasks. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`; detailed attributes and an extended self-test are the next checks. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## Project goals
 
@@ -24,8 +24,8 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from 
 | Component | Configuration | Current status |
 |---|---|---|
 | Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500T, 16 GB RAM, 256 GB NVMe | Proxmox VE 9.2.2 installed; web interface accessible |
-| Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Connected to Lenovo; disk detection pending |
-| Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One installed; second awaiting delivery |
+| Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Connected to Lenovo; installed drive detected |
+| Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One detected; SMART overall status passed; second awaiting delivery |
 | Network switch | RealHD 8-port 2.5GbE web-managed switch with 1 × 10G SFP+ port | Installed in rack |
 | Router | NETGEAR Nighthawk RAX41v2 | Existing router |
 | Rack | GeeekPi DeskPi RackMate T1 Plus, 8U, 10-inch, 260 mm depth | Assembled |
@@ -61,7 +61,7 @@ See [Hardware Inventory](docs/hardware-inventory.md) for the complete component 
                                 6 TB installed
 ```
 
-The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB rather than to the Ethernet switch. The enclosure is connected; the installed drive's visibility and health have not yet been verified.
+The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB rather than to the Ethernet switch. The enclosure is connected, and the installed drive is visible to Proxmox. Its overall SMART status reports `PASSED`; detailed health attributes and an extended self-test remain to be reviewed.
 
 The diagram shows the target network layout. Switch cabling, port assignments, and VLAN configuration will be documented as they are confirmed. Planned virtual machines and services are not considered deployed until they have been configured and tested.
 
@@ -82,7 +82,8 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [ ] Establish and test a backup approach before relying on hosted services.
 3. **Storage and media services**
    - [x] Connect the D4-320 to the Proxmox host.
-   - [ ] Verify disk detection and inspect SMART health.
+   - [x] Verify disk detection and confirm SMART overall status is `PASSED`.
+   - [ ] Review detailed SMART attributes and run an extended self-test.
    - [ ] Configure a filesystem, mount point, and storage layout.
    - [ ] Deploy Jellyfin.
 4. **Application hosting and monitoring**
