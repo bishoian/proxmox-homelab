@@ -22,3 +22,9 @@ Notable project documentation and infrastructure milestones are recorded here.
 
 ### Updated
 - Recorded that the Lenovo successfully booted from the Proxmox USB installer. Disk selection and installation remain pending.
+
+### Added
+- Documented the initial Proxmox VE installation on the Lenovo M920q's internal NVMe and first boot to the local console.
+
+### Status
+- Proxmox VE installation completed; first web-interface login remains to be verified.
