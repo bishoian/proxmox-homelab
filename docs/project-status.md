@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Initial preparation; Proxmox installation not yet completed.
+**Overall status:** BIOS virtualization settings configured; Proxmox installation not yet completed.
 
 I use this checklist as the source of truth for project progress. I mark an item complete only after I have performed the work and verified the result. Planned and unverified work remains clearly labelled.
 
@@ -11,9 +11,10 @@ I use this checklist as the source of truth for project progress. I mark an item
 - [x] Create the public GitHub repository.
 - [x] Document the initial hardware inventory and planned network architecture.
 - [x] Create the bootable Proxmox installation USB.
-- [ ] Verify that the USB boots successfully on the M920q.
-- [ ] Enter BIOS/UEFI and verify Intel virtualization settings.
-- [ ] Confirm UEFI boot configuration.
+- [x] Enable Intel Virtualization Technology (VT-x) in the M920q BIOS.
+- [x] Enable Intel VT-d in the M920q BIOS.
+- [ ] Boot the installer USB and verify that the Proxmox installer starts.
+- [ ] Confirm the intended UEFI boot mode and USB boot selection.
 - [ ] Confirm the 256 GB NVMe is the intended installation target.
 - [ ] Keep the TerraMaster and data disks disconnected during Proxmox installation to reduce the risk of selecting the wrong disk.
 
@@ -87,7 +88,8 @@ I use this checklist as the source of truth for project progress. I mark an item
 
 | Date | Activity | Result / evidence |
 |---|---|---|
-| 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized; Proxmox installation remains pending |
+| 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized |
+| 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS and saved the settings | User-reported BIOS configuration complete; USB boot and Proxmox installation remain pending |
 
 ## Change-control notes
 
