@@ -164,6 +164,12 @@ A concise record of the homelab's major build and documentation milestones.
 - Standardized the in-container `/data` path for Radarr, Sonarr, and qBittorrent; Jellyfin receives a read-only media-library mount.
 - The Compose file is in GitHub but has not yet been copied to or deployed on the Debian VM.
 
+### Media-stack Compose project validation
+- Created the `/opt/media-stack` project and per-service configuration/cache directories on Debian.
+- Downloaded the committed Compose definition from GitHub to the VM.
+- Validated the project with `docker compose config --quiet`; command completed with exit status 0.
+- Application containers have not yet been deployed; service startup and health checks remain next.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
