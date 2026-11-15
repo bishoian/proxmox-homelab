@@ -1,16 +1,17 @@
 # Project Status
 
+**Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
 **Overall status:** Initial preparation; Proxmox installation not yet completed.
 
-This checklist is the source of truth for project progress. Items are marked complete only when the work has been performed and the result has been verified. User-reported physical setup is identified as such.
+I use this checklist as the source of truth for project progress. I mark an item complete only after I have performed the work and verified the result. Planned and unverified work remains clearly labelled.
 
 ## Milestone 0 — Preparation
 
-- [x] Public GitHub repository created.
-- [x] Initial project README and hardware inventory committed.
-- [x] Bootable Proxmox installation USB created (user-reported).
-- [ ] Verify USB boots successfully on the M920q.
+- [x] Create the public GitHub repository.
+- [x] Document the initial hardware inventory and planned network architecture.
+- [x] Create the bootable Proxmox installation USB.
+- [ ] Verify that the USB boots successfully on the M920q.
 - [ ] Enter BIOS/UEFI and verify Intel virtualization settings.
 - [ ] Confirm UEFI boot configuration.
 - [ ] Confirm the 256 GB NVMe is the intended installation target.
@@ -21,7 +22,7 @@ This checklist is the source of truth for project progress. Items are marked com
 - [ ] Install Proxmox VE to the Lenovo's 256 GB NVMe.
 - [ ] Record Proxmox VE version and installation date.
 - [ ] Record CPU, memory, NVMe model, and NIC information.
-- [ ] Configure a stable management address after inspecting the existing LAN.
+- [ ] Configure a stable management address after inspecting my existing LAN.
 - [ ] Verify the management web UI from another trusted device.
 - [ ] Apply updates using the appropriate Proxmox repository configuration.
 - [ ] Configure time synchronization and administrative access.
@@ -31,13 +32,13 @@ This checklist is the source of truth for project progress. Items are marked com
 
 - [ ] Connect the TerraMaster D4-320 to the Lenovo.
 - [ ] Confirm enclosure detection and USB connection mode.
-- [ ] Record each disk's model, capacity, and serial privately.
+- [ ] Record each disk's model and capacity; keep serial numbers in private records only.
 - [ ] Capture SMART health and power-on hours.
 - [ ] Run extended SMART self-tests and review results.
 - [ ] Decide on filesystem, mount point, and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
-**Caution:** The second 6 TB disk is awaiting delivery. Do not assume mirroring, RAID, pooling, or backup behavior merely because multiple disks are installed in the enclosure.
+**Caution:** My second 6 TB disk is awaiting delivery. I will not assume mirroring, RAID, pooling, or backup behavior merely because multiple disks are installed in the enclosure.
 
 ## Milestone 3 — Debian and application hosting
 
@@ -62,7 +63,7 @@ This checklist is the source of truth for project progress. Items are marked com
 - [ ] Monitor host and service availability.
 - [ ] Document routine update and maintenance steps.
 - [ ] Test a restore procedure.
-- [ ] Record a troubleshooting incident with root cause and validation evidence.
+- [ ] Record a troubleshooting incident with root cause and verification.
 
 ## Milestone 6 — Windows administration lab
 
@@ -75,7 +76,7 @@ This checklist is the source of truth for project progress. Items are marked com
 
 ## Milestone 7 — Networking
 
-- [ ] Identify exact RealHD switch model and firmware.
+- [ ] Identify the exact RealHD switch model and firmware.
 - [ ] Document current switch port map and link speeds.
 - [ ] Verify router capabilities relevant to VLANs.
 - [ ] Design management, server, trusted-client, and lab segments.
@@ -86,17 +87,17 @@ This checklist is the source of truth for project progress. Items are marked com
 
 | Date | Activity | Result / evidence |
 |---|---|---|
-| 2026-11-15 | Created public GitHub project and documented the initial hardware inventory and planned network architecture | Repository initialized; Proxmox installation remains pending |
+| 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized; Proxmox installation remains pending |
 
 ## Change-control notes
 
-For significant changes, document:
+For significant changes, I record:
 
 - What changed and why.
 - The affected hardware, VM, container, or network component.
 - Commands or configuration changes, with secrets removed.
-- A before/after validation.
+- Before-and-after validation.
 - Rollback or recovery steps.
 - Lessons learned.
 
-Do not mark a task complete based only on an intention or an unverified configuration change.
+I do not mark a task complete based only on an intention or an unverified configuration change.
