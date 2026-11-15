@@ -2,7 +2,7 @@
 
 **Host:** Proxmox VE 9.2.2  
 **Base distribution:** Debian 13 (Trixie)  
-**Status:** Repository configuration completed; package-list refresh successful; upgrade review pending.
+**Status:** Repository refresh and package upgrade completed; post-upgrade reboot and verification pending.
 
 ## Enabled repositories
 
@@ -33,9 +33,10 @@ The Ceph repository is configured for future package availability and learning. 
 
 - [x] Refresh package lists from **Node → Updates → Refresh**.
 - [x] Confirm Debian, Proxmox VE no-subscription, and Ceph Tentacle no-subscription sources were reached and package lists were read successfully.
-- [ ] Review the available package list and any dependency or repository errors.
-- [ ] Apply updates after reviewing the proposed changes.
-- [ ] Reboot if a kernel or other reboot-requiring component is updated.
-- [ ] Verify Proxmox VE version and node health after updates.
+- [x] Review the available package list.
+- [x] Apply the available package upgrades.
+- [x] Confirm the Updates view reports no remaining upgrades.
+- [ ] Reboot after the Seagate extended SMART self-test finishes to activate the updated kernel.
+- [ ] Verify the running kernel, Proxmox VE version, and node health after reboot.
 
-The refresh task completed with `TASK OK` and reported 530 kB fetched. No package upgrade has been performed yet.
+The refresh task completed with `TASK OK` and reported 530 kB fetched. The available package upgrades were subsequently applied without reported errors. The Updates view now reports no available updates. The package list included a newer Proxmox kernel and manager package; the active kernel and running manager version will be verified after a planned reboot.
