@@ -82,10 +82,10 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Refresh package lists successfully.
    - [x] Review and apply available package upgrades.
    - [x] Reboot to activate the updated kernel and verify the running kernel and Proxmox package versions.
-   - [ ] Configure time and administrative settings.
+   - [x] Configure time and administrative settings.
    - [x] Create VM 100 (`media-server`) with the planned CPU, memory, NVMe disk, and VirtIO network configuration.
    - [x] Complete Debian 13.7 base installation and install GRUB to the VM's virtual disk.
-   - [ ] Detach the installer ISO, reboot, and verify the first Debian boot.
+   - [x] Detach the installer ISO, reboot, and verify the first Debian boot.
    - [ ] Establish and test a backup approach before relying on hosted services.
 3. **Storage and media services**
    - [x] Connect the D4-320 to the Proxmox host.
