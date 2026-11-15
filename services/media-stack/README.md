@@ -24,7 +24,7 @@ Docker Compose project for the Debian 13 media-services VM.
 
 ## Deployment location
 
-On the Debian VM, the Compose project will be stored at `/opt/media-stack`:
+On the Debian VM, the Compose project is stored at `/opt/media-stack`:
 
 - `compose.yaml` — service definitions
 - `config/<service>/` — persistent application settings and databases
