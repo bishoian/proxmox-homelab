@@ -14,3 +14,8 @@ Notable project documentation and infrastructure milestones are recorded here.
 - Bootable Proxmox USB creation reported complete.
 - Proxmox installation and configuration remain pending.
 - One 6 TB Seagate Exos disk is installed; the second matching disk is awaiting delivery.
+
+
+### Updated
+- Recorded the Lenovo M920q BIOS configuration: Intel VT-x and Intel VT-d enabled and saved (user-reported).
+- Updated the project README and milestone checklist. USB boot and Proxmox installation remain pending.
