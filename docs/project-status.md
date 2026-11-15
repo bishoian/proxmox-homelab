@@ -100,7 +100,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED` |
 | 2026-11-15 | Reviewed the Seagate's initial SMART attribute table | Zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC counts; 24°C reported temperature |
 | 2026-11-15 | Started the Seagate extended SMART self-test | Test running in the background; estimated duration approximately 10 hours; final result pending |
-| 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs reported; 15.46 GiB usable RAM; 67.73 GiB root filesystem capacity; six-core CPU label shows i5-8500 @ 3.00 GHz and needs confirmation against the hardware listing |
+| 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
 | 2026-11-15 | Reviewed Proxmox repository status | Enterprise repository is enabled and reports that a valid subscription is required; no-subscription repository configuration is pending |
 
 ## Change notes
