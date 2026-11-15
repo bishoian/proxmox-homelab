@@ -62,10 +62,16 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 - [x] Verify outbound package repository connectivity with `sudo apt update`.
 - [x] Confirm the SSH service is active.
 - [ ] Verify SSH login from another LAN device.
-- [ ] Install the `qemu-guest-agent` package and enable its service.
+- [x] Confirm `qemu-guest-agent` package is installed at the current repository version.
+- [x] Confirm `systemctl is-active qemu-guest-agent` returns `active`.
+- [ ] Verify Proxmox-side communication with `qm agent 100 ping`.
 - [ ] Apply Debian updates.
 - [x] Record the guest's hostname, Debian release, kernel, architecture, and interface status.
 - [ ] Record the guest package baseline after updates.
+
+## QEMU Guest Agent
+
+The `qemu-guest-agent` package was already installed at the current repository version. The service check returned `active`. An attempt to use `systemctl enable --now` printed the expected no-installation-config message because the Debian unit is static; the agent is active, so it does not need to be enabled with `systemctl enable`. The output also included `systemd-ssh-generator` AF_VSOCK diagnostics, which are separate from the QEMU Guest Agent service. Proxmox-side agent communication remains to be validated.
 
 ## Initial guest verification
 
