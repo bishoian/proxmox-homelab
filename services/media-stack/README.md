@@ -2,7 +2,7 @@
 
 Docker Compose project for the Debian 13 media-services VM.
 
-## Planned services
+## Services
 
 | Service | Purpose | LAN web UI |
 |---|---|---:|
@@ -34,11 +34,11 @@ On the Debian VM, the Compose project will be stored at `/opt/media-stack`:
 
 Use the Debian VM's current LAN address with the ports listed above. These are intended for trusted LAN access. Do not configure router port forwarding for the administration interfaces. Set strong application credentials during first-run configuration.
 
-The qBittorrent LinuxServer image prints a temporary Web UI password in its container log on first startup. Retrieve it from the local Docker log and change it in qBittorrent settings after logging in.
+The qBittorrent LinuxServer image prints a temporary Web UI password in its container log on first startup. Use the locally displayed first-start credential to sign in as `admin`, then immediately replace it with a strong unique password in qBittorrent settings. Never commit this temporary credential or the replacement password to this repository.
 
 ## Deployment status
 
-The Compose definition has been copied to `/opt/media-stack/compose.yaml` on the Debian VM. The project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. The Compose project is validated but the application containers have not yet been started. Deployment and service-level checks remain pending.
+The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debian VM. Project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. All five images were pulled and all five application containers were started with `docker compose up -d`. The subsequent `docker compose ps` output showed Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running. Initial logs showed normal Jellyfin startup, database migrations for Radarr and Sonarr, Prowlarr listening on its configured port, and qBittorrent Web UI initialization. Full first-run UI configuration, credential rotation, and end-to-end service integration checks remain pending.
 
 ## References
 
