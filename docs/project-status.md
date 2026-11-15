@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** BIOS virtualization settings configured; Proxmox installation not yet completed.
+**Overall status:** Proxmox installer booted successfully; installation has not yet been started.
 
 I use this checklist as the source of truth for project progress. I mark an item complete only after I have performed the work and verified the result. Planned and unverified work remains clearly labelled.
 
@@ -13,9 +13,9 @@ I use this checklist as the source of truth for project progress. I mark an item
 - [x] Create the bootable Proxmox installation USB.
 - [x] Enable Intel Virtualization Technology (VT-x) in the M920q BIOS.
 - [x] Enable Intel VT-d in the M920q BIOS.
-- [ ] Boot the installer USB and verify that the Proxmox installer starts.
-- [ ] Confirm the intended UEFI boot mode and USB boot selection.
-- [ ] Confirm the 256 GB NVMe is the intended installation target.
+- [x] Boot from the USB and reach the Proxmox installer.
+- [ ] Verify the installer target disk is the Lenovo's internal 256 GB NVMe.
+- [ ] Confirm the intended filesystem and installation options.
 - [ ] Keep the TerraMaster and data disks disconnected during Proxmox installation to reduce the risk of selecting the wrong disk.
 
 ## Milestone 1 — Proxmox installation and baseline
@@ -89,7 +89,8 @@ I use this checklist as the source of truth for project progress. I mark an item
 | Date | Activity | Result / evidence |
 |---|---|---|
 | 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized |
-| 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS and saved the settings | User-reported BIOS configuration complete; USB boot and Proxmox installation remain pending |
+| 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS and saved the settings | BIOS configuration completed |
+| 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Reached the Proxmox installer; target disk not yet selected and installation not started |
 
 ## Change-control notes
 
