@@ -103,6 +103,10 @@ After VM 100 was started, Debian detected the passed-through Seagate as a separa
 
 Inside Debian, `lsblk -f /dev/sdb` displayed the disk but no filesystem, UUID, label, or mount point. `sudo wipefs --no-act /dev/sdb` returned no known signatures and made no changes. These results indicate no recognizable filesystem or partition signatures were found; the disk has not yet been partitioned or formatted.
 
+## GPT partitioning
+
+Created a GPT partition table inside Debian on the passed-through Seagate disk, with one partition spanning the available capacity. The resulting partition is `/dev/sdb1`, approximately 5.5 TiB. The captured `lsblk` output shows no filesystem or mount point on the new partition; ext4 formatting and mounting are pending.
+
 ## Planned media storage
 
 The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It will be formatted as ext4 inside Debian and mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
