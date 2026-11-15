@@ -58,8 +58,12 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 - [x] Create VM 100 (`media-server`) with four vCPUs, 4 GiB RAM, a 64 GiB `local-lvm` system disk, VirtIO SCSI, QEMU Agent enabled, and VirtIO networking on `vmbr0`.
 - [x] Attach the Debian 13.7 netinst ISO and boot to the graphical installer.
-- [ ] Complete Debian installation and initial configuration.
-- [ ] Configure SSH access.
+- [x] Complete Debian 13.7 base installation using the graphical installer.
+- [x] Install GRUB to the VM's virtual system disk.
+- [ ] Detach the installer ISO and verify the first boot from the virtual disk.
+- [ ] Log in and verify network connectivity.
+- [ ] Verify SSH service availability and remote access.
+- [ ] Install and verify QEMU Guest Agent.
 - [ ] Apply system updates and establish a maintenance routine.
 - [ ] Install Docker Engine and Compose plugin in the Debian VM.
 - [ ] Deploy a first test service.
@@ -122,7 +126,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
 | 2026-11-15 | Rebooted Proxmox and checked package versions | Running kernel `7.0.14-29-pve`; `pve-manager` `9.2.27`; `proxmox-ve` meta-package `9.2.0`; updated host booted successfully |
 | 2026-11-15 | Created VM 100 (`media-server`) | Configured 4 vCPUs, 4 GiB RAM, 64 GiB NVMe-backed `local-lvm` disk, VirtIO SCSI single, QEMU Agent, and VirtIO network on `vmbr0` |
-| 2026-11-15 | Booted the Debian 13.7 netinst ISO in VM 100 | Debian graphical installer boot menu displayed in BIOS mode; OS installation not yet completed |
+| 2026-11-15 | Booted the Debian 13.7 netinst ISO in VM 100 | Debian graphical installer boot menu displayed in BIOS mode |
+| 2026-11-15 | Completed Debian 13.7 installation in VM 100 | Base system and selected packages installed; GRUB configured on the VM's virtual system disk; first boot and login verification pending |
 
 ## Change notes
 
