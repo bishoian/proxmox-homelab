@@ -10,25 +10,26 @@ The equipment below makes up the Proxmox homelab. Installation and commissioning
 |---:|---|---|---|
 | 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Proxmox VE 9.2.2 installed; web interface accessible |
 
-The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is UP and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
+The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is UP and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink. The internal NVMe is identified as a Lenovo NVMe 2280S 256GB SSD and reports 238.5G in Linux. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
 
 ## Storage
 
 | Quantity | Component | Specifications | Status |
 |---:|---|---|---|
 | 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Connected to Lenovo; drive detected by Proxmox |
-| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive detected as `/dev/sda`; SMART overall status passed; initial attributes reviewed; second awaiting delivery |
+| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive detected as `/dev/sda` (5.5 TiB reported by Linux); unpartitioned; SMART overall status passed; second awaiting delivery |
 
 ### Storage notes
 
 - The D4-320 is direct-attached storage. It connects to the Lenovo over USB; it is not an Ethernet NAS.
-- One 6 TB drive is installed in the enclosure and is detected by Proxmox as `/dev/sda`.
+- One 6 TB drive is installed in the enclosure and is detected by Proxmox as `/dev/sda` (5.5 TiB as displayed by Linux).
 - The Proxmox disk view reports SMART overall status `PASSED` for the Seagate and the internal NVMe.
 - The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
 - The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
-- An extended SMART self-test is still required.
+- An extended SMART self-test is running; its result is pending.
+- The `lsblk` output shows no partitions, filesystem, or mount point on `/dev/sda`. It has not been initialized or formatted.
 - The second matching 6 TB drive is awaiting delivery.
-- Drive health, power-on hours, firmware, and SMART attributes have not yet been recorded.
+- Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
 - The filesystem, mount point, permissions, and backup approach will be selected before the disk is used for important data.
 
 ## Networking
@@ -68,7 +69,8 @@ The HDMI cables are for displays, not network connections. The RJ45/HDMI pass-th
 
 - [x] Install Proxmox VE and verify web interface access.
 - [ ] Record BIOS/UEFI version and installed RAM layout.
-- [ ] Record NVMe model and health.
+- [x] Record NVMe model and partition layout.
+- [ ] Review detailed NVMe health attributes.
 - [x] Verify the Lenovo's onboard Ethernet link at 1 Gbps.
 - [ ] Identify the RealHD switch's exact model/revision and firmware.
 - [ ] Document switch port assignments.
