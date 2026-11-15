@@ -30,6 +30,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed the installed processor is an Intel Core i5-8500 (standard model, not the i5-8500T).
 - Identified that the Enterprise package repository is enabled but requires a subscription; repository configuration for the unsubscribed lab is pending.
 
+### Host storage layout
+- Identified the internal NVMe as a Lenovo NVMe 2280S 256GB SSD; Linux reports 238.5G.
+- Recorded the Proxmox EFI and LVM layout, including the 8 GB swap volume, 69.4 GB root filesystem, and LVM-thin data pool.
+- Confirmed the Seagate Exos is visible as a separate 5.5T disk with no partitions, filesystem, or mount point.
+
 ### Host hardware and network checks
 - Confirmed the installed processor from the Proxmox Shell as an Intel Core i5-8500 at 3.00 GHz with six logical CPUs.
 - Confirmed the physical Ethernet interface (`nic0`) is UP at 1000 Mb/s; the Proxmox bridge (`vmbr0`) uses the same uplink. The wireless interface is DOWN.
