@@ -97,7 +97,11 @@ The physical Seagate Exos disk has been attached to VM 100 as SCSI1 using the pe
 
 ## Guest-side data disk detection
 
-After VM 100 was started, Debian detected the passed-through Seagate as a separate 5.5 TiB SCSI disk at `/dev/sdb`. The guest reports its presented model as `QEMU HARDDISK`, which is the virtual model exposed by the Proxmox/QEMU SCSI presentation. The existing Debian operating-system disk remains `/dev/sda` at 64 GiB. No partitions, filesystem, or mount point are present on `/dev/sdb` in the captured `lsblk` output. A read-only signature inspection is still required before creating a GPT partition table or filesystem.
+After VM 100 was started, Debian detected the passed-through Seagate as a separate 5.5 TiB SCSI disk at `/dev/sdb`. The guest reports its presented model as `QEMU HARDDISK`, which is the virtual model exposed by the Proxmox/QEMU SCSI presentation. The existing Debian operating-system disk remains `/dev/sda` at 64 GiB. No partitions, filesystem, or mount point are present on `/dev/sdb` in the captured `lsblk` output. Read-only inspection has now been completed: `lsblk -f /dev/sdb` showed no filesystem or mount point, and `sudo wipefs --no-act /dev/sdb` returned no known signatures. The command did not modify the disk. GPT initialization and filesystem creation have not yet occurred.
+
+## Read-only disk signature inspection
+
+Inside Debian, `lsblk -f /dev/sdb` displayed the disk but no filesystem, UUID, label, or mount point. `sudo wipefs --no-act /dev/sdb` returned no known signatures and made no changes. These results indicate no recognizable filesystem or partition signatures were found; the disk has not yet been partitioned or formatted.
 
 ## Planned media storage
 
