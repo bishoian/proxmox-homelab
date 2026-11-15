@@ -139,6 +139,13 @@ A concise record of the homelab's major build and documentation milestones.
 - Applied directory mode `2775` with setgid inheritance and file mode `0664` to any existing files.
 - Verified the directory tree reports `drwxrwsr-x` with owner/group `ian:ian`.
 
+### Docker repository preparation
+- Checked for conflicting Docker/Podman packages; none were reported as installed.
+- Installed `ca-certificates` and `curl` prerequisites.
+- Added Docker’s official Debian signing key and stable APT repository for Debian Trixie amd64.
+- Ran `sudo apt update` successfully; Docker Release metadata and the stable package index were retrieved.
+- Docker Engine and Compose installation remain pending.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
