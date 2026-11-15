@@ -4,7 +4,7 @@
 **VM name:** `media-server`  
 **Hypervisor:** Proxmox VE on Lenovo ThinkCentre M920q Tiny  
 **Guest OS:** Debian GNU/Linux 13.7 (Trixie), amd64  
-**Build status:** Debian 13.7 installed; first login verified as `ian`; hostname and active network interface verified. DNS, internet access, SSH, and QEMU Guest Agent checks remain.
+**Build status:** Debian 13.7 installed; login, DNS, APT repository access, SSH, and QEMU Guest Agent communication verified. The Seagate physical disk is attached as SCSI1 and detected inside Debian as a separate 5.5 TiB SCSI disk; filesystem setup remains pending.
 
 ## VM configuration
 
@@ -43,7 +43,7 @@ The Debian installer detected one approximately 68.7 GB QEMU virtual disk. The p
 | Primary partition | 65.2 GB | ext4 | `/` |
 | Logical partition | 3.5 GB | swap | swap |
 
-The partition changes were written only to the VM's virtual system disk. The Seagate Exos remains unpartitioned and unformatted. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Guest-side model and capacity verification remains pending.
+The partition changes were written only to the VM's virtual system disk. The Seagate Exos remains unpartitioned and unformatted. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Inside Debian, `lsblk` reports the passed-through disk as `sdb`, 5.5 TiB, with model presented as `QEMU HARDDISK`; no partitions, filesystem, or mount point are shown.
 
 ## Installation result
 
@@ -94,6 +94,10 @@ The `qemu-guest-agent` package was already installed at the current repository v
 ## Physical data disk passthrough
 
 The physical Seagate Exos disk has been attached to VM 100 as SCSI1 using the persistent model-based device ID. The Proxmox VM configuration confirms SCSI0 remains the 64 GiB NVMe-backed Debian system disk and remains first in the boot order. The virtual CD/DVD drive has no installation ISO attached. No partition table or filesystem has been created on the Seagate. The next step is to boot Debian and verify the second disk from inside the guest before any destructive storage operation.
+
+## Guest-side data disk detection
+
+After VM 100 was started, Debian detected the passed-through Seagate as a separate 5.5 TiB SCSI disk at `/dev/sdb`. The guest reports its presented model as `QEMU HARDDISK`, which is the virtual model exposed by the Proxmox/QEMU SCSI presentation. The existing Debian operating-system disk remains `/dev/sda` at 64 GiB. No partitions, filesystem, or mount point are present on `/dev/sdb` in the captured `lsblk` output. A read-only signature inspection is still required before creating a GPT partition table or filesystem.
 
 ## Planned media storage
 
