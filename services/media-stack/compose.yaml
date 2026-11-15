@@ -1,0 +1,88 @@
+# Media services for the Debian VM.
+# Application configuration stays on the VM's NVMe-backed system disk.
+# Media and download data stays on the Seagate filesystem mounted at /srv/media.
+#
+# All download-management containers use /data as the same in-container path.
+# This keeps downloads and final libraries on one filesystem for hardlink support.
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    user: "1000:1000"
+    environment:
+      TZ: America/Chicago
+    ports:
+      - "8096:8096/tcp"
+      - "7359:7359/udp"
+    volumes:
+      - ./config/jellyfin:/config
+      - ./cache/jellyfin:/cache
+      - type: bind
+        source: /srv/media/data/media
+        target: /media
+        read_only: true
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: America/Chicago
+      UMASK: "002"
+    ports:
+      - "7878:7878/tcp"
+    volumes:
+      - ./config/radarr:/config
+      - /srv/media/data:/data
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: America/Chicago
+      UMASK: "002"
+    ports:
+      - "8989:8989/tcp"
+    volumes:
+      - ./config/sonarr:/config
+      - /srv/media/data:/data
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: America/Chicago
+      UMASK: "002"
+    ports:
+      - "9696:9696/tcp"
+    volumes:
+      - ./config/prowlarr:/config
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: America/Chicago
+      UMASK: "002"
+      WEBUI_PORT: "8080"
+      TORRENTING_PORT: "6881"
+    ports:
+      - "8080:8080/tcp"
+      - "6881:6881/tcp"
+      - "6881:6881/udp"
+    volumes:
+      - ./config/qbittorrent:/config
+      - /srv/media/data:/data
+    restart: unless-stopped
