@@ -38,7 +38,7 @@ The qBittorrent LinuxServer image prints a temporary Web UI password in its cont
 
 ## Deployment status
 
-This Compose definition is the planned stack configuration. It should only be marked deployed after it is copied to the VM, validated with `docker compose config`, started, and each application UI is checked.
+The Compose definition has been copied to `/opt/media-stack/compose.yaml` on the Debian VM. The project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. The Compose project is validated but the application containers have not yet been started. Deployment and service-level checks remain pending.
 
 ## References
 
