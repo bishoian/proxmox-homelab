@@ -62,7 +62,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Install GRUB to the VM's virtual system disk.
 - [x] Boot the installed Debian system and reach the `media-server` tty1 login prompt.
 - [ ] Confirm the installer ISO is detached from the virtual CD/DVD drive.
-- [ ] Log in and verify network connectivity.
+- [x] Log in using the regular `ian` account.
+- [x] Confirm hostname `media-server`, Debian 13 Trixie, and x86-64 architecture.
+- [x] Confirm VirtIO interface `ens18` is up and has an IPv4 address assigned.
+- [ ] Verify DNS resolution and internet connectivity.
 - [ ] Verify SSH service availability and remote access.
 - [ ] Install and verify QEMU Guest Agent.
 - [ ] Apply system updates and establish a maintenance routine.
@@ -129,7 +132,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Created VM 100 (`media-server`) | Configured 4 vCPUs, 4 GiB RAM, 64 GiB NVMe-backed `local-lvm` disk, VirtIO SCSI single, QEMU Agent, and VirtIO network on `vmbr0` |
 | 2026-11-15 | Booted the Debian 13.7 netinst ISO in VM 100 | Debian graphical installer boot menu displayed in BIOS mode |
 | 2026-11-15 | Completed Debian 13.7 installation in VM 100 | Base system and selected packages installed; GRUB configured on the VM's virtual system disk |
-| 2026-11-15 | Booted the installed Debian VM for the first time | Debian reached the `media-server` tty1 login prompt; account login and network/SSH verification pending |
+| 2026-11-15 | Booted the installed Debian VM for the first time | Debian reached the `media-server` tty1 login prompt |
+| 2026-11-15 | Verified initial Debian guest login and network interface | Logged in as `ian`; `hostnamectl` confirmed Debian 13 Trixie on x86-64 with hostname `media-server`; VirtIO interface `ens18` was UP and had an IPv4 address assigned. DNS, internet, and SSH tests remain pending |
 
 ## Change notes
 
