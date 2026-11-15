@@ -62,6 +62,7 @@ A concise record of the homelab's major build and documentation milestones.
 
 ### Media storage design
 - Selected the first 6 TB Seagate as a standalone media and application-data disk for a Debian VM running Jellyfin and supporting services such as Radarr and Sonarr.
+- Decided to stop the extended SMART test early and proceed using the initial SMART snapshot; the test will be recorded as aborted/incomplete rather than passed.
 - Planned physical disk passthrough to the Debian VM using a persistent `/dev/disk/by-id` path and ext4 inside the guest.
 - Reserved the second 6 TB drive for later expansion. MergerFS and multi-disk pooling are no longer part of the initial setup.
 - Kept the VM operating system and container configuration on the internal NVMe; media, downloads, and library data will share one filesystem in the guest.
