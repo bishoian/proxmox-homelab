@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Host:** Lenovo ThinkCentre M920q Tiny  
-**Status:** Installed; web interface verification pending.
+**Status:** Installed; web interface login verified.
 
 ## Objective
 
@@ -33,13 +33,13 @@ Before installation, I enabled Intel Virtualization Technology (VT-x) and Intel 
 | Network addressing | Static IPv4 configuration with a router reservation |
 | Gateway and DNS | Existing home router |
 
-The management address and hardware MAC address are intentionally omitted from this public document. They are retained only in the local configuration and private network records.
-
 ## Installation result
 
 The installer completed and the Lenovo rebooted successfully to the Proxmox local console. The console displayed the HTTPS web-management endpoint on TCP port 8006.
 
-The first browser login has not yet been verified. The installed Proxmox VE version and host hardware inventory will be recorded after accessing the management interface.
+I opened the management endpoint from another device on the home network and successfully authenticated to the Proxmox web interface using the root account and Linux PAM authentication.
+
+The dashboard displayed the `pve` node as online. The interface identifies the installed release as **Proxmox Virtual Environment 9.2.2**.
 
 ## First access procedure
 
@@ -52,18 +52,17 @@ The first browser login has not yet been verified. The installed Proxmox VE vers
 
 ## Post-install validation checklist
 
-- [ ] Browser can reach the Proxmox web interface.
-- [ ] Root authentication succeeds.
-- [ ] Node appears online in the interface.
-- [ ] Proxmox VE version is recorded.
+- [x] Browser can reach the Proxmox web interface.
+- [x] Root authentication succeeds.
+- [x] Node appears online in the interface.
+- [x] Proxmox VE version is visible in the interface (9.2.2).
 - [ ] CPU and memory are recognized as expected.
 - [ ] NVMe storage is visible and healthy.
 - [ ] Network interface and link status are verified.
-- [ ] Appropriate update repositories are configured.
-- [ ] A backup plan is defined before creating important workloads.
+- [ ] Review update repositories and apply available updates.
+- [ ] Define a backup plan before creating important workloads.
 
 ## Lessons and operational notes
 
 - The Proxmox host is managed through a web interface; a permanent monitor and keyboard are not required for normal administration after network access is verified.
-- The D4-320 is USB direct-attached storage and should be commissioned separately after the Proxmox host baseline is stable.
-- Public documentation must not contain passwords, hardware serial numbers, private keys, or exact private network details.
+- The D4-320 is USB direct-attached storage. It has now been connected to the Lenovo and will be commissioned separately after its disk is detected and checked.
