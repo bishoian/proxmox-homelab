@@ -20,7 +20,9 @@ A concise record of the homelab's major build and documentation milestones.
 - Connected the TerraMaster D4-320 to the Lenovo over USB.
 - Traced the initial missing-drive symptom to the enclosure's rear power switch being off.
 - Powered on the enclosure and refreshed Proxmox disk inventory; the 6 TB Seagate Exos appeared as `/dev/sda`.
-- Confirmed the SMART overall status reports `PASSED`; detailed attributes and an extended self-test remain pending.
+- Confirmed the SMART overall status reports `PASSED`.
+- Reviewed the initial SMART attribute table: zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts; 24°C reported temperature.
+- Recorded the displayed power-on-hours and head-flying-hours counters. An extended SMART self-test remains pending.
 
 ### Current state
 - Proxmox VE 9.2.2 is installed and accessible through the web interface.
