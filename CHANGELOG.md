@@ -36,9 +36,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Retained the Debian Trixie and Debian Security repositories.
 - Added documentation for the package source configuration.
 - Refreshed the APT package database successfully; Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories were reached, 530 kB was fetched, and the task ended with `TASK OK`.
-- Left package upgrade review and installation for the next maintenance step.
+- Reviewed and installed the available package upgrades without reported errors.
+- Confirmed the Proxmox Updates view reports `No updates available`.
+- Noted that a newer Proxmox kernel and manager package were included; reboot and active-version verification remain pending until the extended Seagate SMART test completes.
 
 ### Current state
-- Proxmox VE 9.2.2 is installed and accessible through the web interface.
+- Proxmox VE is installed and accessible through the web interface; the displayed manager version will be rechecked after the post-upgrade reboot.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; detailed health checks and storage configuration remain pending.
