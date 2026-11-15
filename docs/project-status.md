@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE 9.2.2 installed and accessible; D4-320 drive detected with SMART overall status passed.
+**Overall status:** Proxmox VE 9.2 updated, rebooted, and verified; D4-320 drive detected with an initial SMART overall status of passed.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -18,7 +18,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Reboot successfully to the Proxmox local console.
 - [x] Log in to the Proxmox web interface.
 - [x] Confirm the `pve` node is online.
-- [x] Confirm installed Proxmox VE version 9.2.2.
+- [x] Install Proxmox VE 9.2 from the installation image.
 
 ## Milestone 1 — Proxmox host baseline
 
@@ -31,8 +31,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Refresh package lists successfully from all configured sources.
 - [x] Review and apply available package upgrades.
 - [x] Confirm the Updates view reports no available updates after the upgrade.
-- [ ] Reboot to activate the updated kernel.
-- [ ] Verify the active kernel and Proxmox manager version after reboot.
+- [x] Reboot to activate the updated kernel.
+- [x] Verify active kernel `7.0.14-29-pve` and `pve-manager` version `9.2.27`.
 - [ ] Configure time and administrative settings.
 - [ ] Document host recovery and console access.
 
@@ -117,7 +117,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
-| 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view now reports no updates available; reboot pending to activate the updated kernel and verify running versions |
+| 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
+| 2026-11-15 | Rebooted Proxmox and checked package versions | Running kernel `7.0.14-29-pve`; `pve-manager` `9.2.27`; `proxmox-ve` meta-package `9.2.0`; updated host booted successfully |
 
 ## Change notes
 
