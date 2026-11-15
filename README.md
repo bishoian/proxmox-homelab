@@ -25,7 +25,7 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from 
 |---|---|---|
 | Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500, 16 GB RAM, 256 GB NVMe | Proxmox VE 9.2.2 installed; web interface accessible |
 | Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Connected to Lenovo; installed drive detected |
-| Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One detected; SMART overall status passed; second awaiting delivery |
+| Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One detected as a 5.5 TiB disk; unpartitioned; initial SMART status passed; second awaiting delivery |
 | Network switch | RealHD 8-port 2.5GbE web-managed switch with 1 × 10G SFP+ port | Installed in rack |
 | Router | NETGEAR Nighthawk RAX41v2 | Existing router |
 | Rack | GeeekPi DeskPi RackMate T1 Plus, 8U, 10-inch, 260 mm depth | Assembled |
