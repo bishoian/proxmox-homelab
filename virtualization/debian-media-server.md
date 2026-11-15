@@ -143,7 +143,11 @@ The Debian account `ian` was confirmed as UID 1000 with primary GID 1000. Owners
 
 ## Docker repository preparation
 
-Installed the Debian prerequisites `ca-certificates` and `curl`. Checked for conflicting Docker/Podman packages; none were reported as installed. Added Docker’s official Debian package signing key and configured its stable APT repository for Debian Trixie on amd64. `sudo apt update` successfully retrieved the Docker repository Release metadata and package index; APT reported all package lists up to date. Docker Engine and the Compose plugin have not yet been installed.
+Installed the Debian prerequisites `ca-certificates` and `curl`. Checked for conflicting Docker/Podman packages; none were reported as installed. Added Docker’s official Debian package signing key and configured its stable APT repository for Debian Trixie on amd64. `sudo apt update` successfully retrieved the Docker repository Release metadata and package index; APT reported all package lists up to date. Docker Engine and the Compose plugin were subsequently installed and verified; details are recorded below.
+
+## Docker installation and validation
+
+Installed Docker Engine and CLI version 29.9.3, containerd 2.4.2, and Docker Compose plugin version 5.7.1 from Docker's official Debian Trixie stable APT repository. `systemctl is-active docker` returned `active`. `docker version` reported matching client and server Engine versions. `docker compose version` reported v5.7.1. The official `hello-world:latest` image was successfully pulled from Docker Hub, a test container was created and executed, and the expected success message was displayed. Docker commands are currently run with `sudo`; membership in the `docker` group has not been granted.
 
 ## Planned media storage
 
