@@ -91,7 +91,7 @@ The extended SMART self-test was started and then intentionally stopped before c
 ## Implementation checklist
 
 - [x] Stop the extended SMART self-test and record the Aborted by host result.
-- [ ] Reboot Proxmox to activate the installed kernel updates.
+- [x] Reboot Proxmox to activate the installed kernel updates.
 - [ ] Create a Debian VM with its system disk on the NVMe.
 - [ ] Identify the Seagate using a persistent `/dev/disk/by-id` path.
 - [ ] Attach the physical Seagate disk to the Debian VM.
