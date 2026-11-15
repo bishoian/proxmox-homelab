@@ -124,6 +124,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified the filesystem type, label, and generated UUID with `lsblk -f`.
 - The filesystem is not mounted yet; the next step is a persistent UUID-based mount at `/srv/media`.
 
+### Seagate mount configuration
+- Added a UUID-based `/etc/fstab` entry to mount the ext4 filesystem at `/srv/media` with `defaults,nofail`.
+- Ran `sudo mount -a` successfully and verified the mount with `findmnt` and `df -hT`; the filesystem is mounted read/write with approximately 5.4 TiB available.
+- A `systemctl daemon-reload` attempt without elevated privileges was denied; the mount is active. A privileged reload and reboot persistence check remain pending.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
