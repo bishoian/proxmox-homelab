@@ -48,6 +48,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Stop the extended SMART self-test early and record the incomplete result. The self-test log reports Aborted by host with 80% remaining; this is not a passing extended test.
 - [ ] Consider a completed extended SMART self-test during a later maintenance window.
 - [x] Select a standalone ext4 data disk dedicated to the Debian media-services VM; reserve the second drive for later.
+- [x] Identify the Seagate's persistent `/dev/disk/by-id` entry on the Proxmox host (device-specific path retained locally, not in public notes).
+- [ ] Shut down VM 100 cleanly and attach the physical Seagate to SCSI1.
+- [ ] Confirm the passed-through disk appears in Debian.
 - [ ] Create a GPT partition table and ext4 filesystem after disk passthrough to Debian.
 - [ ] Configure the UUID-based mount and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
@@ -129,6 +132,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
 | 2026-11-15 | Inspected block devices with `lsblk` | Internal Lenovo NVMe reports 238.5G with EFI and Proxmox LVM layout; Seagate Exos appears as a separate 5.5T disk with no partitions, filesystem, or mount point |
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
+| 2026-11-15 | Identified the Seagate's persistent disk path for VM passthrough | Confirmed the 5.5 TiB Seagate Exos is a separate USB disk with no partitions, filesystem, or mount point; a model-based `/dev/disk/by-id` link resolves to the disk. Exact serial and device path are omitted from public documentation |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
