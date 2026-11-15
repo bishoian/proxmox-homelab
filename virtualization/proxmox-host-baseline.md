@@ -32,7 +32,7 @@ These figures are initial observations, not performance benchmarks. A subsequent
 | Boot mode | EFI |
 | Manager | pve-manager 9.2.2 |
 
-The CPU label differs from the original hardware listing, which specified an i5-8500T. The exact installed CPU model will be checked from the host shell before updating the inventory. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
+The processor was subsequently confirmed as the standard Intel Core i5-8500, not the i5-8500T originally listed. The hardware inventory now reflects the installed CPU. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
 
 ## Management access
 
