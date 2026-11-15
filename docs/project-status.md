@@ -71,7 +71,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Verify outbound access to Debian package repositories with `sudo apt update`; APT reported all packages up to date.
 - [ ] Test SSH login remotely from the Windows workstation.
 - [x] Confirm QEMU Guest Agent package is installed at the current repository version and service reports `active`.
-- [ ] Verify Proxmox can communicate with the guest agent using `qm agent 100 ping`.
+- [x] Verify Proxmox-to-guest QEMU Guest Agent communication using `qm agent 100 ping`; command completed successfully without output.
 - [ ] Apply system updates and establish a maintenance routine.
 - [ ] Install Docker Engine and Compose plugin in the Debian VM.
 - [ ] Deploy a first test service.
@@ -140,7 +140,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Verified initial Debian guest login and network interface | Logged in as `ian`; `hostnamectl` confirmed Debian 13 Trixie on x86-64 with hostname `media-server`; VirtIO interface `ens18` was UP and had an IPv4 address assigned |
 | 2026-11-15 | Checked Debian administration and network services | `sudo -v` succeeded; default route via home gateway is present; `getent hosts deb.debian.org` resolved successfully; `systemctl is-active ssh` returned `active`. Remote SSH login remains pending |
 | 2026-11-15 | Refreshed Debian package indexes in VM 100 | `sudo apt update` successfully reached Debian Security, Trixie, and Trixie Updates repositories; APT reported all packages are up to date |
-| 2026-11-15 | Installed and checked QEMU Guest Agent in VM 100 | Package was already at the current repository version; `systemctl is-active qemu-guest-agent` returned `active`. The unit is static and does not require `systemctl enable`; Proxmox-side communication check pending |
+| 2026-11-15 | Installed and checked QEMU Guest Agent in VM 100 | Package was already at the current repository version; `systemctl is-active qemu-guest-agent` returned `active`. The unit is static and does not require `systemctl enable`; Proxmox `qm agent 100 ping` completed successfully without output, confirming host-to-guest communication |
 
 ## Change notes
 
