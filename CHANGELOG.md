@@ -178,6 +178,11 @@ A concise record of the homelab's major build and documentation milestones.
 - qBittorrent generated a temporary first-start administrator password. The credential is excluded from the public repository and must be rotated during first-run setup.
 - Application UI setup, authentication hardening, and end-to-end integrations remain pending.
 
+### Media application first-run configuration
+- Completed initial setup of Jellyfin and qBittorrent through their web interfaces.
+- Replaced qBittorrent's temporary first-start administrator password; no credentials are stored in the repository.
+- Radarr, Sonarr, and Prowlarr configuration and integration remain in progress.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
