@@ -87,7 +87,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Confirm QEMU Guest Agent package is installed at the current repository version and service reports `active`.
 - [x] Verify Proxmox-to-guest QEMU Guest Agent communication using `qm agent 100 ping`; command completed successfully without output.
 - [ ] Apply system updates and establish a maintenance routine.
-- [ ] Install Docker Engine and Compose plugin in the Debian VM.
+- [x] Configure Docker’s official Debian APT repository for Trixie and refresh package indexes successfully.
+- [ ] Install Docker Engine, CLI, containerd, Buildx, and Compose plugin in the Debian VM.
 - [ ] Deploy a first test service.
 - [ ] Record service health checks, logs, and update procedure.
 
@@ -154,6 +155,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Created the media directory structure in Debian | Created torrent, usenet, movie, TV, and music directories under `/srv/media/data`; confirmed the directory tree with `find` |
 | 2026-11-15 | Checked the Debian account identity for container permissions | `id` confirmed account `ian` uses UID 1000 and primary GID 1000 and belongs to the `sudo` group |
 | 2026-11-15 | Configured media directory ownership and permissions | Set `/srv/media/data` ownership to `1000:1000`, directories to mode `2775` (setgid), and existing files to `0664`; verified displayed directories as `drwxrwsr-x ian:ian` |
+| 2026-11-15 | Added Docker’s official Debian package repository | Configured the Docker Debian Trixie stable repository and successfully ran `sudo apt update`; Docker package indexes downloaded successfully and APT reported all package lists current |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
