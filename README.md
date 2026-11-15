@@ -6,7 +6,7 @@ I am building this homelab as a practical learning environment for virtualizatio
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow incrementally from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** I created the bootable Proxmox installer USB, enabled Intel VT-x and Intel VT-d in the M920q BIOS, and successfully booted to the Proxmox installer. Proxmox has not yet been installed or configured. See [Project Status](docs/project-status.md) for the current milestone and [Hardware Inventory](docs/hardware-inventory.md) for the equipment in my build.
+> **Current status:** Proxmox VE has been installed to the Lenovo's internal NVMe drive, and the system has rebooted to the Proxmox local console. The console displays the web-management endpoint. First web-interface login and host verification are the next steps. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## My project objectives
 
@@ -23,7 +23,7 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow increm
 
 | Component | Configuration | Current status |
 |---|---|---|
-| Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500T, 16 GB RAM, 256 GB NVMe | Installed in rack |
+| Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500T, 16 GB RAM, 256 GB NVMe | Proxmox VE installed |
 | Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Owned; commissioning pending |
 | Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One installed; second awaiting delivery |
 | Network switch | RealHD 8-port 2.5GbE web-managed switch with 1 × 10G SFP+ port | Installed in rack |
@@ -52,7 +52,7 @@ See [Hardware Inventory](docs/hardware-inventory.md) for the complete component 
                        M920q
                             |
                       Proxmox VE
-                      (planned)
+                     (installed)
                  /          |          \
           Debian VM    Debian LXC    Windows VM
           Docker       Monitoring    Server lab
@@ -76,9 +76,9 @@ This diagram represents my target design, not a claim that these services are al
    - [x] Create bootable Proxmox installer USB.
    - [x] Enable Intel Virtualization Technology (VT-x) and Intel VT-d in BIOS.
    - [x] Boot from the USB and reach the Proxmox installer.
-   - [ ] Select and verify the 256 GB NVMe installation target.
-   - [ ] Install Proxmox VE.
-   - [ ] Record host network configuration and confirm web UI access.
+   - [x] Install Proxmox VE to the Lenovo's internal NVMe and reboot to the local console.
+   - [ ] Log in to the web interface and verify host status.
+   - [ ] Record the installed Proxmox VE version and host hardware details.
 2. **Foundational administration**
    - [ ] Configure updates, time, administrative access, and storage.
    - [ ] Create a Debian virtual machine.
@@ -102,6 +102,7 @@ This diagram represents my target design, not a claim that these services are al
 - [Hardware Inventory](docs/hardware-inventory.md) — my equipment, specifications, and physical installation status.
 - [Network Architecture](docs/network-architecture.md) — current and target network design.
 - [Project Status](docs/project-status.md) — my milestone checklist and verification log.
+- [Proxmox Installation Notes](virtualization/proxmox-installation.md) — installer choices and first-boot process.
 - `virtualization/` — Proxmox host, VM, and container build records.
 - `services/` — deployment notes and configuration examples for hosted applications.
 - `troubleshooting/` — sanitized incidents, diagnosis, fixes, and verification.
