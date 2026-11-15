@@ -4,7 +4,7 @@
 **VM name:** `media-server`  
 **Hypervisor:** Proxmox VE on Lenovo ThinkCentre M920q Tiny  
 **Guest OS:** Debian GNU/Linux 13.7 (Trixie), amd64  
-**Build status:** Debian 13.7 installed and successfully booted to the `media-server` tty1 login prompt; account login and network verification pending.
+**Build status:** Debian 13.7 installed; first login verified as `ian`; hostname and active network interface verified. DNS, internet access, SSH, and QEMU Guest Agent checks remain.
 
 ## VM configuration
 
@@ -49,7 +49,7 @@ The partition changes were written only to the VM's virtual system disk. The Sea
 
 Debian displayed the installer completion screen after the base system and selected packages had been installed. GRUB installation was confirmed for the VM's virtual disk.
 
-The VM has booted from its installed Debian system and reached the `media-server` tty1 login prompt. Account login and network connectivity have not yet been verified. Confirm the installer ISO is detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
+The VM has booted from its installed Debian system. Login succeeded with the `ian` account. The `hostnamectl` output confirmed hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture. The `ip -br addr` output showed the VirtIO interface `ens18` UP with an IPv4 address assigned. DNS resolution, internet connectivity, and SSH remote access have not yet been tested. Confirm the installer ISO remains detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
 
 ## First-boot checklist
 
@@ -62,7 +62,21 @@ The VM has booted from its installed Debian system and reached the `media-server
 - [ ] Verify SSH access from another LAN device.
 - [ ] Install the `qemu-guest-agent` package and enable its service.
 - [ ] Apply Debian updates.
-- [ ] Record the guest's actual kernel, IP address, and package baseline.
+- [x] Record the guest's hostname, Debian release, kernel, architecture, and interface status.
+- [ ] Record the guest package baseline after updates.
+
+## Initial guest verification
+
+| Check | Result |
+|---|---|
+| Account login | `ian` |
+| Hostname | `media-server` |
+| Operating system | Debian GNU/Linux 13 (Trixie) |
+| Kernel | `6.12.17+deb13-amd64` |
+| Architecture | x86-64 |
+| Virtualization | KVM |
+| Network interface | `ens18`, UP |
+| IPv4 | Address assigned; exact private address omitted from this public record |
 
 ## Planned media storage
 
