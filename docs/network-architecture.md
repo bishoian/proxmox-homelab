@@ -1,8 +1,8 @@
 # Network Architecture
 
-This document describes the intended network layout for the homelab. It is deliberately a design document until the actual cabling, addressing, link speeds, and switch configuration have been inspected.
+This document describes the homelab's current connection layout and the planned network design. Port assignments, link speeds, and switch configuration will be filled in as they are verified.
 
-## Physical topology (planned)
+## Physical topology
 
 ```text
                          Internet
@@ -26,35 +26,27 @@ This document describes the intended network layout for the homelab. It is delib
              storage
 ```
 
-The patch panel is a passive cabling termination/distribution point. It does not switch or route traffic. The exact relationship between the switch, patch panel, rack shelf pass-through ports, router, and room cabling must be verified and then reflected in an updated diagram.
+The patch panel is a passive cabling termination/distribution point. It does not switch or route traffic. The exact relationship between the switch, patch panel, rack shelf pass-through ports, router, and room cabling will be recorded after the cables are traced.
 
-The TerraMaster D4-320 connects to the Lenovo over USB. It does not connect to the Ethernet switch.
+The Proxmox host has been installed and its web interface is accessible. The D4-320 is physically connected to the Lenovo over USB; disk detection and health checks are pending.
 
 ## Equipment
 
 | Device | Role | Notes |
 |---|---|---|
-| NETGEAR Nighthawk RAX41v2 | Existing home router / internet gateway | Current routing and DHCP behavior to be inspected |
+| NETGEAR Nighthawk RAX41v2 | Existing home router / internet gateway | Current routing and DHCP behavior |
 | RealHD 8-port 2.5GbE managed switch | Ethernet switching | Exact model/revision, firmware, management method, and configuration to be verified |
 | GeeekPi 12-port CAT6 patch panel | Passive cable organization | No switching or routing functionality |
-| Lenovo ThinkCentre M920q | Planned Proxmox host | Built-in NIC link speed and driver to be verified |
-| TerraMaster D4-320 | Direct-attached storage | USB connection to the Lenovo, not Ethernet |
+| Lenovo ThinkCentre M920q | Proxmox host | Built-in NIC link speed and driver to be verified |
+| TerraMaster D4-320 | Direct-attached storage | Connected to Lenovo over USB; not Ethernet |
 
 ## Baseline network first
 
-The initial deployment should use the existing home LAN without introducing VLANs or changing router-wide settings.
+The initial deployment uses the existing home LAN without introducing VLANs or changing router-wide settings.
 
-Before changing any configuration:
+The Proxmox host was installed with a static management address and a reservation in the home router. The web interface is accessible from another device on the LAN.
 
-1. Record the router's LAN subnet, gateway, and DHCP range privately.
-2. Identify the switch management method and reset/recovery procedure from its documentation.
-3. Identify the switch's current management address and firmware.
-4. Confirm the Lenovo can obtain a DHCP lease and reach the router.
-5. Record the Lenovo's negotiated link speed and interface name.
-6. Reserve a management address for Proxmox in the router, or select a static address outside the DHCP pool after checking for conflicts.
-7. Verify the Proxmox web interface from another trusted LAN device.
-
-Do not publish the actual home subnet, gateway, management address, Wi-Fi details, or device MAC addresses in this public repository. Use placeholders in examples.
+Next, I will verify the host's interface status and negotiated link speed, then document the switch's management method and current port configuration.
 
 ## Planned segmentation (future)
 
@@ -69,7 +61,7 @@ VLANs are a later learning milestone, not part of the initial installation.
 
 These VLAN IDs are examples, not configured networks. The router or a dedicated firewall must provide appropriate Layer 3 routing, DHCP, and firewall policy for devices in different VLANs. A managed switch alone does not automatically provide those services.
 
-Before implementing VLANs, verify that the current router or a planned firewall supports the required VLAN interfaces and routing behavior. Preserve a known-good management path and recovery method so an incorrect VLAN change does not lock out the switch or Proxmox host.
+Before implementing VLANs, I will verify that the current router or a planned firewall supports the required VLAN interfaces and routing behavior. I will preserve a known-good management path and recovery method while testing.
 
 ## Link-speed expectations
 
@@ -91,7 +83,7 @@ The switch's 10G SFP+ port is an uplink option, not evidence that the Lenovo cur
 | 8 | TBD | TBD | Default LAN | No |
 | SFP+ | TBD / unused | TBD | TBD | No |
 
-Update this table only after physically tracing and verifying each connection. Avoid recording sensitive MAC addresses or private addressing in this public file.
+Update this table after physically tracing and verifying each connection.
 
 ## Validation checklist
 
@@ -100,6 +92,7 @@ Update this table only after physically tracing and verifying each connection. A
 - [ ] Trace the Lenovo's Ethernet path through the rack shelf/pass-through, if used.
 - [ ] Confirm link lights and negotiated speeds.
 - [ ] Identify switch firmware and management access.
-- [ ] Record a sanitized port map.
-- [ ] Confirm Proxmox management access from a trusted device.
+- [ ] Record switch port mappings.
+- [x] Confirm Proxmox management interface is accessible from a LAN device.
+- [ ] Confirm Proxmox detects the D4-320's installed drive.
 - [ ] Plan VLANs only after the baseline LAN is stable.
