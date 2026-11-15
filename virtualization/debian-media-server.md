@@ -4,7 +4,7 @@
 **VM name:** `media-server`  
 **Hypervisor:** Proxmox VE on Lenovo ThinkCentre M920q Tiny  
 **Guest OS:** Debian GNU/Linux 13.7 (Trixie), amd64  
-**Build status:** Debian installation completed; first boot and login verification pending.
+**Build status:** Debian 13.7 installed and successfully booted to the `media-server` tty1 login prompt; account login and network verification pending.
 
 ## VM configuration
 
@@ -49,7 +49,7 @@ The partition changes were written only to the VM's virtual system disk. The Sea
 
 Debian displayed the installer completion screen after the base system and selected packages had been installed. GRUB installation was confirmed for the VM's virtual disk.
 
-The VM has not yet been verified after its first boot. Before rebooting, detach the Debian installer ISO from the VM's virtual CD/DVD drive so the guest boots from its installed system disk.
+The VM has booted from its installed Debian system and reached the `media-server` tty1 login prompt. Account login and network connectivity have not yet been verified. Confirm the installer ISO is detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
 
 ## First-boot checklist
 
