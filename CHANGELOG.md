@@ -60,6 +60,13 @@ A concise record of the homelab's major build and documentation milestones.
 - Kept active VM system disks on the internal NVMe; HDDs are intended for bulk data and local backup targets.
 - Documented the proposed design separately from implementation. No formatting, mounting, or pool creation has occurred.
 
+### Media storage design
+- Selected the first 6 TB Seagate as a standalone media and application-data disk for a Debian VM running Jellyfin and supporting services such as Radarr and Sonarr.
+- Planned physical disk passthrough to the Debian VM using a persistent `/dev/disk/by-id` path and ext4 inside the guest.
+- Reserved the second 6 TB drive for later expansion. MergerFS and multi-disk pooling are no longer part of the initial setup.
+- Kept the VM operating system and container configuration on the internal NVMe; media, downloads, and library data will share one filesystem in the guest.
+- The storage design is selected but has not been implemented.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface; the displayed manager version will be rechecked after the post-upgrade reboot.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
