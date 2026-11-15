@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE 9.2.2 installed and accessible; D4-320 connected, with disk detection still to be checked.
+**Overall status:** Proxmox VE 9.2.2 installed and accessible; D4-320 drive detected with SMART overall status passed.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -31,9 +31,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 ## Milestone 2 — Storage commissioning
 
 - [x] Connect the TerraMaster D4-320 to the Lenovo over USB.
-- [ ] Verify that Proxmox detects the enclosure and its installed drive.
-- [ ] Identify the installed drive by model and capacity.
-- [ ] Capture SMART health and power-on hours.
+- [x] Verify that Proxmox detects the installed drive.
+- [x] Identify the installed drive as a 6 TB Seagate Exos ST6000NM0115.
+- [x] Confirm SMART overall status reports `PASSED`.
+- [ ] Review detailed SMART attributes and power-on hours.
 - [ ] Run an extended SMART self-test and review the result.
 - [ ] Decide on filesystem, mount point, and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
@@ -92,7 +93,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Proxmox installer started successfully |
 | 2026-11-15 | Installed Proxmox VE using ext4 on the internal NVMe and rebooted | System reached the Proxmox local console |
 | 2026-11-15 | Opened the Proxmox web interface and signed in | Dashboard loaded; node `pve` online; Proxmox VE 9.2.2 confirmed |
-| 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Enclosure physically connected; disk detection and health checks pending |
+| 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Enclosure connected; drive initially absent because the rear power switch was off |
+| 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED`; detailed attributes and extended test pending |
 
 ## Change notes
 
