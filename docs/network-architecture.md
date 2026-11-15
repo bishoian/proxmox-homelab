@@ -46,7 +46,7 @@ The initial deployment uses the existing home LAN without VLANs or changes to ro
 
 The Proxmox host has a static management address reserved in the home router. The web interface is accessible from another device on the LAN.
 
-The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The Proxmox bridge (`vmbr0`) is UP and uses the same physical uplink. The wireless interface (`wlo1`) is DOWN; the server is using its wired connection. The current physical path from the Lenovo to the router or managed switch will be traced and documented separately.
+The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The Proxmox bridge (`vmbr0`) is UP and uses the same physical uplink. The wireless interface (`wlo1`) is DOWN; the server is using its wired connection. The current physical path from the Lenovo to the router or managed switch will be traced and documented separately. The host's network configuration and 1 Gbps link have been confirmed from the Proxmox Shell.
 
 ## Planned segmentation
 
