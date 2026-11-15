@@ -96,9 +96,11 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Identify the Seagate using a persistent `/dev/disk/by-id` path on the Proxmox host.
 - [x] Shut down VM 100 and attach the physical Seagate as SCSI1 using its persistent `/dev/disk/by-id` path.
 - [x] Boot Debian and verify the passed-through disk appears as a separate 5.5 TiB SCSI disk inside the guest.
-- [ ] Inspect existing signatures using read-only tools before formatting.
+- [x] Inspect the guest disk with `lsblk -f`; no filesystem or mount point is reported.
+- [x] Run `wipefs --no-act` on the guest disk; no known signatures are reported and the command makes no changes.
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
-- [ ] Create a GPT partition table and ext4 filesystem inside Debian.
+- [ ] Create a GPT partition table on the guest data disk.
+- [ ] Create an ext4 filesystem inside Debian.
 - [ ] Mount the filesystem persistently by UUID at `/srv/media`.
 - [ ] Create the shared `/srv/media/data` directory structure.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
