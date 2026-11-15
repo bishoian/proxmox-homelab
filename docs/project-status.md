@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox installer booted successfully; installation has not yet been started.
+**Overall status:** Proxmox VE installed; first web-interface login and host verification pending.
 
 I use this checklist as the source of truth for project progress. I mark an item complete only after I have performed the work and verified the result. Planned and unverified work remains clearly labelled.
 
@@ -14,17 +14,16 @@ I use this checklist as the source of truth for project progress. I mark an item
 - [x] Enable Intel Virtualization Technology (VT-x) in the M920q BIOS.
 - [x] Enable Intel VT-d in the M920q BIOS.
 - [x] Boot from the USB and reach the Proxmox installer.
-- [ ] Verify the installer target disk is the Lenovo's internal 256 GB NVMe.
-- [ ] Confirm the intended filesystem and installation options.
-- [ ] Keep the TerraMaster and data disks disconnected during Proxmox installation to reduce the risk of selecting the wrong disk.
+- [x] Install Proxmox VE to the Lenovo's internal NVMe.
+- [x] Reboot successfully to the Proxmox local console.
+- [ ] Log in to the Proxmox web interface from another trusted LAN device.
 
-## Milestone 1 — Proxmox installation and baseline
+## Milestone 1 — Proxmox host baseline
 
-- [ ] Install Proxmox VE to the Lenovo's 256 GB NVMe.
-- [ ] Record Proxmox VE version and installation date.
-- [ ] Record CPU, memory, NVMe model, and NIC information.
-- [ ] Configure a stable management address after inspecting my existing LAN.
-- [ ] Verify the management web UI from another trusted device.
+- [ ] Record the installed Proxmox VE version.
+- [ ] Verify CPU, memory, NVMe, and NIC recognition.
+- [ ] Verify management network reachability and negotiated Ethernet link speed.
+- [ ] Configure and verify a stable management address.
 - [ ] Apply updates using the appropriate Proxmox repository configuration.
 - [ ] Configure time synchronization and administrative access.
 - [ ] Document recovery and console access.
@@ -90,7 +89,8 @@ I use this checklist as the source of truth for project progress. I mark an item
 |---|---|---|
 | 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized |
 | 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS and saved the settings | BIOS configuration completed |
-| 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Reached the Proxmox installer; target disk not yet selected and installation not started |
+| 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Reached the Proxmox installer |
+| 2026-11-15 | Installed Proxmox VE using the ext4 installer option on the internal NVMe and rebooted the system | System reached the Proxmox local console and displayed its web-management endpoint; web login remains unverified |
 
 ## Change-control notes
 
