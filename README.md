@@ -1,21 +1,23 @@
 # Proxmox Homelab
 
-A documented, hands-on homelab project focused on virtualization, Linux administration, networking, storage, and self-hosted services.
+**Project owner: Ian Bishop**
 
-Built around a **Lenovo ThinkCentre M920q Tiny**, this project will grow incrementally from a single-node hypervisor into a practical learning environment for systems administration and infrastructure operations.
+I am building this homelab as a practical learning environment for virtualization, Linux administration, networking, storage, and self-hosted services. My goal is to develop, test, document, and maintain infrastructure that demonstrates hands-on systems administration skills.
 
-> **Project status:** In progress. The bootable Proxmox installer USB has been created. Proxmox has not yet been installed or configured. See [Project Status](docs/project-status.md) for the current milestone and [Hardware Inventory](docs/hardware-inventory.md) for component details.
+The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow incrementally from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-## Project objectives
+> **Current status:** I have created the bootable Proxmox installer USB. I have not yet installed or configured Proxmox VE. See [Project Status](docs/project-status.md) for the current milestone and [Hardware Inventory](docs/hardware-inventory.md) for the equipment in my build.
 
-- Install and administer Proxmox VE on a Lenovo ThinkCentre M920q.
+## My project objectives
+
+- Install and administer Proxmox VE on my Lenovo ThinkCentre M920q.
 - Deploy and maintain Debian virtual machines and Linux containers.
 - Host self-managed applications, including a planned Jellyfin media server.
 - Learn direct-attached storage administration, disk health monitoring, filesystems, and backup planning.
 - Practice managed switching, network documentation, and VLAN concepts.
 - Build a Windows Server and Active Directory practice environment.
 - Develop repeatable troubleshooting, maintenance, and recovery procedures.
-- Maintain public, sanitized documentation that demonstrates practical IT skills.
+- Maintain public, sanitized documentation that demonstrates my practical IT skills.
 
 ## Hardware at a glance
 
@@ -64,14 +66,14 @@ See [Hardware Inventory](docs/hardware-inventory.md) for the complete component 
           6 TB each (2 planned)
 ```
 
-The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB, not to the Ethernet switch. The Lenovo will provide network access to data through appropriately configured services or file sharing.
+The TerraMaster D4-320 is **direct-attached storage (DAS)**. I plan to connect it to the Lenovo over USB, not to the Ethernet switch. The Lenovo will provide network access to data through services or file sharing that I configure.
 
-The diagram represents the target design, not a claim that these services are already deployed. Exact cabling, port assignments, IP addressing, and VLANs will be documented only after they are verified.
+This diagram represents my target design, not a claim that these services are already deployed. I will document exact cabling, port assignments, IP addressing, and VLANs only after I have verified them.
 
-## Planned project milestones
+## My project milestones
 
 1. **Preparation and installation**
-   - [x] Create bootable Proxmox installer USB (user-reported).
+   - [x] Create bootable Proxmox installer USB.
    - [ ] Verify BIOS virtualization settings.
    - [ ] Install Proxmox VE to the 256 GB NVMe.
    - [ ] Record host network configuration and confirm web UI access.
@@ -95,19 +97,19 @@ The diagram represents the target design, not a claim that these services are al
 
 ## Repository guide
 
-- [Hardware Inventory](docs/hardware-inventory.md) — equipment, specifications, and physical installation status.
+- [Hardware Inventory](docs/hardware-inventory.md) — my equipment, specifications, and physical installation status.
 - [Network Architecture](docs/network-architecture.md) — current and target network design.
-- [Project Status](docs/project-status.md) — milestone checklist and verification log.
-- `virtualization/` — Proxmox host, VM, and container build records (to be added as systems are deployed).
-- `services/` — deployment notes and configuration examples for hosted applications (to be added as services are deployed).
-- `troubleshooting/` — sanitized incidents, diagnosis, fixes, and verification (to be added as troubleshooting events occur).
+- [Project Status](docs/project-status.md) — my milestone checklist and verification log.
+- `virtualization/` — Proxmox host, VM, and container build records.
+- `services/` — deployment notes and configuration examples for hosted applications.
+- `troubleshooting/` — sanitized incidents, diagnosis, fixes, and verification.
 
-## Documentation and security practices
+## How I document this project
 
-Each implementation record should include its objective, environment, prerequisites, implementation steps, validation evidence, issues encountered, resolution, and lessons learned.
+For each significant implementation, I record the objective, environment, prerequisites, implementation steps, validation evidence, issues encountered, resolution, and lessons learned.
 
-Only verified work is marked complete. Planned work is labelled as planned. Do not commit passwords, API tokens, private keys, personal data, router credentials, unredacted configuration exports, or sensitive network details. Use example values and placeholders in public documentation.
+I mark work complete only after I have performed and verified it. I label planned work clearly. I do not publish passwords, API tokens, private keys, personal data, router credentials, unredacted configuration exports, or sensitive network details. I use example values and placeholders in public documentation.
 
 ## License
 
-No license has been selected yet. Unless and until a license is added, the repository contents are shared publicly on GitHub but are not granted an explicit open-source reuse license.
+I have not selected a license yet. Until I add one, this repository is publicly viewable on GitHub but does not grant an explicit open-source reuse license.
