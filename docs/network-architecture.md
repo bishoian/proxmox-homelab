@@ -37,7 +37,7 @@ The patch panel is a passive cabling termination point. It does not switch or ro
 | NETGEAR Nighthawk RAX41v2 | Home router / internet gateway | Provides the existing home network |
 | RealHD 8-port 2.5GbE managed switch | Ethernet switching | Exact model/revision, firmware, management method, and configuration to be verified |
 | GeeekPi 12-port CAT6 patch panel | Passive cable organization | No switching or routing functionality |
-| Lenovo ThinkCentre M920q | Proxmox host | Built-in NIC link speed and driver to be verified |
+| Lenovo ThinkCentre M920q | Proxmox host | Onboard `nic0` link verified at 1 Gbps; Proxmox bridge `vmbr0` uses this uplink |
 | TerraMaster D4-320 | Direct-attached storage | Connected to Lenovo over USB; not Ethernet |
 
 ## Current network
@@ -46,7 +46,7 @@ The initial deployment uses the existing home LAN without VLANs or changes to ro
 
 The Proxmox host has a static management address reserved in the home router. The web interface is accessible from another device on the LAN.
 
-The next network checks are the host interface status, negotiated Ethernet link speed, and the switch's management method and port configuration.
+The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The Proxmox bridge (`vmbr0`) is UP and uses the same physical uplink. The wireless interface (`wlo1`) is DOWN; the server is using its wired connection. The current physical path from the Lenovo to the router or managed switch will be traced and documented separately.
 
 ## Planned segmentation
 
@@ -88,7 +88,8 @@ The 10G SFP+ port is an uplink option; it does not mean the Lenovo currently has
 - [ ] Trace the router-to-switch uplink.
 - [ ] Trace switch-to-patch-panel connections.
 - [ ] Trace the Lenovo's Ethernet path through the rack shelf/pass-through, if used.
-- [ ] Confirm link lights and negotiated speeds.
+- [x] Confirm the Lenovo's onboard Ethernet link negotiates at 1 Gbps.
+- [ ] Trace the physical network path and confirm the switch-side negotiated speed.
 - [ ] Identify switch firmware and management access.
 - [ ] Record switch port mappings.
 - [x] Confirm Proxmox management interface is accessible from a LAN device.
