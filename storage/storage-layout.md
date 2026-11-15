@@ -1,80 +1,105 @@
-# Proposed Storage Layout
+# Media Storage Design
 
 **Host:** Lenovo ThinkCentre M920q Tiny  
-**Hypervisor:** Proxmox VE 9.2.2  
-**External enclosure:** TerraMaster D4-320  
-**Drives:** 2 × Seagate Exos ST6000NM0115, 6 TB each  
-**Priority:** Maximum usable capacity for general homelab storage  
-**Status:** Proposed design; not yet implemented.
+**Hypervisor:** Proxmox VE  
+**Enclosure:** TerraMaster D4-320  
+**Initial data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
+**Workload:** Debian media-services VM (Jellyfin and supporting containers)  
+**Status:** Design selected; disk passthrough and filesystem setup not yet implemented.
 
-## Design goals
+## Design decision
 
-- Use the capacity of both 6 TB drives.
-- Keep the two physical disks independently readable.
-- Avoid making one disk failure take down the entire storage set.
-- Keep Proxmox and active VM operating systems on the internal NVMe.
-- Provide bulk storage for media, application data, downloads, and general files.
-- Support local Proxmox backups while recognizing that a second disk in the same enclosure is not an off-site backup.
+The first 6 TB Seagate will be used as a dedicated data disk for a Debian virtual machine running the media stack. The second matching 6 TB drive will remain unused until a later expansion phase.
 
-## Recommended layout
+The two drives will not be combined into RAID, MergerFS, or another pool as part of the initial build.
 
-| Device | Proposed filesystem | Proposed mount point | Intended use |
-|---|---|---|---|
-| Internal NVMe | Existing EFI + LVM-thin layout | Existing Proxmox paths | Proxmox host and active VM/CT system disks |
-| Seagate Exos 1 | ext4 | `/mnt/bulk-a` | Media, downloads, shared files, general datasets |
-| Seagate Exos 2 | ext4 | `/mnt/bulk-b` | Additional bulk files, application data, and local backup target |
+## Storage placement
 
-Each HDD will have its own filesystem and UUID-based mount. Device names such as `/dev/sda` can change across boots or USB reconnection, so permanent mounts should use filesystem UUIDs rather than relying on the current device path.
+| Device | Location | Purpose |
+|---|---|---|
+| Lenovo 256 GB NVMe | Proxmox host | Hypervisor and Debian VM system disk |
+| First Seagate Exos 6 TB | D4-320, passed through to Debian VM | Media library, downloads, and application data |
+| Second Seagate Exos 6 TB | D4-320, reserved | Future capacity expansion |
 
-## Optional combined namespace
+The Debian VM's virtual system disk and container configuration will remain on the NVMe-backed Proxmox storage. The 6 TB disk will be attached to the VM as a physical disk using its persistent `/dev/disk/by-id` path. Debian will own the partition table, filesystem, mount, and directory structure on that disk.
 
-After both disks are individually mounted and tested, MergerFS can combine the two directories into a single path such as `/mnt/storage`.
+The physical disk's identity must be checked immediately before passthrough. The current `/dev/sda` name is not suitable for a persistent VM configuration because Linux device enumeration can change.
 
-MergerFS is a union filesystem, not RAID:
+## Filesystem and directory structure
 
-- Files are stored whole on one underlying disk rather than striped across both.
-- The combined path presents the free space of both filesystems.
-- A failure of one disk affects the files stored on that disk; files on the other disk remain on that disk.
-- MergerFS does not provide mirroring, parity, or backup protection.
+The selected filesystem is ext4, created inside the Debian VM after the disk has been passed through and positively identified.
 
-The two independent mount points should remain available for diagnostics and recovery even if a combined path is added.
+Proposed mount point:
 
-MergerFS is intended for bulk file storage such as media and shared folders. It will not be used as the backing store for active VM boot disks or latency-sensitive workloads.
+`/srv/media`
 
-## Why not RAID 0?
+Proposed data structure:
 
-RAID 0 can combine both drive capacities, but it stripes data across the drives. A failure of either drive can make the entire striped array unavailable. The same nominal capacity can be obtained with two independent filesystems, so RAID 0 offers no compelling capacity advantage for this build.
+```text
+/srv/media/data/
+├── torrents/
+│   ├── movies/
+│   └── tv/
+├── usenet/
+│   ├── incomplete/
+│   └── complete/
+│       ├── movies/
+│       └── tv/
+└── media/
+    ├── movies/
+    ├── tv/
+    └── music/
+```
 
-The D4-320 itself does not provide hardware RAID and exposes individual disks. It supports software-managed layouts through the host, but no RAID array is planned.
+The download and library folders will live on the same ext4 filesystem. This allows Radarr and Sonarr to use hardlinks and atomic moves when the download client and applications have consistent paths and permissions. Hardlinks cannot span separate filesystems or mounts.
 
-## Proxmox integration
+## Container path strategy
 
-The internal NVMe's existing `local-lvm` thin pool will remain the default location for active VM and container system disks.
+The media stack will run in Docker Compose inside Debian. A single host data directory will be mounted into the relevant containers at the same container path:
 
-After the HDD filesystems are created and mounted persistently, each mount can be added to Proxmox as a Directory storage. Proxmox Directory storage can hold content such as backups, ISO images, templates, snippets, and file-based VM images. For this build, the initial HDD directory definitions should be limited to the content types actually needed; active VM system disks should remain on the NVMe.
+- Radarr and Sonarr: `/data`
+- Download client: `/data`
+- Jellyfin: read-only access to `/data/media`
+- Prowlarr: application configuration and network access; no direct media-file access required
 
-Bulk media and application data can be exposed to a Debian service VM through a deliberately configured share or mount. The exact access method will be selected when the first service VM is designed.
+Application configuration and databases will live on the Debian VM's system disk, separate from the large media data tree.
 
-## Backup strategy
+The initial application stack is expected to include:
 
-The second HDD can hold local backups of VM and container configurations stored on the NVMe, as well as selected application data. This protects against some individual-drive failures when backups are kept separately, but both drives remain in the same USB enclosure and connected to the same host.
+- Jellyfin for media playback.
+- Radarr for movie library management.
+- Sonarr for television library management.
+- Prowlarr for indexer management.
+- A download client selected during deployment.
+- Jellyseerr for media requests, if desired.
+- Bazarr for subtitle management, if desired.
 
-Important data should eventually have another backup copy outside this enclosure, such as a separate external disk or another system.
+Folder ownership and shared group permissions will be configured consistently across the containers. The path strategy follows the guidance in [TRaSH Guides: Docker](https://trash-guides.info/Hardlinks/How-to-setup-for/Docker/) and the [Servarr Docker Guide](https://wiki.servarr.com/docker-guide).
 
-## Capacity expectations
+## Disk passthrough and backup implications
 
-Two 6 TB drives provide 12 TB of nominal raw capacity. Linux typically displays approximately 5.46 TiB per disk, or about 10.9 TiB combined before filesystem overhead.
+The Seagate will be passed through to the Debian VM as a physical disk. Proxmox will manage the VM's virtual system disk, while Debian will manage the Seagate's ext4 filesystem.
+
+The media disk will not be part of the Debian VM's ordinary virtual system disk. VM backups therefore need to be paired with a separate backup plan for important media and application data. The second drive, when commissioned, may become a local backup target or additional storage, but a second disk in the same enclosure is not an independent off-site backup.
+
+## SMART and drive condition
+
+The initial SMART overall result was `PASSED`. The captured attribute table showed zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors, with a reported temperature of 24°C.
+
+The extended SMART self-test was started but is planned to be stopped before completion to proceed with the build. Its result must be recorded as aborted/incomplete, not passed. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for media data with the understanding that important files need a separate backup.
 
 ## Implementation checklist
 
-- [ ] Finish the extended SMART self-test on the first Seagate.
-- [ ] Install the second Seagate when it arrives.
-- [ ] Verify its model, capacity, SMART status, and extended self-test.
-- [ ] Confirm stable USB detection of both drives.
-- [ ] Create an ext4 filesystem on each disk after confirming the correct device identities.
-- [ ] Record each filesystem UUID.
-- [ ] Create persistent mounts using UUIDs.
-- [ ] Add the two mounted filesystems as Proxmox Directory storage with appropriate content types.
-- [ ] Test read/write access and persistence after a controlled reboot.
-- [ ] Consider MergerFS for a unified bulk-storage path.
-- [ ] Configure and test backup jobs.
+- [ ] Stop the current extended SMART self-test and confirm the recorded state.
+- [ ] Reboot Proxmox to activate the installed kernel updates.
+- [ ] Create a Debian VM with its system disk on the NVMe.
+- [ ] Identify the Seagate using a persistent `/dev/disk/by-id` path.
+- [ ] Attach the physical Seagate disk to the Debian VM.
+- [ ] Confirm the disk appears in Debian and identify it by model and capacity.
+- [ ] Create a GPT partition table and ext4 filesystem inside Debian.
+- [ ] Mount the filesystem persistently by UUID at `/srv/media`.
+- [ ] Create the shared `/srv/media/data` directory structure.
+- [ ] Configure Docker Compose and consistent container paths/permissions.
+- [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
+- [ ] Test imports, hardlinks, playback, and permissions.
+- [ ] Define and test backup coverage for VM configuration and important media data.
