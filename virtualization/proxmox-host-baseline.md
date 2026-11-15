@@ -95,7 +95,7 @@ The host is reachable through its HTTPS management interface on TCP port 8006 fr
 
 ## Storage connection
 
-The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. The initial attribute table shows zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts. The reported temperature is 24°C. The power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These values are recorded as displayed; an extended SMART self-test remains pending.
+The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. The initial attribute table shows zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts. The reported temperature is 24°C. The power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These values are recorded as displayed. The extended SMART self-test was intentionally stopped; its log reports Aborted by host with 80% remaining and no first-error LBA recorded. The extended test is incomplete, not passed.
 
 ## Package repositories
 
@@ -109,15 +109,15 @@ The package database refresh completed successfully. The task output showed succ
 
 ## Package upgrade
 
-The available upgrades were applied without reported errors. The Proxmox Updates view now reports `No updates available`. The update batch included a newer Proxmox kernel and manager package. A reboot is pending; the active kernel and running Proxmox manager version will be checked after reboot. The reboot is being held until the extended SMART test on the Seagate finishes.
+The available upgrades were applied without reported errors. The Proxmox Updates view now reports `No updates available`. The update batch included a newer Proxmox kernel and manager package. A reboot is pending; the active kernel and running Proxmox manager version will be checked after reboot. The extended SMART test has been stopped early, so the host can now be rebooted to activate the installed kernel updates.
 
 ## Next validation tasks
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
-2. Run an extended SMART self-test and review the result.
-3. Allow the Seagate extended SMART self-test to finish.
-4. Reboot to activate the updated kernel.
-5. Verify the active kernel, Proxmox manager version, and node health after reboot.
+2. Reboot to activate the updated kernel.
+3. Verify the active kernel, Proxmox manager version, and node health after reboot.
+4. Create the Debian media-services VM.
+5. Pass the Seagate disk through to the VM and create the filesystem inside Debian.
 6. Record the NVMe model and health.
 7. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
