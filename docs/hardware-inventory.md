@@ -17,13 +17,16 @@ The M920q is the Proxmox host. Intel VT-x and VT-d are enabled in BIOS. The web 
 | Quantity | Component | Specifications | Status |
 |---:|---|---|---|
 | 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Connected to Lenovo; drive detected by Proxmox |
-| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive detected as `/dev/sda`; SMART overall status passed; second awaiting delivery |
+| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive detected as `/dev/sda`; SMART overall status passed; initial attributes reviewed; second awaiting delivery |
 
 ### Storage notes
 
 - The D4-320 is direct-attached storage. It connects to the Lenovo over USB; it is not an Ethernet NAS.
 - One 6 TB drive is installed in the enclosure and is detected by Proxmox as `/dev/sda`.
-- The Proxmox disk view reports SMART overall status `PASSED` for the Seagate and the internal NVMe. Detailed SMART attributes and an extended self-test for the Seagate remain pending.
+- The Proxmox disk view reports SMART overall status `PASSED` for the Seagate and the internal NVMe.
+- The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
+- The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
+- An extended SMART self-test is still required.
 - The second matching 6 TB drive is awaiting delivery.
 - Drive health, power-on hours, firmware, and SMART attributes have not yet been recorded.
 - The filesystem, mount point, permissions, and backup approach will be selected before the disk is used for important data.
@@ -72,6 +75,7 @@ The HDMI cables are for displays, not network connections. The RJ45/HDMI pass-th
 - [x] Connect the D4-320 to the Lenovo.
 - [x] Confirm Proxmox detects the D4-320's installed drive.
 - [x] Confirm SMART overall status reports `PASSED`.
-- [ ] Review detailed SMART attributes and run an extended self-test.
+- [x] Review initial SMART attributes and record the reported power-on counters.
+- [ ] Run an extended SMART self-test.
 - [ ] Configure a safe storage mount and backup strategy.
 - [ ] Verify PDU load and airflow under normal operating conditions.
