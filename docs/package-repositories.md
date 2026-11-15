@@ -2,7 +2,7 @@
 
 **Host:** Proxmox VE 9.2.2  
 **Base distribution:** Debian 13 (Trixie)  
-**Status:** Repository refresh and package upgrade completed; post-upgrade reboot and verification pending.
+**Status:** Repository refresh, package upgrade, and post-upgrade reboot completed; running versions verified.
 
 ## Enabled repositories
 
@@ -36,7 +36,7 @@ The Ceph repository is configured for future package availability and learning. 
 - [x] Review the available package list.
 - [x] Apply the available package upgrades.
 - [x] Confirm the Updates view reports no remaining upgrades.
-- [ ] Reboot after the Seagate extended SMART self-test finishes to activate the updated kernel.
-- [ ] Verify the running kernel, Proxmox VE version, and node health after reboot.
+- [x] Rebooted after package upgrades to activate the updated kernel.
+- [x] Verified running kernel `7.0.14-29-pve` and `pve-manager` `9.2.27`.
 
-The refresh task completed with `TASK OK` and reported 530 kB fetched. The available package upgrades were subsequently applied without reported errors. The Updates view now reports no available updates. The package list included a newer Proxmox kernel and manager package; the active kernel and running manager version will be verified after a planned reboot.
+The refresh task completed with `TASK OK` and reported 530 kB fetched. The available package upgrades were subsequently applied without reported errors. The Updates view now reports no available updates. The package list included a newer Proxmox kernel and manager package; the host was rebooted and the running kernel was verified as `7.0.14-29-pve`; `pve-manager` is `9.2.27`.
