@@ -42,11 +42,17 @@ The host is reachable through its HTTPS management interface on TCP port 8006 fr
 
 The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. The initial attribute table shows zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts. The reported temperature is 24°C. The power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These values are recorded as displayed; an extended SMART self-test remains pending.
 
+## Package repositories
+
+The package source configuration uses the Debian Trixie base and security repositories, the Proxmox VE no-subscription repository, and the Ceph Tentacle no-subscription repository. The Proxmox VE Enterprise and older Ceph Squid Enterprise entries are disabled. The repository interface displays informational warnings that no-subscription channels are not recommended for production use; this is a personal homelab environment. No Ceph cluster has been deployed.
+
+See [Package Repository Configuration](../docs/package-repositories.md) for the configured sources.
+
 ## Next validation tasks
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
 2. Run an extended SMART self-test and review the result.
-3. Review and configure the Proxmox package repositories for this unsubscribed homelab.
+3. Refresh package lists and review available updates.
 4. Apply available updates.
 5. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
