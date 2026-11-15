@@ -86,7 +86,7 @@ The media disk will not be part of the Debian VM's ordinary virtual system disk.
 
 The initial SMART overall result was `PASSED`. The captured attribute table showed zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors, with a reported temperature of 24°C.
 
-The extended SMART self-test was started but is planned to be stopped before completion to proceed with the build. Its result must be recorded as aborted/incomplete, not passed. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for media data with the understanding that important files need a separate backup.
+The extended SMART self-test was started but will be stopped before completion to proceed with the build. Its result must be recorded as aborted/incomplete, not passed. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for media data with the understanding that important files need a separate backup.
 
 ## Implementation checklist
 
