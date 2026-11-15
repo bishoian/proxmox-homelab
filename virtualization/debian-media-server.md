@@ -149,6 +149,10 @@ Installed the Debian prerequisites `ca-certificates` and `curl`. Checked for con
 
 Installed Docker Engine and CLI version 29.9.3, containerd 2.4.2, and Docker Compose plugin version 5.7.1 from Docker's official Debian Trixie stable APT repository. `systemctl is-active docker` returned `active`. `docker version` reported matching client and server Engine versions. `docker compose version` reported v5.7.1. The official `hello-world:latest` image was successfully pulled from Docker Hub, a test container was created and executed, and the expected success message was displayed. Docker commands are currently run with `sudo`; membership in the `docker` group has not been granted.
 
+## Docker bind-mount storage validation
+
+Pulled the Alpine test image and ran a one-shot container as UID/GID `1000:1000`, bind-mounting `/srv/media/data` into the container at `/data`. The container successfully created and removed a test file and printed `Container write test passed`. This verifies the current host directory ownership and permissions permit a non-root container process using the planned UID/GID to write to the media data mount.
+
 ## Planned media storage
 
-The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It is formatted as ext4 inside Debian and will be mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
+The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
