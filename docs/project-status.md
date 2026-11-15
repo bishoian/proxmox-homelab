@@ -91,7 +91,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Install Docker Engine, CLI, containerd, Buildx, and Compose plugin in the Debian VM.
 - [x] Verify the Docker service is active and record installed versions.
 - [x] Pull and run the official `hello-world` container successfully.
-- [ ] Create a managed Docker Compose project for the media stack.
+- [x] Create a version-controlled Docker Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
+- [ ] Copy the Compose project to the Debian VM, create its config/cache directories, and validate it with `docker compose config`.
+- [ ] Deploy the media stack and verify each service UI and storage mapping.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
