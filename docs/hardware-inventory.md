@@ -17,7 +17,7 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 | Quantity | Component | Specifications | Status |
 |---:|---|---|---|
 | 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Connected to Lenovo; drive detected by Proxmox |
-| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive detected as `/dev/sda` (5.5 TiB reported by Linux); unpartitioned; SMART overall status passed; second awaiting delivery |
+| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One 5.5 TiB Seagate detected; initial SMART overall status passed; ext4 data partition configured for Debian VM 100; second awaiting delivery |
 
 ### Storage notes
 
@@ -27,7 +27,7 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 - The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
 - The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
 - The extended SMART self-test was intentionally stopped early; the self-test log reports Aborted by host with 80% remaining. A complete extended test has not passed.
-- The `lsblk` output shows no partitions, filesystem, or mount point on the Seagate device. It has not been initialized or formatted.
+- The Seagate is passed through to Debian VM 100. Debian contains one GPT partition formatted as ext4 and labeled `media`; the filesystem has not yet been mounted persistently.
 - A persistent model-based `/dev/disk/by-id` link has been identified for passing the physical disk to VM 100. The exact device identifier and drive serial are retained locally rather than published.
 - The second matching 6 TB drive is awaiting delivery.
 - Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
