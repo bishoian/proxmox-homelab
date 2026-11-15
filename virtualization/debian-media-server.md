@@ -18,7 +18,7 @@
 | Disk options | Discard, IO thread, SSD emulation enabled |
 | Firmware | SeaBIOS |
 | Machine | Default i440fx |
-| QEMU Guest Agent | Enabled in VM configuration; guest package still needs installation |
+| QEMU Guest Agent | Installed in Debian guest; service active; Proxmox communication verified |
 | Network | VirtIO NIC on `vmbr0`, Proxmox firewall enabled |
 | Installer media | Debian 13.7 amd64 netinst ISO |
 
@@ -43,7 +43,7 @@ The Debian installer detected one approximately 68.7 GB QEMU virtual disk. The p
 | Primary partition | 65.2 GB | ext4 | `/` |
 | Logical partition | 3.5 GB | swap | swap |
 
-The partition changes were written only to the VM's virtual system disk. The Seagate Exos has a GPT partition table and one ext4-formatted partition labeled `media`. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Inside Debian, `lsblk` reports the passed-through disk as `sdb`, 5.5 TiB, with model presented as `QEMU HARDDISK`; no partitions, filesystem, or mount point are shown.
+The partition changes for the operating system were written only to the VM's virtual system disk. The Seagate Exos was attached to VM 100 as SCSI1 using a persistent disk ID; the 64 GiB Debian system disk remains SCSI0 and first in the boot order. Inside Debian, the Seagate appears as a separate 5.5 TiB SCSI disk, presented by QEMU as `QEMU HARDDISK`. It has a GPT partition (`/dev/sdb1`) formatted as ext4 and labeled `media`, mounted read/write at `/srv/media` using a UUID-based `/etc/fstab` entry. The exact physical disk path, serial, and filesystem UUID are not included in this public build record.
 
 ## Installation result
 
@@ -53,11 +53,11 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 
 ## First-boot checklist
 
-- [ ] Set the VM's CD/DVD drive to **Do not use any media** in Proxmox Hardware.
-- [ ] Reboot VM 100.
-- [ ] Confirm Debian reaches its login prompt.
-- [ ] Log in with the regular account created during installation.
-- [ ] Confirm the guest obtained a LAN IP address.
+- [x] Set the VM's CD/DVD drive to **Do not use any media** in Proxmox Hardware.
+- [x] Reboot VM 100.
+- [x] Confirm Debian reaches its login prompt.
+- [x] Log in with the regular `ian` account.
+- [x] Confirm the guest obtained a LAN IP address.
 - [x] Verify DNS resolution for `deb.debian.org`.
 - [x] Verify outbound package repository connectivity with `sudo apt update`.
 - [x] Confirm the SSH service is active.
@@ -65,7 +65,7 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 - [x] Confirm `qemu-guest-agent` package is installed at the current repository version.
 - [x] Confirm `systemctl is-active qemu-guest-agent` returns `active`.
 - [x] Verify Proxmox-side communication with `qm agent 100 ping`; it returned silently without an error.
-- [ ] Apply Debian updates.
+- [ ] Apply package upgrades and establish a maintenance routine.
 - [x] Record the guest's hostname, Debian release, kernel, architecture, and interface status.
 - [ ] Record the guest package baseline after updates.
 
@@ -93,11 +93,11 @@ The `qemu-guest-agent` package was already installed at the current repository v
 
 ## Physical data disk passthrough
 
-The physical Seagate Exos disk has been attached to VM 100 as SCSI1 using the persistent model-based device ID. The Proxmox VM configuration confirms SCSI0 remains the 64 GiB NVMe-backed Debian system disk and remains first in the boot order. The virtual CD/DVD drive has no installation ISO attached. No partition table or filesystem has been created on the Seagate. The next step is to boot Debian and verify the second disk from inside the guest before any destructive storage operation.
+The physical Seagate Exos disk is attached to VM 100 as SCSI1 using its persistent model-based device ID. The Proxmox VM configuration confirms SCSI0 remains the 64 GiB NVMe-backed Debian system disk and first in the boot order. The virtual CD/DVD drive has no installation ISO attached. The disk was partitioned and formatted inside Debian after read-only signature checks; its ext4 filesystem is mounted at `/srv/media`.
 
 ## Guest-side data disk detection
 
-After VM 100 was started, Debian detected the passed-through Seagate as a separate 5.5 TiB SCSI disk at `/dev/sdb`. The guest reports its presented model as `QEMU HARDDISK`, which is the virtual model exposed by the Proxmox/QEMU SCSI presentation. The existing Debian operating-system disk remains `/dev/sda` at 64 GiB. No partitions, filesystem, or mount point are present on `/dev/sdb` in the captured `lsblk` output. Read-only inspection has now been completed: `lsblk -f /dev/sdb` showed no filesystem or mount point, and `sudo wipefs --no-act /dev/sdb` returned no known signatures. The command did not modify the disk. GPT initialization and filesystem creation have not yet occurred.
+After VM 100 was started, Debian detected the passed-through Seagate as a separate 5.5 TiB SCSI disk at `/dev/sdb`. The guest reports its presented model as `QEMU HARDDISK`, which is the virtual model exposed by the Proxmox/QEMU SCSI presentation. The existing Debian operating-system disk remains `/dev/sda` at 64 GiB. The Seagate now has one GPT partition (`/dev/sdb1`) formatted as ext4 and mounted at `/srv/media`.
 
 ## Read-only disk signature inspection
 
@@ -105,7 +105,7 @@ Inside Debian, `lsblk -f /dev/sdb` displayed the disk but no filesystem, UUID, l
 
 ## GPT partitioning
 
-Created a GPT partition table inside Debian on the passed-through Seagate disk, with one partition spanning the available capacity. The resulting partition is `/dev/sdb1`, approximately 5.5 TiB. The captured `lsblk` output shows no filesystem or mount point on the new partition; ext4 formatting and mounting are pending.
+Created a GPT partition table inside Debian on the passed-through Seagate disk, with one partition spanning the available capacity. The resulting partition is `/dev/sdb1`, approximately 5.5 TiB. It was subsequently formatted as ext4 with label `media` and mounted at `/srv/media`.
 
 ## Ext4 filesystem creation
 
@@ -113,7 +113,7 @@ Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The sub
 
 ## Persistent mount configuration
 
-The ext4 filesystem UUID was used in `/etc/fstab` to configure `/srv/media` with filesystem type `ext4`, options `defaults,nofail`, and filesystem check fields `0 2`. `sudo mount -a` completed successfully. `findmnt /srv/media` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT /srv/media` reported approximately 5.5 TiB total and 5.4 TiB available. An initial `systemctl daemon-reload` attempt was run without `sudo` and was denied; the mount itself succeeded. A privileged systemd reload and reboot persistence check remain pending. The filesystem UUID is kept out of the public build record.
+The ext4 filesystem UUID was used in `/etc/fstab` to configure `/srv/media` with filesystem type `ext4`, options `defaults,nofail`, and filesystem check fields `0 2`. `sudo mount -a` completed successfully. `findmnt /srv/media` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT /srv/media` reported approximately 5.5 TiB total and 5.4 TiB available. An initial `systemctl daemon-reload` attempt was run without `sudo` and was denied; the mount itself succeeded. `sudo systemctl daemon-reload` completed successfully. `findmnt --verify --verbose` reported zero parse errors and zero errors; its one warning identified the empty virtual CD-ROM at `/media/cdrom0`. A reboot persistence check remains pending. The filesystem UUID is kept out of the public build record.
 
 ## Media directory structure
 
@@ -135,7 +135,7 @@ Created and verified the following directories on the mounted ext4 filesystem:
     └── music/
 ```
 
-The `lost+found` directory at the filesystem root is the standard ext4 recovery directory and is left untouched. The Debian account `ian` has UID 1000 and primary GID 1000. The planned container applications will use a consistent UID/GID mapping; directory ownership and permissions are being configured.
+The `lost+found` directory at the filesystem root is the standard ext4 recovery directory and is left untouched. The Debian account `ian` has UID 1000 and primary GID 1000. The data tree is owned by `ian:ian`; directories use mode `2775` with setgid inheritance, and the displayed directory listing confirmed `drwxrwsr-x`.
 
 ## Media data ownership and permissions
 
@@ -159,10 +159,10 @@ A version-controlled Compose project has been created at `services/media-stack/c
 
 ## Initial media-stack deployment
 
-Deployed the five services from `/opt/media-stack/compose.yaml` with Docker Compose. All images were pulled successfully, the Compose network was created, and the Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent containers started. The captured `docker compose ps` output showed Jellyfin in a healthy state and the other four containers running. Startup logs showed Jellyfin completing its initial startup and migrations, Radarr and Sonarr running database migrations, Prowlarr starting its HTTP listener, and qBittorrent initializing the Web UI. These results confirm container startup but do not yet establish that each application’s first-run setup, authentication, storage access, or integrations are complete.
+Deployed the five services from `/opt/media-stack/compose.yaml` with Docker Compose. All images were pulled successfully, the Compose network was created, and the Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent containers started. The captured `docker compose ps` output showed Jellyfin in a healthy state and the other four containers running. Startup logs showed Jellyfin completing its initial startup and migrations, Radarr and Sonarr running database migrations, Prowlarr starting its HTTP listener, and qBittorrent initializing the Web UI. Initial first-run setup has since been completed in all five applications. Radarr and Sonarr root folders are configured, both use qBittorrent with separate categories, and Prowlarr has application connections configured for Radarr and Sonarr. End-to-end download/import behavior, hardlink creation, Jellyfin library scans, and playback still need validation.
 
-The qBittorrent first-start log issued a temporary Web UI administrator password. That credential is intentionally not recorded here or in any other public project file. It must be replaced with a strong unique password before routine use. The service interfaces are intended for trusted LAN access only; no router port forwarding is planned.
+The qBittorrent first-start log issued a temporary Web UI administrator password. That credential is intentionally not recorded here or in any other public project file. The temporary password was replaced during initial setup. The service interfaces are intended for trusted LAN access only; no router port forwarding is planned.
 
-## Planned media storage
+## Media storage disposition
 
-The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. An Alpine container write/delete test passed against `/srv/media/data` using UID/GID 1000:1000. The second 6 TB drive remains reserved for future expansion. A version-controlled Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent has been created but has not yet been copied to or deployed on the VM.
+The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. An Alpine container write/delete test passed against `/srv/media/data` using UID/GID 1000:1000. The second 6 TB drive remains reserved for future expansion.
