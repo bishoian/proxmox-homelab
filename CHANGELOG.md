@@ -19,3 +19,6 @@ Notable project documentation and infrastructure milestones are recorded here.
 ### Updated
 - Recorded the Lenovo M920q BIOS configuration: Intel VT-x and Intel VT-d enabled and saved (user-reported).
 - Updated the project README and milestone checklist. USB boot and Proxmox installation remain pending.
+
+### Updated
+- Recorded that the Lenovo successfully booted from the Proxmox USB installer. Disk selection and installation remain pending.
