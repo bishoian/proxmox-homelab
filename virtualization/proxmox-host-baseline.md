@@ -25,14 +25,13 @@ The host is reachable through its HTTPS management interface on TCP port 8006 fr
 
 ## Storage connection
 
-The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. Detailed SMART attributes, power-on hours, and an extended self-test remain pending.
+The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. The initial attribute table shows zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts. The reported temperature is 24°C. The power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These values are recorded as displayed; an extended SMART self-test remains pending.
 
 ## Next validation tasks
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
-2. Review the Seagate's detailed SMART attributes and power-on hours.
-3. Run an extended SMART self-test and review the result.
-4. Review update repositories and apply available updates.
-5. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
+2. Run an extended SMART self-test and review the result.
+3. Review update repositories and apply available updates.
+4. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
