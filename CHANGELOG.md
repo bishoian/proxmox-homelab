@@ -90,6 +90,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed the VirtIO interface `ens18` is UP and received an IPv4 address.
 - Verified the default route through the home gateway, successful DNS resolution for `deb.debian.org`, working sudo authentication, and SSH service state `active`.
 - Ran `sudo apt update` successfully; Debian Security, Trixie, and Trixie Updates repositories responded, and APT reported all packages up to date.
+- Checked QEMU Guest Agent in Debian VM 100: package was already current and service reports `active`; Debian's static service unit does not require `systemctl enable`. Proxmox-side communication check remains pending.
 - Left remote SSH login testing pending.
 
 ### Current state
