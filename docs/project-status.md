@@ -97,8 +97,11 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Deploy the media stack with `docker compose up -d`; all five application containers started.
 - [x] Confirm `docker compose ps` reports Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running.
 - [x] Review initial service logs; application migrations/startup completed and qBittorrent Web UI initialized.
-- [ ] Rotate qBittorrent's temporary first-start Web UI password and configure strong application credentials.
-- [ ] Complete each application’s first-run setup and verify service connectivity and storage mappings.
+- [x] Complete initial Jellyfin setup.
+- [x] Complete initial qBittorrent setup and change the temporary first-start Web UI password.
+- [ ] Complete Radarr and Sonarr first-run setup, root folders, and qBittorrent download-client connections.
+- [ ] Configure Prowlarr and connect it to Radarr and Sonarr.
+- [ ] Verify each application’s service connectivity and storage mappings.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
