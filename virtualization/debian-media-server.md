@@ -43,7 +43,7 @@ The Debian installer detected one approximately 68.7 GB QEMU virtual disk. The p
 | Primary partition | 65.2 GB | ext4 | `/` |
 | Logical partition | 3.5 GB | swap | swap |
 
-The partition changes were written only to the VM's virtual system disk. The Seagate Exos data disk remains on the Proxmox host and has not been passed through, partitioned, or formatted. Proxmox identifies it as a separate USB disk with no partitions, filesystem, or mount point; a persistent model-based `/dev/disk/by-id` entry has been identified. The exact device path and drive serial are not included in this public build record.
+The partition changes were written only to the VM's virtual system disk. The Seagate Exos remains unpartitioned and unformatted. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Guest-side model and capacity verification remains pending.
 
 ## Installation result
 
@@ -90,6 +90,10 @@ The `qemu-guest-agent` package was already installed at the current repository v
 | APT repository access | Debian Security, Trixie, and Trixie Updates reached successfully; APT reported all packages up to date |
 | SSH daemon | Service reports `active`; remote Windows PowerShell login successful |
 | Sudo | `sudo -v` succeeded |
+
+## Physical data disk passthrough
+
+The physical Seagate Exos disk has been attached to VM 100 as SCSI1 using the persistent model-based device ID. The Proxmox VM configuration confirms SCSI0 remains the 64 GiB NVMe-backed Debian system disk and remains first in the boot order. The virtual CD/DVD drive has no installation ISO attached. No partition table or filesystem has been created on the Seagate. The next step is to boot Debian and verify the second disk from inside the guest before any destructive storage operation.
 
 ## Planned media storage
 
