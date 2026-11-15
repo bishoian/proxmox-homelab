@@ -108,7 +108,9 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Set `/srv/media/data` ownership to UID/GID 1000 (`ian:ian`).
 - [x] Apply `2775` directory permissions with setgid inheritance and verify owner/group.
 - [x] Verify container read/write access to `/srv/media/data` using an Alpine test container with UID/GID 1000:1000.
-- [ ] Configure Docker Compose and consistent container paths/permissions.
+- [x] Verify non-root container read/write access to `/srv/media/data` with UID/GID 1000:1000 using an Alpine test container.
+- [x] Create a version-controlled Docker Compose definition with a consistent `/data` path for the download client and *arr services; Jellyfin receives read-only access to the media library.
+- [ ] Deploy the Compose stack and verify imports, hardlinks, and playback.
 - [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
 - [ ] Test imports, hardlinks, playback, and permissions.
 - [ ] Define and test backup coverage for VM configuration and important media data.
