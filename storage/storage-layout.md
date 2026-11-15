@@ -5,7 +5,7 @@
 **Enclosure:** TerraMaster D4-320  
 **Initial data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
 **Workload:** Debian media-services VM (Jellyfin and supporting containers)  
-**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100 and detected inside Debian as a separate 5.5 TiB SCSI disk; read-only signature inspection and filesystem setup remain pending.
+**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100. Debian detects the 5.5 TiB disk, and a GPT table with one full-size partition (`/dev/sdb1`) has been created; ext4 formatting and mounting remain pending.
 
 ## Design decision
 
@@ -99,8 +99,8 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Inspect the guest disk with `lsblk -f`; no filesystem or mount point is reported.
 - [x] Run `wipefs --no-act` on the guest disk; no known signatures are reported and the command makes no changes.
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
-- [ ] Create a GPT partition table on the guest data disk.
-- [ ] Create an ext4 filesystem inside Debian.
+- [x] Create a GPT partition table on the guest data disk with one full-size partition (`/dev/sdb1`).
+- [ ] Create an ext4 filesystem inside Debian on `/dev/sdb1`.
 - [ ] Mount the filesystem persistently by UUID at `/srv/media`.
 - [ ] Create the shared `/srv/media/data` directory structure.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
