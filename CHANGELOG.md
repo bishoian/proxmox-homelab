@@ -78,6 +78,12 @@ A concise record of the homelab's major build and documentation milestones.
 ### SMART test disposition
 - Recorded the extended SMART self-test as intentionally aborted by the host at 80% remaining; no successful extended-test result is claimed.
 
+### First virtual machine
+- Created VM 100, `media-server`, on the Proxmox host.
+- Allocated four vCPUs, 4 GiB RAM, and a 64 GiB system disk on `local-lvm`.
+- Configured VirtIO SCSI single, QEMU Agent, and VirtIO networking through `vmbr0`.
+- Attached the Debian 13.7 netinst ISO and booted to the graphical installer in BIOS mode. Debian installation is still in progress.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
