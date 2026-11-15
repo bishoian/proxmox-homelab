@@ -26,7 +26,7 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 - The Proxmox disk view reports SMART overall status `PASSED` for the Seagate and the internal NVMe.
 - The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
 - The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
-- An extended SMART self-test is running; its result is pending.
+- The extended SMART self-test was intentionally stopped early; the self-test log reports Aborted by host with 80% remaining. A complete extended test has not passed.
 - The `lsblk` output shows no partitions, filesystem, or mount point on `/dev/sda`. It has not been initialized or formatted.
 - The second matching 6 TB drive is awaiting delivery.
 - Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
