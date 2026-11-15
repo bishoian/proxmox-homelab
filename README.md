@@ -6,7 +6,7 @@ A hands-on homelab project focused on virtualization, Linux administration, netw
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. An extended self-test is running and will be reviewed after completion. The initial host summary confirms six CPUs and 15.46 GiB of usable RAM. The Enterprise update repository is enabled but requires a subscription; repository configuration is the next maintenance task. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. An extended self-test is running and will be reviewed after completion. The initial host summary confirms six CPUs and 15.46 GiB of usable RAM. The package sources are configured for the Proxmox VE and Ceph no-subscription channels, alongside the Debian Trixie and security repositories. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## Project goals
 
@@ -76,7 +76,8 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Confirm Proxmox VE version 9.2.2.
    - [ ] Verify CPU, memory, NVMe, and NIC details and link status.
 2. **Foundational administration**
-   - [ ] Review update repositories and apply available updates.
+   - [x] Configure Proxmox VE and Ceph no-subscription repositories.
+   - [ ] Refresh package lists and review available updates.
    - [ ] Configure time and administrative settings.
    - [ ] Create a Debian virtual machine.
    - [ ] Establish and test a backup approach before relying on hosted services.
@@ -104,6 +105,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
 - [Project Status](docs/project-status.md) — milestone checklist and verification log.
 - [Proxmox Installation Notes](virtualization/proxmox-installation.md) — installer choices and first-boot process.
 - [Proxmox Host Baseline](virtualization/proxmox-host-baseline.md) — first web-interface login and initial host observations.
+- [Package Repository Configuration](docs/package-repositories.md) — Proxmox VE, Ceph, and Debian package sources.
 - `virtualization/` — Proxmox host, VM, and container build records.
 - `services/` — deployment notes and configuration examples for hosted applications.
 - [D4-320 Drive Not Detected](troubleshooting/d4-320-drive-not-detected.md) — power-state diagnosis and storage detection verification.
