@@ -4,7 +4,7 @@
 **VM name:** `media-server`  
 **Hypervisor:** Proxmox VE on Lenovo ThinkCentre M920q Tiny  
 **Guest OS:** Debian GNU/Linux 13.7 (Trixie), amd64  
-**Build status:** Debian 13.7 installed; login, DNS, APT repository access, SSH, and QEMU Guest Agent communication verified. The Seagate physical disk is attached as SCSI1 and detected inside Debian as a separate 5.5 TiB SCSI disk; the ext4 filesystem is created and labeled `media`; persistent mounting remains pending.
+**Build status:** Debian 13.7 installed; login, DNS, APT repository access, SSH, and QEMU Guest Agent communication verified. The Seagate physical disk is attached as SCSI1 and detected inside Debian as a separate 5.5 TiB SCSI disk; the ext4 filesystem is created and labeled `media`; the UUID-based `/etc/fstab` entry is configured and tested, and `/srv/media` is mounted read/write. Reboot persistence remains to be verified.
 
 ## VM configuration
 
@@ -109,7 +109,11 @@ Created a GPT partition table inside Debian on the passed-through Seagate disk, 
 
 ## Ext4 filesystem creation
 
-Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The subsequent `lsblk -f /dev/sdb` output confirmed the ext4 filesystem and UUID. The filesystem is not mounted yet; the next step is to configure a persistent UUID-based mount at `/srv/media`.
+Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The subsequent `lsblk -f /dev/sdb` output confirmed the ext4 filesystem and UUID. A UUID-based `/etc/fstab` entry was added for `/srv/media`. `sudo mount -a` succeeded, `findmnt` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT` showed approximately 5.4 TiB available. A systemd manager reload and reboot persistence check remain pending.
+
+## Persistent mount configuration
+
+The ext4 filesystem UUID was used in `/etc/fstab` to configure `/srv/media` with filesystem type `ext4`, options `defaults,nofail`, and filesystem check fields `0 2`. `sudo mount -a` completed successfully. `findmnt /srv/media` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT /srv/media` reported approximately 5.5 TiB total and 5.4 TiB available. An initial `systemctl daemon-reload` attempt was run without `sudo` and was denied; the mount itself succeeded. A privileged systemd reload and reboot persistence check remain pending. The filesystem UUID is kept out of the public build record.
 
 ## Planned media storage
 
