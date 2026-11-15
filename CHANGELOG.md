@@ -107,7 +107,12 @@ A concise record of the homelab's major build and documentation milestones.
 ### Guest-side Seagate detection
 - Started VM 100 after attaching the Seagate as SCSI1.
 - Confirmed Debian sees a separate 5.5 TiB SCSI disk as `/dev/sdb`; QEMU presents the model string as `QEMU HARDDISK`.
-- Confirmed the captured `lsblk` output shows no partitions, filesystem, or mount point on the data disk. A read-only signature check remains before formatting.
+- Confirmed the captured `lsblk` output shows no partitions, filesystem, or mount point on the data disk. A read-only signature check was completed with no known signatures reported; GPT initialization is the next step.
+
+### Read-only Seagate signature inspection
+- Checked the guest disk with `lsblk -f`; no filesystem or mount point was reported.
+- Ran `sudo wipefs --no-act` against the guest data disk; no known signatures were reported and the command made no changes.
+- Confirmed the disk remains unpartitioned and unformatted. GPT initialization is the next step.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
