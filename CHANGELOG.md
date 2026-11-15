@@ -176,7 +176,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified with `docker compose ps`: Jellyfin reported healthy; Radarr, Sonarr, Prowlarr, and qBittorrent reported running.
 - Reviewed startup logs: Jellyfin completed initial startup and migrations; Radarr and Sonarr applied database migrations; Prowlarr started its HTTP listener; qBittorrent initialized its Web UI.
 - qBittorrent generated a temporary first-start administrator password. The credential is excluded from the public repository and must be rotated during first-run setup.
-- Application UI setup, authentication hardening, and end-to-end integrations remain pending.
+- Initial application setup is complete in all five services; application-level download/import, hardlink, and playback validation remains pending.
 
 ### Media application first-run configuration
 - Completed initial setup of Jellyfin and qBittorrent through their web interfaces.
