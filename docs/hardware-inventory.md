@@ -8,24 +8,24 @@ This document records the physical components selected for the Proxmox homelab a
 
 | Quantity | Component | Specifications | Status |
 |---:|---|---|---|
-| 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500T, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Installed in rack |
+| 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500T, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Proxmox VE 9.2.2 installed; web interface accessible |
 
-The Lenovo is the planned Proxmox host. Proxmox installation, BIOS configuration, firmware details, and network configuration have not yet been verified and will be recorded after commissioning.
+The Lenovo is the Proxmox host. Intel VT-x and VT-d have been enabled in BIOS. The Proxmox web dashboard is accessible and the node is online. CPU, memory, NVMe, and NIC details will be recorded during the host baseline review.
 
 ## Storage
 
 | Quantity | Component | Specifications | Status |
 |---:|---|---|---|
-| 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Owned; storage commissioning pending |
+| 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Connected to Lenovo; disk detection pending |
 | 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One drive installed; second drive has not arrived |
 
 ### Storage notes
 
 - The D4-320 is direct-attached storage. It is intended to connect to the Lenovo over USB; it is not an Ethernet NAS.
-- One 6 TB drive is currently installed. The second matching drive is pending delivery.
-- The drives' health, power-on hours, firmware, and SMART attributes have not yet been recorded.
-- Do not treat two disks as redundancy or a backup until a deliberate storage layout and independent backup plan have been designed and tested.
-- Before formatting or partitioning any disk, positively identify it by model, serial number, and device path. Confirm that the correct disk is selected.
+- One 6 TB drive is installed in the enclosure. Proxmox detection and drive health have not yet been checked.
+- The second matching 6 TB drive is awaiting delivery.
+- Drive health, power-on hours, firmware, and SMART attributes have not yet been recorded.
+- A storage layout and independent backup plan will be designed before the disk is used for important data.
 
 ## Networking
 
@@ -62,17 +62,14 @@ The HDMI cables are display cables, not network links. The RJ45/HDMI pass-throug
 
 ## Commissioning checklist
 
-- [ ] Record Lenovo BIOS/UEFI version and virtualization settings.
-- [ ] Record installed RAM layout and NVMe model.
-- [ ] Install Proxmox VE and record its version.
-- [ ] Record the Lenovo's negotiated Ethernet speed.
+- [x] Install Proxmox VE and verify web interface access.
+- [ ] Record BIOS/UEFI version and installed RAM layout.
+- [ ] Record NVMe model and health.
+- [ ] Verify the Lenovo's negotiated Ethernet speed.
 - [ ] Identify the RealHD switch's exact model/revision and firmware.
-- [ ] Document switch port assignments without publishing sensitive credentials.
-- [ ] Connect the D4-320 and identify both installed/pending disks by model and serial number.
-- [ ] Capture SMART health and extended self-test results for each disk.
+- [ ] Document switch port assignments.
+- [x] Connect the D4-320 to the Lenovo.
+- [ ] Confirm Proxmox detects the D4-320's installed drive.
+- [ ] Capture SMART health and extended self-test results.
 - [ ] Document safe storage mounts, permissions, and backup strategy.
 - [ ] Verify PDU load and airflow under normal operating conditions.
-
-## Public documentation safety
-
-Do not publish serial numbers, passwords, API keys, private SSH keys, router credentials, public IP addresses, or unredacted exports from network equipment. Keep sensitive operational notes in a private location.
