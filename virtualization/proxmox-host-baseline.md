@@ -17,7 +17,22 @@ The dashboard confirmed:
 - The node view reports six CPU cores.
 - At the time of the screenshot, CPU utilization was approximately 0.2% and memory utilization was approximately 10.2%.
 
-These figures are initial observations, not performance benchmarks. A fuller hardware inventory will be captured from the node Summary and Shell views.
+These figures are initial observations, not performance benchmarks. A subsequent Node → Summary inspection reported:
+
+| Summary field | Displayed value |
+|---|---:|
+| Uptime at capture | 1 hour, 4 minutes |
+| CPU usage | 0.08% of 6 CPUs |
+| Load average | 0.11 / 0.04 / 0.01 |
+| CPU label | Intel Core i5-8500 @ 3.00 GHz, 1 socket |
+| Memory | 1.65 GiB of 15.46 GiB (10.66%) |
+| Root filesystem | 4.14 GiB of 67.73 GiB (6.11%) |
+| Swap | 0 B of 8.00 GiB |
+| Kernel | Linux 7.0.2-6-pve |
+| Boot mode | EFI |
+| Manager | pve-manager 9.2.2 |
+
+The CPU label differs from the original hardware listing, which specified an i5-8500T. The exact installed CPU model will be checked from the host shell before updating the inventory. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
 
 ## Management access
 
@@ -31,7 +46,8 @@ The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
 2. Run an extended SMART self-test and review the result.
-3. Review update repositories and apply available updates.
-4. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
+3. Review and configure the Proxmox package repositories for this unsubscribed homelab.
+4. Apply available updates.
+5. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
