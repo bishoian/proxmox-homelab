@@ -144,7 +144,14 @@ A concise record of the homelab's major build and documentation milestones.
 - Installed `ca-certificates` and `curl` prerequisites.
 - Added Docker’s official Debian signing key and stable APT repository for Debian Trixie amd64.
 - Ran `sudo apt update` successfully; Docker Release metadata and the stable package index were retrieved.
-- Docker Engine and Compose installation remain pending.
+- Docker Engine and Compose are installed and validated; media stack deployment remains pending.
+
+### Docker Engine installation and validation
+- Installed Docker Engine and CLI 29.9.3, containerd 2.4.2, and Docker Compose plugin 5.7.1.
+- Verified the Docker service reports `active`.
+- Verified Docker client/server versions and Compose plugin availability.
+- Pulled and ran `hello-world:latest` from Docker Hub; the container printed the expected success message.
+- Retained `sudo docker` usage rather than adding the administrative account to the Docker group.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
