@@ -45,7 +45,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Identify the installed drive as a 6 TB Seagate Exos ST6000NM0115.
 - [x] Confirm SMART overall status reports `PASSED`.
 - [x] Review and record the initial SMART attributes and reported power-on counters.
-- [ ] Run an extended SMART self-test and review the result. **In progress:** started; estimated duration approximately 10 hours.
+- [ ] Complete an extended SMART self-test. **Deferred:** the running test will be intentionally aborted before completion; the initial SMART snapshot will be used for the first media setup, with the incomplete test clearly recorded.
 - [ ] Choose the data disk layout, filesystem, mount point, and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
@@ -106,9 +106,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Enclosure connected; drive initially absent because the rear power switch was off |
 | 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED` |
 | 2026-11-15 | Reviewed the Seagate's initial SMART attribute table | Zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC counts; 24°C reported temperature |
-| 2026-11-15 | Started the Seagate extended SMART self-test | Test running in the background; estimated duration approximately 10 hours; final result pending |
+| 2026-11-15 | Started the Seagate extended SMART self-test | Estimated duration approximately 10 hours; an early abort has been selected, so no complete extended-test result will be claimed |
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
-| 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Inspected block devices with `lsblk` | Internal Lenovo NVMe reports 238.5G with EFI and Proxmox LVM layout; Seagate Exos appears as a separate 5.5T disk with no partitions, filesystem, or mount point |
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
