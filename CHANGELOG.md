@@ -27,7 +27,7 @@ A concise record of the homelab's major build and documentation milestones.
 
 ### Host baseline
 - Reviewed the Proxmox node Summary: six CPUs, 15.46 GiB usable RAM, EFI boot, and Proxmox manager 9.2.2.
-- Noted a CPU model discrepancy between the original listing (i5-8500T) and the Summary label (i5-8500 @ 3.00 GHz); shell verification is pending.
+- Confirmed the installed processor is an Intel Core i5-8500 (standard model, not the i5-8500T).
 - Identified that the Enterprise package repository is enabled but requires a subscription; repository configuration for the unsubscribed lab is pending.
 
 ### Current state
