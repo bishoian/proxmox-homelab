@@ -49,7 +49,7 @@ The partition changes were written only to the VM's virtual system disk. The Sea
 
 Debian displayed the installer completion screen after the base system and selected packages had been installed. GRUB installation was confirmed for the VM's virtual disk.
 
-The VM has booted from its installed Debian system. Login succeeded with the `ian` account. The `hostnamectl` output confirmed hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture. The `ip -br addr` output showed the VirtIO interface `ens18` UP with an IPv4 address assigned. DNS resolution has been verified with `getent hosts deb.debian.org`; the SSH service reports `active` via `systemctl is-active ssh`; `sudo -v` completed without an authentication error. The default route is present through the home gateway. `sudo apt update` successfully contacted the Debian Security, Trixie, and Trixie Updates repositories and reported all packages up to date. SSH login from another LAN device has not yet been tested. Confirm the installer ISO remains detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
+The VM has booted from its installed Debian system. Login succeeded with the `ian` account. The `hostnamectl` output confirmed hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture. The `ip -br addr` output showed the VirtIO interface `ens18` UP with an IPv4 address assigned. DNS resolution has been verified with `getent hosts deb.debian.org`; the SSH service reports `active` via `systemctl is-active ssh`; `sudo -v` completed without an authentication error. The default route is present through the home gateway. `sudo apt update` successfully contacted the Debian Security, Trixie, and Trixie Updates repositories and reported all packages up to date. SSH login from Windows PowerShell succeeded; the client accepted the Debian host key and opened an interactive shell as `ian`. Confirm the installer ISO remains detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
 
 ## First-boot checklist
 
@@ -61,7 +61,7 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 - [x] Verify DNS resolution for `deb.debian.org`.
 - [x] Verify outbound package repository connectivity with `sudo apt update`.
 - [x] Confirm the SSH service is active.
-- [ ] Verify SSH login from another LAN device.
+- [x] Verify SSH login from Windows PowerShell; authenticated as `ian` and reached the `media-server` shell.
 - [x] Confirm `qemu-guest-agent` package is installed at the current repository version.
 - [x] Confirm `systemctl is-active qemu-guest-agent` returns `active`.
 - [x] Verify Proxmox-side communication with `qm agent 100 ping`; it returned silently without an error.
@@ -88,7 +88,7 @@ The `qemu-guest-agent` package was already installed at the current repository v
 | Default route | Present through home gateway |
 | DNS | `deb.debian.org` resolved successfully |
 | APT repository access | Debian Security, Trixie, and Trixie Updates reached successfully; APT reported all packages up to date |
-| SSH daemon | Service reports `active` |
+| SSH daemon | Service reports `active`; remote Windows PowerShell login successful |
 | Sudo | `sudo -v` succeeded |
 
 ## Planned media storage
