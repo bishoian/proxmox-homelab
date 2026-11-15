@@ -141,6 +141,10 @@ The `lost+found` directory at the filesystem root is the standard ext4 recovery 
 
 The Debian account `ian` was confirmed as UID 1000 with primary GID 1000. Ownership of `/srv/media/data` was set recursively to `1000:1000`. All directories under the data tree were assigned mode `2775`, enabling group inheritance for newly created items. Existing files were assigned mode `0664` (the tree was initially empty). A directory listing verified the displayed directories as `drwxrwsr-x` and owner/group `ian:ian`.
 
+## Docker repository preparation
+
+Installed the Debian prerequisites `ca-certificates` and `curl`. Checked for conflicting Docker/Podman packages; none were reported as installed. Added Docker’s official Debian package signing key and configured its stable APT repository for Debian Trixie on amd64. `sudo apt update` successfully retrieved the Docker repository Release metadata and package index; APT reported all package lists up to date. Docker Engine and the Compose plugin have not yet been installed.
+
 ## Planned media storage
 
 The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It is formatted as ext4 inside Debian and will be mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
