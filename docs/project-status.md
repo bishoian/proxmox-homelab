@@ -56,7 +56,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 ## Milestone 3 — Debian and application hosting
 
-- [ ] Create a Debian virtual machine.
+- [x] Create VM 100 (`media-server`) with four vCPUs, 4 GiB RAM, a 64 GiB `local-lvm` system disk, VirtIO SCSI, QEMU Agent enabled, and VirtIO networking on `vmbr0`.
+- [x] Attach the Debian 13.7 netinst ISO and boot to the graphical installer.
+- [ ] Complete Debian installation and initial configuration.
 - [ ] Configure SSH access.
 - [ ] Apply system updates and establish a maintenance routine.
 - [ ] Install Docker Engine and Compose plugin in the Debian VM.
@@ -119,6 +121,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
 | 2026-11-15 | Rebooted Proxmox and checked package versions | Running kernel `7.0.14-29-pve`; `pve-manager` `9.2.27`; `proxmox-ve` meta-package `9.2.0`; updated host booted successfully |
+| 2026-11-15 | Created VM 100 (`media-server`) | Configured 4 vCPUs, 4 GiB RAM, 64 GiB NVMe-backed `local-lvm` disk, VirtIO SCSI single, QEMU Agent, and VirtIO network on `vmbr0` |
+| 2026-11-15 | Booted the Debian 13.7 netinst ISO in VM 100 | Debian graphical installer boot menu displayed in BIOS mode; OS installation not yet completed |
 
 ## Change notes
 
