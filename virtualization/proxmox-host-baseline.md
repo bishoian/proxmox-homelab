@@ -34,6 +34,27 @@ These figures are initial observations, not performance benchmarks. A subsequent
 
 The processor was subsequently confirmed as the standard Intel Core i5-8500, not the i5-8500T originally listed. The hardware inventory now reflects the installed CPU. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
 
+## CPU and network interface verification
+
+The Proxmox Shell reported the following CPU details:
+
+| Field | Result |
+|---|---|
+| Model | Intel Core i5-8500 CPU @ 3.00 GHz |
+| Socket count | 1 |
+| Logical CPUs | 6 (online CPUs 0–5) |
+
+The interface status and link-speed checks reported:
+
+| Interface | State | Link speed | Notes |
+|---|---|---:|---|
+| `nic0` | UP | 1000 Mb/s | Physical Ethernet interface |
+| `vmbr0` | UP | 1000 Mb/s | Proxmox bridge using the physical uplink |
+| `wlo1` | DOWN | Not reported | Wireless interface, not used for host connectivity |
+| `lo` | UP | Not applicable | Loopback interface |
+
+The host's wired network link is currently 1 Gbps. Although the RealHD switch supports 2.5GbE, the active link negotiates at 1 Gbps. The physical connection path and switch-side port status will be checked separately once the rack cabling is traced.
+
 ## Management access
 
 The host is reachable through its HTTPS management interface on TCP port 8006 from the home LAN. The management address is recorded in the local network configuration.
@@ -63,6 +84,7 @@ The available upgrades were applied without reported errors. The Proxmox Updates
 3. Allow the Seagate extended SMART self-test to finish.
 4. Reboot to activate the updated kernel.
 5. Verify the active kernel, Proxmox manager version, and node health after reboot.
-6. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
+6. Record the NVMe model and health.
+7. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
