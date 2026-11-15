@@ -1,40 +1,26 @@
 # Changelog
 
-Notable project documentation and infrastructure milestones are recorded here.
+A concise record of the homelab's major build and documentation milestones.
 
 ## 2026-11-15
 
-### Added
-- Expanded the project README with objectives, target architecture, milestone overview, and documentation practices.
-- Added the initial hardware inventory, including the rack, power distribution, patch panel, switch, server, DAS enclosure, disks, and cabling.
-- Added the planned network architecture and a placeholder switch port map for later verification.
-- Added a project-status checklist separating completed preparation from planned and unverified work.
+### Initial project setup
+- Created the public `proxmox-homelab` repository.
+- Added the project overview, hardware inventory, planned network architecture, and milestone checklist.
+- Documented the Lenovo M920q, TerraMaster D4-320, Seagate Exos drives, RealHD switch, RackMate cabinet, power distribution, patch panel, shelves, and cabling.
 
-### Status
-- Bootable Proxmox USB creation reported complete.
-- Proxmox installation and configuration remain pending.
-- One 6 TB Seagate Exos disk is installed; the second matching disk is awaiting delivery.
+### Proxmox installation
+- Created the Proxmox VE installation USB.
+- Enabled Intel VT-x and Intel VT-d in the M920q BIOS.
+- Booted the installer and installed Proxmox VE 9.2.2 on the internal NVMe using ext4.
+- Rebooted successfully to the Proxmox local console.
+- Signed in to the web interface and confirmed the `pve` node was online.
 
+### Storage
+- Connected the TerraMaster D4-320 to the Lenovo over USB.
+- Left disk detection, SMART checks, and storage configuration for the next commissioning stage.
 
-### Updated
-- Recorded the Lenovo M920q BIOS configuration: Intel VT-x and Intel VT-d enabled and saved (user-reported).
-- Updated the project README and milestone checklist. USB boot and Proxmox installation remain pending.
-
-### Updated
-- Recorded that the Lenovo successfully booted from the Proxmox USB installer. Disk selection and installation remain pending.
-
-### Added
-- Documented the initial Proxmox VE installation on the Lenovo M920q's internal NVMe and first boot to the local console.
-
-### Status
-- Proxmox VE installation completed; first web-interface login remains to be verified.
-
-
-### Added
-- Recorded first successful login to the Proxmox VE 9.2.2 web interface and confirmed the `pve` node is online.
-- Added an initial Proxmox host baseline record.
-- Recorded the TerraMaster D4-320 as physically connected to the Lenovo over USB; disk detection and health checks remain pending.
-
-### Updated
-- Updated the README, project checklist, hardware inventory, network architecture, and installation notes to reflect the verified dashboard access and current storage connection.
-- Removed repetitive publication/security reminders from supporting documentation, keeping the general documentation practice on the main README.
+### Current state
+- Proxmox VE 9.2.2 is installed and accessible through the web interface.
+- One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
+- The D4-320 is connected, but disk detection and health checks are still pending.
