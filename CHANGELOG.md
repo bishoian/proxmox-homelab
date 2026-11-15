@@ -85,10 +85,12 @@ A concise record of the homelab's major build and documentation milestones.
 - Attached the Debian 13.7 netinst ISO and booted to the graphical installer in BIOS mode.
 - Completed the Debian 13.7 base installation with no desktop environment, SSH server, and standard system utilities selected.
 - Configured GRUB on the VM's virtual system disk.
-- Booted from the installed system and reached the `media-server` tty1 login prompt. Account login, network connectivity, and SSH verification remain next.
+- Booted from the installed system and reached the `media-server` tty1 login prompt.
+- Logged in successfully as `ian`; verified hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture.
+- Confirmed the VirtIO interface `ens18` is UP and received an IPv4 address. DNS, internet reachability, and SSH remote access remain to be tested.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed and has successfully booted to its tty1 login prompt; account login and network/SSH verification are pending.
+- VM 100 has Debian 13.7 installed; the `ian` account login is verified and the `ens18` network interface is up with an IPv4 address. DNS, internet, and SSH checks remain pending.
