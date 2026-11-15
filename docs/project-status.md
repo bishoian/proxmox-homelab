@@ -34,7 +34,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Verify that Proxmox detects the installed drive.
 - [x] Identify the installed drive as a 6 TB Seagate Exos ST6000NM0115.
 - [x] Confirm SMART overall status reports `PASSED`.
-- [ ] Review detailed SMART attributes and power-on hours.
+- [x] Review and record the initial SMART attributes and reported power-on counters.
 - [ ] Run an extended SMART self-test and review the result.
 - [ ] Decide on filesystem, mount point, and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
@@ -94,7 +94,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Installed Proxmox VE using ext4 on the internal NVMe and rebooted | System reached the Proxmox local console |
 | 2026-11-15 | Opened the Proxmox web interface and signed in | Dashboard loaded; node `pve` online; Proxmox VE 9.2.2 confirmed |
 | 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Enclosure connected; drive initially absent because the rear power switch was off |
-| 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED`; detailed attributes and extended test pending |
+| 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED` |
+| 2026-11-15 | Reviewed the Seagate's initial SMART attribute table | Zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC counts; 24°C reported temperature; extended test pending |
 
 ## Change notes
 
