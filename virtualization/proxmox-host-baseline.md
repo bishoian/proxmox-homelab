@@ -50,14 +50,19 @@ See [Package Repository Configuration](../docs/package-repositories.md) for the 
 
 ## Package database refresh
 
-The package database refresh completed successfully. The task output showed successful access to the Debian Trixie, Debian Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription repositories. A total of 530 kB was fetched, package lists were read, and the task ended with `TASK OK`. The available upgrades have not yet been reviewed or installed.
+The package database refresh completed successfully. The task output showed successful access to the Debian Trixie, Debian Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription repositories. A total of 530 kB was fetched, package lists were read, and the task ended with `TASK OK`. The available upgrades were reviewed and installed successfully. The Updates view now reports no available updates. The batch included a newer Proxmox kernel and manager package. The host has not yet been rebooted, so the active kernel and running manager version remain to be verified.
+
+## Package upgrade
+
+The available upgrades were applied without reported errors. The Proxmox Updates view now reports `No updates available`. The update batch included a newer Proxmox kernel and manager package. A reboot is pending; the active kernel and running Proxmox manager version will be checked after reboot. The reboot is being held until the extended SMART test on the Seagate finishes.
 
 ## Next validation tasks
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
 2. Run an extended SMART self-test and review the result.
-3. Review the available package upgrades.
-4. Apply available updates after reviewing the proposed changes.
-5. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
+3. Allow the Seagate extended SMART self-test to finish.
+4. Reboot to activate the updated kernel.
+5. Verify the active kernel, Proxmox manager version, and node health after reboot.
+6. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
