@@ -43,7 +43,7 @@ The Debian installer detected one approximately 68.7 GB QEMU virtual disk. The p
 | Primary partition | 65.2 GB | ext4 | `/` |
 | Logical partition | 3.5 GB | swap | swap |
 
-The partition changes were written only to the VM's virtual system disk. The Seagate Exos data disk remains on the Proxmox host and has not been passed through, partitioned, or formatted.
+The partition changes were written only to the VM's virtual system disk. The Seagate Exos data disk remains on the Proxmox host and has not been passed through, partitioned, or formatted. Proxmox identifies it as a separate USB disk with no partitions, filesystem, or mount point; a persistent model-based `/dev/disk/by-id` entry has been identified. The exact device path and drive serial are not included in this public build record.
 
 ## Installation result
 
