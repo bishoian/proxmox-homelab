@@ -27,7 +27,7 @@ The physical disk was identified on the Proxmox host as a separate USB-attached 
 
 ## Filesystem and directory structure
 
-The selected filesystem is ext4, created inside the Debian VM after the disk has been passed through and positively identified.
+The selected filesystem is ext4. It has been created inside the Debian VM on `/dev/sdb1` and labeled `media`.
 
 Proposed mount point:
 
@@ -100,7 +100,7 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Run `wipefs --no-act` on the guest disk; no known signatures are reported and the command makes no changes.
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
 - [x] Create a GPT partition table on the guest data disk with one full-size partition (`/dev/sdb1`).
-- [ ] Create an ext4 filesystem inside Debian on `/dev/sdb1`.
+- [x] Create an ext4 filesystem inside Debian on `/dev/sdb1`, labeled `media`.
 - [ ] Mount the filesystem persistently by UUID at `/srv/media`.
 - [ ] Create the shared `/srv/media/data` directory structure.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
