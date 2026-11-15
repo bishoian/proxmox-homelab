@@ -105,6 +105,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
 - [Proxmox Host Baseline](virtualization/proxmox-host-baseline.md) — first web-interface login and initial host observations.
 - `virtualization/` — Proxmox host, VM, and container build records.
 - `services/` — deployment notes and configuration examples for hosted applications.
+- [D4-320 Drive Not Detected](troubleshooting/d4-320-drive-not-detected.md) — power-state diagnosis and storage detection verification.
 - `troubleshooting/` — incidents, diagnosis, fixes, and verification.
 
 ## Documentation approach
