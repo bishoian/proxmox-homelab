@@ -68,7 +68,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Verify DNS resolution for `deb.debian.org`.
 - [x] Confirm the SSH service reports `active` inside Debian.
 - [x] Confirm sudo authentication with `sudo -v`.
-- [ ] Verify outbound package downloads and full internet connectivity.
+- [x] Verify outbound access to Debian package repositories with `sudo apt update`; APT reported all packages up to date.
 - [ ] Test SSH login remotely from the Windows workstation.
 - [ ] Install and verify QEMU Guest Agent.
 - [ ] Apply system updates and establish a maintenance routine.
@@ -137,7 +137,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Completed Debian 13.7 installation in VM 100 | Base system and selected packages installed; GRUB configured on the VM's virtual system disk |
 | 2026-11-15 | Booted the installed Debian VM for the first time | Debian reached the `media-server` tty1 login prompt |
 | 2026-11-15 | Verified initial Debian guest login and network interface | Logged in as `ian`; `hostnamectl` confirmed Debian 13 Trixie on x86-64 with hostname `media-server`; VirtIO interface `ens18` was UP and had an IPv4 address assigned |
-| 2026-11-15 | Checked Debian administration and network services | `sudo -v` succeeded; default route via home gateway is present; `getent hosts deb.debian.org` resolved successfully; `systemctl is-active ssh` returned `active`. Remote SSH login and outbound package download test remain pending |
+| 2026-11-15 | Checked Debian administration and network services | `sudo -v` succeeded; default route via home gateway is present; `getent hosts deb.debian.org` resolved successfully; `systemctl is-active ssh` returned `active`. Remote SSH login remains pending |
+| 2026-11-15 | Refreshed Debian package indexes in VM 100 | `sudo apt update` successfully reached Debian Security, Trixie, and Trixie Updates repositories; APT reported all packages are up to date |
 
 ## Change notes
 
