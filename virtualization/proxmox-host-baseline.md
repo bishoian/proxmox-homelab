@@ -34,6 +34,19 @@ These figures are initial observations, not performance benchmarks. A subsequent
 
 The processor was subsequently confirmed as the standard Intel Core i5-8500, not the i5-8500T originally listed. The hardware inventory now reflects the installed CPU. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
 
+## Disk and partition inventory
+
+The Proxmox Shell `lsblk` output reported:
+
+| Device | Size | Model / type | Layout / status |
+|---|---:|---|---|
+| `/dev/nvme0n1` | 238.5G | Lenovo NVMe 2280S 256GB SSD | EFI and Proxmox LVM partitions |
+| `/dev/sda` | 5.5T | Seagate Exos ST6000NM0115-1YZ110 | No partitions, filesystem, or mount point shown |
+
+The NVMe partition layout includes a small BIOS boot partition, a 1 GB EFI partition mounted at `/boot/efi`, and an LVM physical volume. The Proxmox LVM layout includes an 8 GB swap volume, a 69.4 GB root filesystem, and an LVM-thin data pool with approximately 141.2 GB of data space plus metadata.
+
+The Seagate is currently a raw, unpartitioned disk. No filesystem, mount point, or Proxmox storage definition has been created on it. This is intentional until the final storage layout is selected.
+
 ## CPU and network interface verification
 
 The Proxmox Shell reported the following CPU details:
