@@ -34,7 +34,9 @@ A concise record of the homelab's major build and documentation milestones.
 - Disabled the Proxmox VE Enterprise and Ceph Squid Enterprise entries.
 - Enabled the Proxmox VE no-subscription repository and Ceph Tentacle no-subscription repository.
 - Retained the Debian Trixie and Debian Security repositories.
-- Added documentation for the package source configuration. Package list refresh and update review are next.
+- Added documentation for the package source configuration.
+- Refreshed the APT package database successfully; Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories were reached, 530 kB was fetched, and the task ended with `TASK OK`.
+- Left package upgrade review and installation for the next maintenance step.
 
 ### Current state
 - Proxmox VE 9.2.2 is installed and accessible through the web interface.
