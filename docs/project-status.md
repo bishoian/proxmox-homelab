@@ -92,8 +92,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Verify the Docker service is active and record installed versions.
 - [x] Pull and run the official `hello-world` container successfully.
 - [x] Create a version-controlled Docker Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
-- [ ] Copy the Compose project to the Debian VM, create its config/cache directories, and validate it with `docker compose config`.
-- [ ] Deploy the media stack and verify each service UI and storage mapping.
+- [x] Create the `/opt/media-stack` project and service configuration/cache directories on Debian.
+- [x] Download the version-controlled Compose file from GitHub and validate it with `docker compose config --quiet` (exit status 0).
+- [ ] Deploy the media stack with `docker compose up -d`.
+- [ ] Verify container health, service logs, web interfaces, and storage mappings.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
@@ -162,6 +164,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Added Docker’s official Debian package repository | Configured the Docker Debian Trixie stable repository and successfully ran `sudo apt update`; Docker package indexes downloaded successfully and APT reported all package lists current |
 | 2026-11-15 | Installed Docker Engine and Compose in the Debian VM | Installed Docker Engine/CLI 29.9.3, containerd 2.4.2, and Docker Compose 5.7.1; Docker service reports `active` |
 | 2026-11-15 | Validated container access to Seagate media storage | Ran an Alpine container as UID/GID 1000:1000 with `/srv/media/data` bind-mounted at `/data`; the container created and deleted a test file and printed `Container write test passed` |
+| 2026-11-15 | Prepared and validated the media-stack Compose project | Created `/opt/media-stack` configuration/cache directories, downloaded the version-controlled Compose file from GitHub, and confirmed `docker compose config --quiet` exits with status 0. Application containers have not yet been started |
 | 2026-11-15 | Ran the Docker `hello-world` test container | Pulled `hello-world:latest` from Docker Hub, created and executed the container, and received the expected success message |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
