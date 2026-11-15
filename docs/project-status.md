@@ -31,7 +31,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Refresh package lists successfully from all configured sources.
 - [x] Review and apply available package upgrades.
 - [x] Confirm the Updates view reports no available updates after the upgrade.
-- [ ] Reboot to activate the updated kernel after the Seagate extended SMART test finishes.
+- [ ] Reboot to activate the updated kernel.
 - [ ] Verify the active kernel and Proxmox manager version after reboot.
 - [ ] Configure time and administrative settings.
 - [ ] Document host recovery and console access.
@@ -45,8 +45,11 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Identify the installed drive as a 6 TB Seagate Exos ST6000NM0115.
 - [x] Confirm SMART overall status reports `PASSED`.
 - [x] Review and record the initial SMART attributes and reported power-on counters.
-- [ ] Complete an extended SMART self-test. **Deferred:** the running test will be intentionally aborted before completion; the initial SMART snapshot will be used for the first media setup, with the incomplete test clearly recorded.
-- [ ] Choose the data disk layout, filesystem, mount point, and access permissions.
+- [x] Stop the extended SMART self-test early and record the incomplete result. The self-test log reports Aborted by host with 80% remaining; this is not a passing extended test.
+- [ ] Consider a completed extended SMART self-test during a later maintenance window.
+- [x] Select a standalone ext4 data disk dedicated to the Debian media-services VM; reserve the second drive for later.
+- [ ] Create a GPT partition table and ext4 filesystem after disk passthrough to Debian.
+- [ ] Configure the UUID-based mount and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
 **Current disk inventory:** One 6 TB Seagate Exos drive is installed in the enclosure. The second matching 6 TB drive is awaiting delivery. No disk has been initialized, formatted, or assigned to a Proxmox storage pool.
@@ -106,7 +109,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Enclosure connected; drive initially absent because the rear power switch was off |
 | 2026-11-15 | Powered on the D4-320 and refreshed Proxmox disk inventory | 6 TB Seagate Exos detected as `/dev/sda`; SMART overall status `PASSED` |
 | 2026-11-15 | Reviewed the Seagate's initial SMART attribute table | Zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC counts; 24°C reported temperature |
-| 2026-11-15 | Started the Seagate extended SMART self-test | Estimated duration approximately 10 hours; an early abort has been selected, so no complete extended-test result will be claimed |
+| 2026-11-15 | Started the Seagate extended SMART self-test | Estimated duration approximately 10 hours |
+| 2026-11-15 | Stopped the Seagate extended SMART self-test early | Self-test log reports Aborted by host with 80% remaining; test is incomplete and is not recorded as a pass |
+| 2026-11-15 | Selected the initial media storage layout | First Seagate reserved as a standalone ext4 data disk for the Debian media-services VM; second drive reserved for future expansion |
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
 | 2026-11-15 | Inspected block devices with `lsblk` | Internal Lenovo NVMe reports 238.5G with EFI and Proxmox LVM layout; Seagate Exos appears as a separate 5.5T disk with no partitions, filesystem, or mount point |
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
