@@ -38,6 +38,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 ## Milestone 2 — Storage commissioning
 
+**Proposed layout:** Two independent ext4 filesystems, with MergerFS as an optional combined namespace after both drives pass health checks. The layout has been documented but not implemented. See [Proposed Storage Layout](../storage/storage-layout.md).
+
 - [x] Connect the TerraMaster D4-320 to the Lenovo over USB.
 - [x] Verify that Proxmox detects the installed drive.
 - [x] Identify the installed drive as a 6 TB Seagate Exos ST6000NM0115.
