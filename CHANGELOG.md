@@ -181,7 +181,13 @@ A concise record of the homelab's major build and documentation milestones.
 ### Media application first-run configuration
 - Completed initial setup of Jellyfin and qBittorrent through their web interfaces.
 - Replaced qBittorrent's temporary first-start administrator password; no credentials are stored in the repository.
-- Radarr, Sonarr, and Prowlarr configuration and integration remain in progress.
+- Completed initial setup of Radarr and Sonarr, configured their library root folders and qBittorrent download-client categories, and connected Prowlarr to Radarr and Sonarr. End-to-end synchronization, download/import behavior, hardlinks, and playback remain to be verified.
+
+### Radarr, Sonarr, and Prowlarr configuration
+- Completed first-run setup of Radarr and Sonarr and configured their movie/TV root folders.
+- Configured qBittorrent as the download client in Radarr and Sonarr with separate `radarr` and `sonarr` categories.
+- Added Radarr and Sonarr as applications in Prowlarr using their application API keys.
+- Initial setup is now complete across Jellyfin, qBittorrent, Radarr, Sonarr, and Prowlarr. End-to-end synchronization, download/import behavior, hardlinks, Jellyfin library scans, and playback remain to be verified.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
