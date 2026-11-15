@@ -6,7 +6,7 @@ I am building this homelab as a practical learning environment for virtualizatio
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow incrementally from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE has been installed to the Lenovo's internal NVMe drive, and the system has rebooted to the Proxmox local console. The console displays the web-management endpoint. First web-interface login and host verification are the next steps. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), and [Hardware Inventory](docs/hardware-inventory.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive. I have successfully logged in to the web interface and confirmed that the `pve` node is online. The TerraMaster D4-320 is now connected to the host; disk detection and health checks are the next storage tasks. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## My project objectives
 
@@ -23,8 +23,8 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and will grow increm
 
 | Component | Configuration | Current status |
 |---|---|---|
-| Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500T, 16 GB RAM, 256 GB NVMe | Proxmox VE installed |
-| Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Owned; commissioning pending |
+| Compute | Lenovo ThinkCentre M920q Tiny, Intel Core i5-8500T, 16 GB RAM, 256 GB NVMe | Proxmox VE 9.2.2 installed; web interface accessible |
+| Storage enclosure | TerraMaster D4-320, four-bay USB DAS | Connected to Lenovo; disk detection pending |
 | Data disks | 2 × Seagate Exos ST6000NM0115, 6 TB each | One installed; second awaiting delivery |
 | Network switch | RealHD 8-port 2.5GbE web-managed switch with 1 × 10G SFP+ port | Installed in rack |
 | Router | NETGEAR Nighthawk RAX41v2 | Existing router |
@@ -66,9 +66,9 @@ See [Hardware Inventory](docs/hardware-inventory.md) for the complete component 
           6 TB each (2 planned)
 ```
 
-The TerraMaster D4-320 is **direct-attached storage (DAS)**. I plan to connect it to the Lenovo over USB, not to the Ethernet switch. The Lenovo will provide network access to data through services or file sharing that I configure.
+The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB, not to the Ethernet switch. The enclosure is physically connected; the disk's visibility to Proxmox and its health have not yet been verified.
 
-This diagram represents my target design, not a claim that these services are already deployed. I will document exact cabling, port assignments, IP addressing, and VLANs only after I have verified them.
+This diagram represents my target design, not a claim that the planned services are already deployed. I will document exact cabling, port assignments, and VLANs as I verify them.
 
 ## My project milestones
 
@@ -77,14 +77,16 @@ This diagram represents my target design, not a claim that these services are al
    - [x] Enable Intel Virtualization Technology (VT-x) and Intel VT-d in BIOS.
    - [x] Boot from the USB and reach the Proxmox installer.
    - [x] Install Proxmox VE to the Lenovo's internal NVMe and reboot to the local console.
-   - [ ] Log in to the web interface and verify host status.
-   - [ ] Record the installed Proxmox VE version and host hardware details.
+   - [x] Log in to the web interface and confirm the `pve` node is online.
+   - [x] Record Proxmox VE version 9.2.2.
+   - [ ] Verify CPU, memory, NVMe, and NIC details and link status.
 2. **Foundational administration**
    - [ ] Configure updates, time, administrative access, and storage.
    - [ ] Create a Debian virtual machine.
    - [ ] Establish and test a backup approach before relying on hosted services.
 3. **Storage and media services**
-   - [ ] Commission the D4-320 and inspect disk SMART health.
+   - [x] Connect the D4-320 to the Proxmox host.
+   - [ ] Verify disk detection and inspect SMART health.
    - [ ] Configure a safe mount and storage layout.
    - [ ] Deploy Jellyfin.
 4. **Application hosting and monitoring**
@@ -103,6 +105,7 @@ This diagram represents my target design, not a claim that these services are al
 - [Network Architecture](docs/network-architecture.md) — current and target network design.
 - [Project Status](docs/project-status.md) — my milestone checklist and verification log.
 - [Proxmox Installation Notes](virtualization/proxmox-installation.md) — installer choices and first-boot process.
+- [Proxmox Host Baseline](virtualization/proxmox-host-baseline.md) — first web-interface login and initial host observations.
 - `virtualization/` — Proxmox host, VM, and container build records.
 - `services/` — deployment notes and configuration examples for hosted applications.
 - `troubleshooting/` — sanitized incidents, diagnosis, fixes, and verification.
@@ -111,7 +114,7 @@ This diagram represents my target design, not a claim that these services are al
 
 For each significant implementation, I record the objective, environment, prerequisites, implementation steps, validation evidence, issues encountered, resolution, and lessons learned.
 
-I mark work complete only after I have performed and verified it. I label planned work clearly. I do not publish passwords, API tokens, private keys, personal data, router credentials, unredacted configuration exports, or sensitive network details. I use example values and placeholders in public documentation.
+I mark work complete only after I have performed and verified it. I label planned work clearly. I keep operational credentials and sensitive personal or network information out of the public repository.
 
 ## License
 
