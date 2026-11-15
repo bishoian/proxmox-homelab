@@ -99,15 +99,17 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Review initial service logs; application migrations/startup completed and qBittorrent Web UI initialized.
 - [x] Complete initial Jellyfin setup.
 - [x] Complete initial qBittorrent setup and change the temporary first-start Web UI password.
-- [ ] Complete Radarr and Sonarr first-run setup, root folders, and qBittorrent download-client connections.
-- [ ] Configure Prowlarr and connect it to Radarr and Sonarr.
-- [ ] Verify each application’s service connectivity and storage mappings.
+- [x] Complete Radarr and Sonarr first-run setup and configure their movie/TV root folders.
+- [x] Configure qBittorrent as the download client in Radarr and Sonarr with their respective categories.
+- [x] Configure Prowlarr application connections to Radarr and Sonarr using their API keys.
+- [ ] Verify end-to-end application sync, download handling, import paths, and hardlinks.
+- [ ] Verify Jellyfin library scans and playback from a trusted client.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
 
-- [ ] Deploy Jellyfin.
-- [ ] Configure media storage access.
+- [x] Deploy Jellyfin.
+- [x] Configure Jellyfin media library access to the read-only `/media` bind mount.
 - [ ] Verify playback from a trusted client.
 - [ ] Document transcoding expectations and hardware limitations.
 - [ ] Configure backups for application configuration and metadata.
