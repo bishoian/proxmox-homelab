@@ -54,7 +54,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Refreshed the APT package database successfully; Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories were reached, 530 kB was fetched, and the task ended with `TASK OK`.
 - Reviewed and installed the available package upgrades without reported errors.
 - Confirmed the Proxmox Updates view reports `No updates available`.
-- Noted that a newer Proxmox kernel and manager package were included; reboot and active-version verification remain pending until the extended Seagate SMART test completes.
+- Noted that a newer Proxmox kernel and manager package were included.
 
 ### Storage architecture planning
 - Selected a capacity-focused proposal for the two 6 TB drives: independent ext4 filesystems, with optional MergerFS pooling to provide one namespace without striping or mirroring.
@@ -69,10 +69,16 @@ A concise record of the homelab's major build and documentation milestones.
 - Kept the VM operating system and container configuration on the internal NVMe; media, downloads, and library data will share one filesystem in the guest.
 - The storage design is selected but has not been implemented.
 
+### Post-upgrade reboot
+- Rebooted successfully after package upgrades.
+- Verified the active kernel as `7.0.14-29-pve`.
+- Verified `pve-manager` version `9.2.27` and the `proxmox-ve` meta-package version `9.2.0`.
+- Confirmed the upgraded Ceph client package version `20.2.5-pve1` is installed; no Ceph cluster is deployed.
+
 ### SMART test disposition
 - Recorded the extended SMART self-test as intentionally aborted by the host at 80% remaining; no successful extended-test result is claimed.
 
 ### Current state
-- Proxmox VE is installed and accessible through the web interface; the displayed manager version will be rechecked after the post-upgrade reboot.
+- Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete. The selected next step is a single-disk Debian media-services setup.
