@@ -105,7 +105,8 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Verify `/dev/sdb1` is mounted read/write as ext4 with `findmnt` and `df -hT`.
 - [ ] Reload systemd manager configuration and verify the mount after reboot.
 - [x] Create the shared `/srv/media/data` directory structure for torrents, usenet, movies, TV, and music.
-- [ ] Set ownership and setgid directory permissions for the planned container UID/GID.
+- [x] Set `/srv/media/data` ownership to UID/GID 1000 (`ian:ian`).
+- [x] Apply `2775` directory permissions with setgid inheritance and verify owner/group.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
 - [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
 - [ ] Test imports, hardlinks, playback, and permissions.
