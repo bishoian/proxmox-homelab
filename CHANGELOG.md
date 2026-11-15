@@ -158,6 +158,12 @@ A concise record of the homelab's major build and documentation milestones.
 - The container created and deleted a test file successfully and printed `Container write test passed`.
 - Confirmed the directory ownership and setgid permission model works for a non-root container process.
 
+### Docker Compose media stack preparation
+- Created a version-controlled Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
+- Kept application configuration and Jellyfin cache on the VM system disk; mapped media data separately from the Seagate filesystem.
+- Standardized the in-container `/data` path for Radarr, Sonarr, and qBittorrent; Jellyfin receives a read-only media-library mount.
+- The Compose file is in GitHub but has not yet been copied to or deployed on the Debian VM.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
