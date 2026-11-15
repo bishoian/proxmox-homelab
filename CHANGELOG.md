@@ -92,10 +92,10 @@ A concise record of the homelab's major build and documentation milestones.
 - Ran `sudo apt update` successfully; Debian Security, Trixie, and Trixie Updates repositories responded, and APT reported all packages up to date.
 - Checked QEMU Guest Agent in Debian VM 100: package was already current and service reports `active`; Debian's static service unit does not require `systemctl enable`.
 - Verified host-to-guest agent communication with `qm agent 100 ping`; it returned without output or error.
-- Left remote SSH login testing pending.
+- Connected remotely from Windows PowerShell to the Debian VM over SSH; host key was accepted and authentication succeeded as `ian`.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login remains to be tested.
+- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified.
