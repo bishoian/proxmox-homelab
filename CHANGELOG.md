@@ -30,6 +30,12 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed the installed processor is an Intel Core i5-8500 (standard model, not the i5-8500T).
 - Identified that the Enterprise package repository is enabled but requires a subscription; repository configuration for the unsubscribed lab is pending.
 
+### Package repositories
+- Disabled the Proxmox VE Enterprise and Ceph Squid Enterprise entries.
+- Enabled the Proxmox VE no-subscription repository and Ceph Tentacle no-subscription repository.
+- Retained the Debian Trixie and Debian Security repositories.
+- Added documentation for the package source configuration. Package list refresh and update review are next.
+
 ### Current state
 - Proxmox VE 9.2.2 is installed and accessible through the web interface.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
