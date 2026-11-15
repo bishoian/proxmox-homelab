@@ -51,8 +51,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Identify the Seagate's persistent `/dev/disk/by-id` entry on the Proxmox host (device-specific path retained locally, not in public notes).
 - [x] Shut down VM 100 cleanly and attach the physical Seagate to SCSI1 using its persistent disk ID.
 - [x] Boot Debian and confirm the passed-through Seagate appears as a separate 5.5 TiB SCSI disk (`sdb`) with no filesystem or mount point.
-- [ ] Perform a final read-only signature check before initializing the disk.
-- [ ] Create a GPT partition table and ext4 filesystem inside Debian.
+- [x] Inspect the guest disk with `lsblk -f`; no filesystem or mount point was reported.
+- [x] Run `wipefs --no-act` against the guest disk; no known signatures were reported and no changes were made.
+- [ ] Create a GPT partition table on the guest data disk.
+- [ ] Create an ext4 filesystem inside Debian.
 - [ ] Configure the UUID-based mount and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
@@ -135,7 +137,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Identified the Seagate's persistent disk path for VM passthrough | Confirmed the 5.5 TiB Seagate Exos is a separate USB disk with no partitions, filesystem, or mount point; a model-based `/dev/disk/by-id` link resolves to the disk. Exact serial and device path are omitted from public documentation |
 | 2026-11-15 | Attached the Seagate physical disk to Debian VM 100 | Added the whole physical disk as SCSI1 using its persistent disk ID. VM configuration confirms SCSI0 remains the 64 GiB Debian system disk and boot order prioritizes SCSI0; installer media is detached |
-| 2026-11-15 | Verified Seagate passthrough inside Debian | `lsblk` shows a separate 5.5 TiB SCSI disk as `sdb`, model presented as `QEMU HARDDISK`, with no partition, filesystem, or mount point. Read-only signature inspection is next; no formatting has occurred |
+| 2026-11-15 | Verified Seagate passthrough inside Debian | `lsblk` shows a separate 5.5 TiB SCSI disk as `sdb`, model presented as `QEMU HARDDISK`, with no partition, filesystem, or mount point |
+| 2026-11-15 | Performed read-only signature inspection on the Seagate guest disk | `lsblk -f` showed no filesystem or mount point; `sudo wipefs --no-act /dev/sdb` returned no known signatures. The inspection did not modify the disk. GPT initialization is the next planned operation |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
