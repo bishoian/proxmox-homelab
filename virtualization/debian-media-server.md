@@ -109,7 +109,7 @@ Created a GPT partition table inside Debian on the passed-through Seagate disk, 
 
 ## Ext4 filesystem creation
 
-Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The subsequent `lsblk -f /dev/sdb` output confirmed the ext4 filesystem and UUID. A UUID-based `/etc/fstab` entry was added for `/srv/media`. `sudo mount -a` succeeded, `findmnt` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT` showed approximately 5.4 TiB available. A systemd manager reload and reboot persistence check remain pending.
+Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The subsequent `lsblk -f /dev/sdb` output confirmed the ext4 filesystem and UUID. A UUID-based `/etc/fstab` entry was added for `/srv/media`. `sudo mount -a` succeeded, `findmnt` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT` showed approximately 5.4 TiB available. `sudo systemctl daemon-reload` completed successfully. `sudo findmnt --verify --verbose` reported zero parse errors and zero errors; its one warning is the expected empty virtual CD-ROM at `/media/cdrom0` with no medium inserted. A reboot persistence check remains pending.
 
 ## Persistent mount configuration
 
