@@ -137,6 +137,10 @@ Created and verified the following directories on the mounted ext4 filesystem:
 
 The `lost+found` directory at the filesystem root is the standard ext4 recovery directory and is left untouched. The Debian account `ian` has UID 1000 and primary GID 1000. The planned container applications will use a consistent UID/GID mapping; directory ownership and permissions are being configured.
 
+## Media data ownership and permissions
+
+The Debian account `ian` was confirmed as UID 1000 with primary GID 1000. Ownership of `/srv/media/data` was set recursively to `1000:1000`. All directories under the data tree were assigned mode `2775`, enabling group inheritance for newly created items. Existing files were assigned mode `0664` (the tree was initially empty). A directory listing verified the displayed directories as `drwxrwsr-x` and owner/group `ian:ian`.
+
 ## Planned media storage
 
 The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It is formatted as ext4 inside Debian and will be mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
