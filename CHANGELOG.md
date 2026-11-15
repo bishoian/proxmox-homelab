@@ -18,9 +18,11 @@ A concise record of the homelab's major build and documentation milestones.
 
 ### Storage
 - Connected the TerraMaster D4-320 to the Lenovo over USB.
-- Left disk detection, SMART checks, and storage configuration for the next commissioning stage.
+- Traced the initial missing-drive symptom to the enclosure's rear power switch being off.
+- Powered on the enclosure and refreshed Proxmox disk inventory; the 6 TB Seagate Exos appeared as `/dev/sda`.
+- Confirmed the SMART overall status reports `PASSED`; detailed attributes and an extended self-test remain pending.
 
 ### Current state
 - Proxmox VE 9.2.2 is installed and accessible through the web interface.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
-- The D4-320 is connected, but disk detection and health checks are still pending.
+- The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; detailed health checks and storage configuration remain pending.
