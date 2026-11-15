@@ -5,7 +5,7 @@
 **Enclosure:** TerraMaster D4-320 USB DAS  
 **Device path at inspection:** `/dev/sda`  
 **Inspection date:** 2026-11-15  
-**Status:** Initial SMART review completed; extended self-test running.
+**Status:** Initial SMART attributes reviewed; extended self-test intentionally aborted before completion.
 
 ## Detection
 
@@ -37,7 +37,7 @@ Seagate's guidance on SMART interpretation: [How do I interpret SMART diagnostic
 
 Seagate's openSeaChest documentation also explains that raw attribute formats vary by drive vendor and that Power On Hours and Head Flight Hours represent different measurements: [Drive Health and SMART](https://github.com/Seagate/openSeaChest/wiki/Drive-Health-and-SMART).
 
-## Assessment
+## Initial assessment
 
 The initial SMART snapshot is encouraging:
 
@@ -46,25 +46,37 @@ The initial SMART snapshot is encouraging:
 - No reported uncorrectable errors or UDMA CRC errors are shown.
 - The reported temperature is 24°C.
 
-The Power On Hours raw value of zero and low cycle counters should not be interpreted as proof that a renewed drive has never been used. The values are recorded as displayed and will be considered alongside the extended self-test and future monitoring.
+The Power On Hours raw value of zero and low cycle counters should not be interpreted as proof that a renewed drive has never been used. The initial snapshot is not a substitute for a complete extended read test.
 
-## Extended self-test
+## Extended self-test result
 
-The extended SMART self-test was started with `smartctl -t long /dev/sda`. The drive reported an estimated duration of approximately 10 hours. The test runs in the drive's background; the Proxmox web interface does not need to remain open, but the Lenovo and D4-320 should remain powered on and connected. The result has not yet been collected.
+The extended SMART test was started with `smartctl -t long /dev/sda`. The drive estimated approximately 10 hours for the test. It was intentionally stopped with `smartctl -X /dev/sda`.
 
-To review the result after the estimated completion time, run:
+The resulting self-test log showed:
 
-```bash
-smartctl -l selftest /dev/sda
-smartctl -a /dev/sda
-```
+| Field | Result |
+|---|---|
+| Test description | Extended offline |
+| Status | Aborted by host |
+| Remaining | 80% |
+| Power-on lifetime at test log | 1 hour |
+| LBA of first error | No value shown |
 
-## Next test
+The test had progressed approximately 20% before it was stopped. The log contains no first-error LBA for this aborted entry. This is an incomplete test, not a successful extended-test result and not, by itself, evidence of a disk failure.
 
+## Current decision
+
+The first Seagate will be used for the initial media-services build based on the encouraging initial SMART snapshot. The incomplete extended test will remain documented. The disk will be monitored during initial use, and important media or application data will require a separate backup.
+
+A completed extended SMART self-test can be run during a later maintenance window.
+
+## Follow-up
+
+- [x] Capture the initial SMART attribute table.
 - [x] Start the extended SMART self-test.
-- [ ] Wait for the background test to complete (estimated duration approximately 10 hours).
-- [ ] Check the self-test result and any error log entries.
-- [ ] Recheck key SMART attributes after the test.
-- [ ] Continue to monitor temperature and error counters during initial use.
+- [x] Stop the test early and record the Aborted by host result.
+- [ ] Consider a completed extended SMART self-test during a later maintenance window.
+- [ ] Recheck key SMART attributes during routine maintenance.
+- [ ] Monitor temperature and error counters during initial use.
 
 No partitioning, formatting, filesystem creation, or Proxmox storage-pool configuration has been performed during this inspection.
