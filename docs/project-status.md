@@ -1,0 +1,102 @@
+# Project Status
+
+**Last updated:** 2026-11-15  
+**Overall status:** Initial preparation; Proxmox installation not yet completed.
+
+This checklist is the source of truth for project progress. Items are marked complete only when the work has been performed and the result has been verified. User-reported physical setup is identified as such.
+
+## Milestone 0 — Preparation
+
+- [x] Public GitHub repository created.
+- [x] Initial project README and hardware inventory committed.
+- [x] Bootable Proxmox installation USB created (user-reported).
+- [ ] Verify USB boots successfully on the M920q.
+- [ ] Enter BIOS/UEFI and verify Intel virtualization settings.
+- [ ] Confirm UEFI boot configuration.
+- [ ] Confirm the 256 GB NVMe is the intended installation target.
+- [ ] Keep the TerraMaster and data disks disconnected during Proxmox installation to reduce the risk of selecting the wrong disk.
+
+## Milestone 1 — Proxmox installation and baseline
+
+- [ ] Install Proxmox VE to the Lenovo's 256 GB NVMe.
+- [ ] Record Proxmox VE version and installation date.
+- [ ] Record CPU, memory, NVMe model, and NIC information.
+- [ ] Configure a stable management address after inspecting the existing LAN.
+- [ ] Verify the management web UI from another trusted device.
+- [ ] Apply updates using the appropriate Proxmox repository configuration.
+- [ ] Configure time synchronization and administrative access.
+- [ ] Document recovery and console access.
+
+## Milestone 2 — Storage commissioning
+
+- [ ] Connect the TerraMaster D4-320 to the Lenovo.
+- [ ] Confirm enclosure detection and USB connection mode.
+- [ ] Record each disk's model, capacity, and serial privately.
+- [ ] Capture SMART health and power-on hours.
+- [ ] Run extended SMART self-tests and review results.
+- [ ] Decide on filesystem, mount point, and access permissions.
+- [ ] Design and test an independent backup plan before storing irreplaceable data.
+
+**Caution:** The second 6 TB disk is awaiting delivery. Do not assume mirroring, RAID, pooling, or backup behavior merely because multiple disks are installed in the enclosure.
+
+## Milestone 3 — Debian and application hosting
+
+- [ ] Create a Debian virtual machine.
+- [ ] Configure SSH access securely.
+- [ ] Apply system updates and establish a maintenance routine.
+- [ ] Install Docker Engine and Compose plugin in the Debian VM.
+- [ ] Deploy a first test service.
+- [ ] Record service health checks, logs, and update procedure.
+
+## Milestone 4 — Media service
+
+- [ ] Deploy Jellyfin.
+- [ ] Configure media storage access.
+- [ ] Verify playback from a trusted client.
+- [ ] Document transcoding expectations and hardware limitations.
+- [ ] Configure backups for application configuration and metadata.
+
+## Milestone 5 — Monitoring and operations
+
+- [ ] Deploy Uptime Kuma or equivalent monitoring.
+- [ ] Monitor host and service availability.
+- [ ] Document routine update and maintenance steps.
+- [ ] Test a restore procedure.
+- [ ] Record a troubleshooting incident with root cause and validation evidence.
+
+## Milestone 6 — Windows administration lab
+
+- [ ] Create a Windows Server VM.
+- [ ] Create a separate Windows client VM.
+- [ ] Build an isolated practice domain.
+- [ ] Configure Active Directory Domain Services.
+- [ ] Practice DNS, DHCP, users, groups, and Group Policy.
+- [ ] Document common support tasks and troubleshooting.
+
+## Milestone 7 — Networking
+
+- [ ] Identify exact RealHD switch model and firmware.
+- [ ] Document current switch port map and link speeds.
+- [ ] Verify router capabilities relevant to VLANs.
+- [ ] Design management, server, trusted-client, and lab segments.
+- [ ] Implement VLANs with a tested recovery path.
+- [ ] Validate allowed and blocked traffic with explicit tests.
+
+## Evidence log
+
+| Date | Activity | Result / evidence |
+|---|---|---|
+| 2026-11-15 | Created public GitHub project and documented the initial hardware inventory and planned network architecture | Repository initialized; Proxmox installation remains pending |
+
+## Change-control notes
+
+For significant changes, document:
+
+- What changed and why.
+- The affected hardware, VM, container, or network component.
+- Commands or configuration changes, with secrets removed.
+- A before/after validation.
+- Rollback or recovery steps.
+- Lessons learned.
+
+Do not mark a task complete based only on an intention or an unverified configuration change.
