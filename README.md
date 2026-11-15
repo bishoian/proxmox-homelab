@@ -6,7 +6,7 @@ A hands-on homelab project focused on virtualization, Linux administration, netw
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. An extended self-test is running and will be reviewed after completion. The initial host summary confirms six CPUs and 15.46 GiB of usable RAM. The Proxmox VE and Ceph Tentacle no-subscription repositories are enabled alongside Debian Trixie and Debian Security. The package-list refresh completed successfully; available upgrades are next. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. An extended self-test is running and will be reviewed after completion. The initial host summary confirms six CPUs and 15.46 GiB of usable RAM. The Proxmox VE and Ceph Tentacle no-subscription repositories are enabled alongside Debian Trixie and Debian Security. Package upgrades have been applied successfully, and the Updates view now reports no available updates. A reboot is pending to activate the updated Proxmox kernel; the running kernel and manager version will be checked afterward. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## Project goals
 
@@ -78,7 +78,8 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
 2. **Foundational administration**
    - [x] Configure Proxmox VE and Ceph no-subscription repositories.
    - [x] Refresh package lists successfully.
-   - [ ] Review available package upgrades.
+   - [x] Review and apply available package upgrades.
+   - [ ] Reboot after the extended Seagate SMART self-test finishes and verify the active kernel and Proxmox version.
    - [ ] Configure time and administrative settings.
    - [ ] Create a Debian virtual machine.
    - [ ] Establish and test a backup approach before relying on hosted services.
@@ -86,7 +87,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Connect the D4-320 to the Proxmox host.
    - [x] Verify disk detection and confirm SMART overall status is `PASSED`.
    - [x] Review the initial SMART attributes and record the reported power-on counters.
-   - [ ] Run an extended SMART self-test.
+   - [ ] Complete the running extended SMART self-test and review its result.
    - [ ] Configure a filesystem, mount point, and storage layout.
    - [ ] Deploy Jellyfin.
 4. **Application hosting and monitoring**
