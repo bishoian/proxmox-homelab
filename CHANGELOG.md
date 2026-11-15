@@ -99,6 +99,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Located the persistent model-based `/dev/disk/by-id` link that resolves to the physical disk.
 - Kept the device-specific identifier and serial out of the public repository. Physical passthrough to VM 100 has not yet been configured.
 
+### Seagate disk passthrough
+- Attached the whole Seagate Exos physical disk to VM 100 as SCSI1 using its persistent disk identifier.
+- Verified VM configuration preserves the 64 GiB Debian system disk as SCSI0 and keeps SCSI0 first in the boot order.
+- Confirmed the virtual CD/DVD drive has no installer ISO attached. The Seagate remains unpartitioned and unformatted; guest-side detection verification is next.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
