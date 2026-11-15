@@ -55,7 +55,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Run `wipefs --no-act` against the guest disk; no known signatures were reported and no changes were made.
 - [x] Create a GPT partition table on the guest data disk with one full-size partition (`/dev/sdb1`).
 - [x] Create an ext4 filesystem on `/dev/sdb1` inside Debian and label it `media`.
-- [ ] Configure the UUID-based mount at `/srv/media` and set access permissions.
+- [x] Configure the UUID-based `/etc/fstab` entry for `/srv/media`.
+- [x] Test the entry with `sudo mount -a` and verify the ext4 filesystem is mounted read/write with `findmnt` and `df -hT`.
+- [ ] Reload the systemd manager configuration and verify the mount survives a reboot.
+- [ ] Set media-directory ownership and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
 **Current disk inventory:** One 6 TB Seagate Exos drive is installed in the enclosure and passed through to Debian VM 100. Its GPT partition `/dev/sdb1` is formatted as ext4 and labeled `media`; it is not yet mounted. The second matching 6 TB drive is awaiting delivery.
@@ -140,7 +143,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Verified Seagate passthrough inside Debian | `lsblk` shows a separate 5.5 TiB SCSI disk as `sdb`, model presented as `QEMU HARDDISK`, with no partition, filesystem, or mount point |
 | 2026-11-15 | Performed read-only signature inspection on the Seagate guest disk | `lsblk -f` showed no filesystem or mount point; `sudo wipefs --no-act /dev/sdb` returned no known signatures. The inspection did not modify the disk |
 | 2026-11-15 | Created the Seagate GPT partition table | Created one partition using the full available disk space; `lsblk` confirms `/dev/sdb1` at approximately 5.5 TiB |
-| 2026-11-15 | Formatted the Seagate data partition | Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`; `lsblk -f` confirmed ext4 and a filesystem UUID. The partition is not mounted yet |
+| 2026-11-15 | Formatted the Seagate data partition | Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`; `lsblk -f` confirmed ext4 and a filesystem UUID |
+| 2026-11-15 | Configured and tested the Seagate mount | Added a UUID-based `/etc/fstab` entry for `/srv/media`; `sudo mount -a` succeeded. `findmnt` confirmed `/dev/sdb1` mounted read/write as ext4, and `df -hT` reported approximately 5.4 TiB available. Reboot persistence check remains pending |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
