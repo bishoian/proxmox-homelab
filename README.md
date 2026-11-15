@@ -6,7 +6,7 @@ A hands-on homelab project focused on virtualization, Linux administration, netw
 
 The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from a single-node Proxmox VE host into a small, versatile infrastructure environment.
 
-> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`; detailed attributes and an extended self-test are the next checks. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
+> **Current status:** Proxmox VE 9.2.2 is installed on the Lenovo's internal NVMe drive, and the `pve` node is online in the web interface. The TerraMaster D4-320 is connected over USB, and its installed 6 TB Seagate Exos drive is detected by Proxmox as `/dev/sda`. The disk's overall SMART status is `PASSED`. The initial attribute review shows zero reallocated, pending, offline-uncorrectable, and UDMA CRC error counts, with a reported temperature of 24°C. An extended self-test is still pending. See [Project Status](docs/project-status.md), [Installation Notes](virtualization/proxmox-installation.md), [Host Baseline](virtualization/proxmox-host-baseline.md), and [Hardware Inventory](docs/hardware-inventory.md).
 
 ## Project goals
 
@@ -83,7 +83,8 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
 3. **Storage and media services**
    - [x] Connect the D4-320 to the Proxmox host.
    - [x] Verify disk detection and confirm SMART overall status is `PASSED`.
-   - [ ] Review detailed SMART attributes and run an extended self-test.
+   - [x] Review the initial SMART attributes and record the reported power-on counters.
+   - [ ] Run an extended SMART self-test.
    - [ ] Configure a filesystem, mount point, and storage layout.
    - [ ] Deploy Jellyfin.
 4. **Application hosting and monitoring**
@@ -106,6 +107,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
 - `virtualization/` — Proxmox host, VM, and container build records.
 - `services/` — deployment notes and configuration examples for hosted applications.
 - [D4-320 Drive Not Detected](troubleshooting/d4-320-drive-not-detected.md) — power-state diagnosis and storage detection verification.
+- [Seagate SMART Baseline](storage/seagate-smart-baseline.md) — initial health attributes and planned self-test.
 - `troubleshooting/` — incidents, diagnosis, fixes, and verification.
 
 ## Documentation approach
