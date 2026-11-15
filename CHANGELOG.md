@@ -134,6 +134,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified the directory tree from Debian.
 - Confirmed the Debian account `ian` uses UID 1000 and primary GID 1000 for consistent container permission mapping; ownership and permission configuration is next.
 
+### Media storage permissions
+- Set ownership of `/srv/media/data` to `ian:ian` (UID/GID 1000).
+- Applied directory mode `2775` with setgid inheritance and file mode `0664` to any existing files.
+- Verified the directory tree reports `drwxrwsr-x` with owner/group `ian:ian`.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
