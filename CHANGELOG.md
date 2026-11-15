@@ -35,6 +35,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed the physical Ethernet interface (`nic0`) is UP at 1000 Mb/s; the Proxmox bridge (`vmbr0`) uses the same uplink. The wireless interface is DOWN.
 - Recorded the host's current wired link as 1 Gbps; the switch-side path and port negotiation remain to be checked.
 
+### Host hardware and network checks
+- Confirmed the installed processor from the Proxmox Shell as an Intel Core i5-8500 at 3.00 GHz with six logical CPUs.
+- Confirmed the physical Ethernet interface (`nic0`) is UP at 1000 Mb/s; the Proxmox bridge (`vmbr0`) uses the same uplink. The wireless interface is DOWN.
+- Recorded the host's current wired link as 1 Gbps, matching Lenovo's M920 Tiny specification for onboard Intel I219-LM Gigabit Ethernet. The switch-side path and port negotiation remain to be checked.
+
 ### Package repositories
 - Disabled the Proxmox VE Enterprise and Ceph Squid Enterprise entries.
 - Enabled the Proxmox VE no-subscription repository and Ceph Tentacle no-subscription repository.
