@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE installed; first web-interface login and host verification pending.
+**Overall status:** Proxmox VE 9.2.2 installed; web interface verified; D4-320 connected and awaiting disk detection checks.
 
 I use this checklist as the source of truth for project progress. I mark an item complete only after I have performed the work and verified the result. Planned and unverified work remains clearly labelled.
 
@@ -16,29 +16,29 @@ I use this checklist as the source of truth for project progress. I mark an item
 - [x] Boot from the USB and reach the Proxmox installer.
 - [x] Install Proxmox VE to the Lenovo's internal NVMe.
 - [x] Reboot successfully to the Proxmox local console.
-- [ ] Log in to the Proxmox web interface from another trusted LAN device.
+- [x] Log in to the Proxmox web interface from another device.
+- [x] Confirm the `pve` node is online in the web interface.
+- [x] Record installed Proxmox VE version 9.2.2.
 
 ## Milestone 1 — Proxmox host baseline
 
-- [ ] Record the installed Proxmox VE version.
 - [ ] Verify CPU, memory, NVMe, and NIC recognition.
 - [ ] Verify management network reachability and negotiated Ethernet link speed.
-- [ ] Configure and verify a stable management address.
-- [ ] Apply updates using the appropriate Proxmox repository configuration.
-- [ ] Configure time synchronization and administrative access.
-- [ ] Document recovery and console access.
+- [ ] Review update repositories and apply available updates.
+- [ ] Configure time and administrative settings.
+- [ ] Document host recovery and console access.
 
 ## Milestone 2 — Storage commissioning
 
-- [ ] Connect the TerraMaster D4-320 to the Lenovo.
-- [ ] Confirm enclosure detection and USB connection mode.
-- [ ] Record each disk's model and capacity; keep serial numbers in private records only.
+- [x] Connect the TerraMaster D4-320 to the Lenovo over USB.
+- [ ] Verify that Proxmox detects the enclosure and its installed drive.
+- [ ] Identify the installed drive by model and capacity.
 - [ ] Capture SMART health and power-on hours.
 - [ ] Run extended SMART self-tests and review results.
 - [ ] Decide on filesystem, mount point, and access permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
-**Caution:** My second 6 TB disk is awaiting delivery. I will not assume mirroring, RAID, pooling, or backup behavior merely because multiple disks are installed in the enclosure.
+**Current disk inventory:** One 6 TB Seagate Exos drive is installed in the enclosure. The second matching 6 TB drive is awaiting delivery. No disk has been initialized, formatted, or assigned to a Proxmox storage pool as part of this project yet.
 
 ## Milestone 3 — Debian and application hosting
 
@@ -90,7 +90,9 @@ I use this checklist as the source of truth for project progress. I mark an item
 | 2026-11-15 | Created the public GitHub project and documented my initial hardware inventory and planned network architecture | Repository initialized |
 | 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS and saved the settings | BIOS configuration completed |
 | 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Reached the Proxmox installer |
-| 2026-11-15 | Installed Proxmox VE using the ext4 installer option on the internal NVMe and rebooted the system | System reached the Proxmox local console and displayed its web-management endpoint; web login remains unverified |
+| 2026-11-15 | Installed Proxmox VE using the ext4 installer option on the internal NVMe and rebooted the system | System reached the Proxmox local console |
+| 2026-11-15 | Logged in to the Proxmox web interface | Dashboard loaded; node `pve` displayed as online; interface identified Proxmox VE 9.2.2 |
+| 2026-11-15 | Connected the TerraMaster D4-320 to the Proxmox host over USB | Physical connection completed; disk detection and health checks pending |
 
 ## Change-control notes
 
@@ -98,7 +100,7 @@ For significant changes, I record:
 
 - What changed and why.
 - The affected hardware, VM, container, or network component.
-- Commands or configuration changes, with secrets removed.
+- Commands or configuration changes.
 - Before-and-after validation.
 - Rollback or recovery steps.
 - Lessons learned.
