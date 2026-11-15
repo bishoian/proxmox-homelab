@@ -153,6 +153,10 @@ Installed Docker Engine and CLI version 29.9.3, containerd 2.4.2, and Docker Com
 
 Pulled the Alpine test image and ran a one-shot container as UID/GID `1000:1000`, bind-mounting `/srv/media/data` into the container at `/data`. The container successfully created and removed a test file and printed `Container write test passed`. This verifies the current host directory ownership and permissions permit a non-root container process using the planned UID/GID to write to the media data mount.
 
+## Docker Compose project definition
+
+A version-controlled Compose project has been created at `services/media-stack/compose.yaml`. It defines Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent. Application configuration and Jellyfin cache are mapped to project-local directories on the VM system disk. Radarr, Sonarr, and qBittorrent share `/srv/media/data` at the same in-container path, `/data`, to support consistent download/import paths and hardlinks on one filesystem. Jellyfin receives the media library at `/media` as a read-only bind mount. LinuxServer containers use UID/GID 1000 and UMASK 002; Jellyfin runs as UID/GID 1000:1000. The Compose file is committed to GitHub but is not yet deployed. The next steps are to create local config/cache directories, download the file to `/opt/media-stack`, validate it with `docker compose config`, and deploy the services.
+
 ## Planned media storage
 
-The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
+The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. An Alpine container write/delete test passed against `/srv/media/data` using UID/GID 1000:1000. The second 6 TB drive remains reserved for future expansion. A version-controlled Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent has been created but has not yet been copied to or deployed on the VM.
