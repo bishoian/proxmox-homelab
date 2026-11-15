@@ -30,7 +30,8 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 - The `lsblk` output shows no partitions, filesystem, or mount point on `/dev/sda`. It has not been initialized or formatted.
 - The second matching 6 TB drive is awaiting delivery.
 - Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
-- The filesystem, mount point, permissions, and backup approach will be selected before the disk is used for important data.
+- Proposed layout: two independent ext4 filesystems, optionally combined with MergerFS for a single storage namespace. The layout is documented but has not been implemented.
+- Mount points, Proxmox storage definitions, permissions, and backup jobs will be configured after both drives pass health checks.
 
 ## Networking
 
