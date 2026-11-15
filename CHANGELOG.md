@@ -127,7 +127,7 @@ A concise record of the homelab's major build and documentation milestones.
 ### Seagate mount configuration
 - Added a UUID-based `/etc/fstab` entry to mount the ext4 filesystem at `/srv/media` with `defaults,nofail`.
 - Ran `sudo mount -a` successfully and verified the mount with `findmnt` and `df -hT`; the filesystem is mounted read/write with approximately 5.4 TiB available.
-- A `systemctl daemon-reload` attempt without elevated privileges was denied; the mount is active. A privileged reload and reboot persistence check remain pending.
+- A `systemctl daemon-reload` attempt without elevated privileges was denied; the mount is active. A privileged `systemctl daemon-reload` completed successfully. `findmnt --verify --verbose` reported zero parse errors and zero errors; its only warning is the empty virtual CD-ROM at `/media/cdrom0`. A reboot persistence check remains pending.
 
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
