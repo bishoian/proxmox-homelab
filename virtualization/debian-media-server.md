@@ -4,7 +4,7 @@
 **VM name:** `media-server`  
 **Hypervisor:** Proxmox VE on Lenovo ThinkCentre M920q Tiny  
 **Guest OS:** Debian GNU/Linux 13.7 (Trixie), amd64  
-**Build status:** Debian 13.7 installed; login, DNS, APT repository access, SSH, and QEMU Guest Agent communication verified. The Seagate physical disk is attached as SCSI1 and detected inside Debian as a separate 5.5 TiB SCSI disk; filesystem setup remains pending.
+**Build status:** Debian 13.7 installed; login, DNS, APT repository access, SSH, and QEMU Guest Agent communication verified. The Seagate physical disk is attached as SCSI1 and detected inside Debian as a separate 5.5 TiB SCSI disk; the ext4 filesystem is created and labeled `media`; persistent mounting remains pending.
 
 ## VM configuration
 
@@ -43,7 +43,7 @@ The Debian installer detected one approximately 68.7 GB QEMU virtual disk. The p
 | Primary partition | 65.2 GB | ext4 | `/` |
 | Logical partition | 3.5 GB | swap | swap |
 
-The partition changes were written only to the VM's virtual system disk. The Seagate Exos remains unpartitioned and unformatted. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Inside Debian, `lsblk` reports the passed-through disk as `sdb`, 5.5 TiB, with model presented as `QEMU HARDDISK`; no partitions, filesystem, or mount point are shown.
+The partition changes were written only to the VM's virtual system disk. The Seagate Exos has a GPT partition table and one ext4-formatted partition labeled `media`. Proxmox identified it as a separate USB disk with no partitions, filesystem, or mount point, then attached the whole disk to VM 100 as SCSI1 using its persistent disk ID. The VM configuration confirms the existing 64 GiB Debian system disk remains SCSI0 and the boot order prioritizes SCSI0. The exact device path and drive serial are not included in this public build record. Inside Debian, `lsblk` reports the passed-through disk as `sdb`, 5.5 TiB, with model presented as `QEMU HARDDISK`; no partitions, filesystem, or mount point are shown.
 
 ## Installation result
 
@@ -107,6 +107,10 @@ Inside Debian, `lsblk -f /dev/sdb` displayed the disk but no filesystem, UUID, l
 
 Created a GPT partition table inside Debian on the passed-through Seagate disk, with one partition spanning the available capacity. The resulting partition is `/dev/sdb1`, approximately 5.5 TiB. The captured `lsblk` output shows no filesystem or mount point on the new partition; ext4 formatting and mounting are pending.
 
+## Ext4 filesystem creation
+
+Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The subsequent `lsblk -f /dev/sdb` output confirmed the ext4 filesystem and UUID. The filesystem is not mounted yet; the next step is to configure a persistent UUID-based mount at `/srv/media`.
+
 ## Planned media storage
 
-The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It will be formatted as ext4 inside Debian and mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
+The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It is formatted as ext4 inside Debian and will be mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
