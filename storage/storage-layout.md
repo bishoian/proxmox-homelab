@@ -23,7 +23,7 @@ The two drives will not be combined into RAID, MergerFS, or another pool as part
 
 The Debian VM's virtual system disk and container configuration will remain on the NVMe-backed Proxmox storage. The 6 TB disk will be attached to the VM as a physical disk using its persistent `/dev/disk/by-id` path. Debian will own the partition table, filesystem, mount, and directory structure on that disk.
 
-The physical disk's identity must be checked immediately before passthrough. The current `/dev/sda` name is not suitable for a persistent VM configuration because Linux device enumeration can change.
+The physical disk was identified on the Proxmox host as a separate USB-attached Seagate Exos with no partitions, filesystem, or mount point. A persistent model-based `/dev/disk/by-id` link was located and resolves to the Seagate. The exact device identifier and serial are intentionally kept out of the public repository. The current `/dev/sda` name is not suitable for a persistent VM configuration because Linux device enumeration can change.
 
 ## Filesystem and directory structure
 
@@ -93,8 +93,8 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Stop the extended SMART self-test and record the Aborted by host result.
 - [x] Reboot Proxmox to activate the installed kernel updates.
 - [ ] Create a Debian VM with its system disk on the NVMe.
-- [ ] Identify the Seagate using a persistent `/dev/disk/by-id` path.
-- [ ] Attach the physical Seagate disk to the Debian VM.
+- [x] Identify the Seagate using a persistent `/dev/disk/by-id` path on the Proxmox host.
+- [ ] Shut down VM 100 cleanly and attach the physical Seagate disk as SCSI1.
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
 - [ ] Create a GPT partition table and ext4 filesystem inside Debian.
 - [ ] Mount the filesystem persistently by UUID at `/srv/media`.
