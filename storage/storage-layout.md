@@ -5,7 +5,7 @@
 **Enclosure:** TerraMaster D4-320  
 **Initial data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
 **Workload:** Debian media-services VM (Jellyfin and supporting containers)  
-**Status:** Design selected; disk passthrough and filesystem setup not yet implemented.
+**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100; guest-side verification and filesystem setup remain pending.
 
 ## Design decision
 
@@ -94,7 +94,8 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Reboot Proxmox to activate the installed kernel updates.
 - [ ] Create a Debian VM with its system disk on the NVMe.
 - [x] Identify the Seagate using a persistent `/dev/disk/by-id` path on the Proxmox host.
-- [ ] Shut down VM 100 cleanly and attach the physical Seagate disk as SCSI1.
+- [x] Shut down VM 100 and attach the physical Seagate as SCSI1 using its persistent `/dev/disk/by-id` path.
+- [ ] Boot Debian and verify the disk model and capacity inside the guest.
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
 - [ ] Create a GPT partition table and ext4 filesystem inside Debian.
 - [ ] Mount the filesystem persistently by UUID at `/srv/media`.
