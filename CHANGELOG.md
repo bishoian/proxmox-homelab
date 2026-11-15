@@ -104,8 +104,13 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified VM configuration preserves the 64 GiB Debian system disk as SCSI0 and keeps SCSI0 first in the boot order.
 - Confirmed the virtual CD/DVD drive has no installer ISO attached. The Seagate remains unpartitioned and unformatted; guest-side detection verification is next.
 
+### Guest-side Seagate detection
+- Started VM 100 after attaching the Seagate as SCSI1.
+- Confirmed Debian sees a separate 5.5 TiB SCSI disk as `/dev/sdb`; QEMU presents the model string as `QEMU HARDDISK`.
+- Confirmed the captured `lsblk` output shows no partitions, filesystem, or mount point on the data disk. A read-only signature check remains before formatting.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified.
+- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk and remains unformatted.
