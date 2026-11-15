@@ -129,6 +129,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Ran `sudo mount -a` successfully and verified the mount with `findmnt` and `df -hT`; the filesystem is mounted read/write with approximately 5.4 TiB available.
 - A `systemctl daemon-reload` attempt without elevated privileges was denied; the mount is active. A privileged `systemctl daemon-reload` completed successfully. `findmnt --verify --verbose` reported zero parse errors and zero errors; its only warning is the empty virtual CD-ROM at `/media/cdrom0`. A reboot persistence check remains pending.
 
+### Media directory layout
+- Created the shared `/srv/media/data` directory structure for torrent downloads, usenet incomplete and complete downloads, movies, television, and music.
+- Verified the directory tree from Debian.
+- Confirmed the Debian account `ian` uses UID 1000 and primary GID 1000 for consistent container permission mapping; ownership and permission configuration is next.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
