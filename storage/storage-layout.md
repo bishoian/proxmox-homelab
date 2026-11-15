@@ -5,7 +5,7 @@
 **Enclosure:** TerraMaster D4-320  
 **Initial data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
 **Workload:** Debian media-services VM (Jellyfin and supporting containers)  
-**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100. Debian detects the 5.5 TiB disk, and a GPT table with one full-size partition (`/dev/sdb1`) has been created; ext4 formatting and mounting remain pending.
+**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100. The 5.5 TiB disk has a GPT partition and ext4 filesystem, is mounted read/write at `/srv/media` by UUID, and the shared data directory permissions have been verified. A container write/delete test passed.
 
 ## Design decision
 
@@ -78,7 +78,7 @@ Folder ownership and shared group permissions will be configured consistently ac
 
 ## Disk passthrough and backup implications
 
-The Seagate will be passed through to the Debian VM as a physical disk. Proxmox will manage the VM's virtual system disk, while Debian will manage the Seagate's ext4 filesystem.
+The Seagate is passed through to the Debian VM as a physical disk. Proxmox manages the VM's virtual system disk, while Debian manages the Seagate's ext4 filesystem. The filesystem is mounted read/write at `/srv/media` using a UUID-based `/etc/fstab` entry.
 
 The media disk will not be part of the Debian VM's ordinary virtual system disk. VM backups therefore need to be paired with a separate backup plan for important media and application data. The second drive, when commissioned, may become a local backup target or additional storage, but a second disk in the same enclosure is not an independent off-site backup.
 
@@ -107,6 +107,7 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [x] Create the shared `/srv/media/data` directory structure for torrents, usenet, movies, TV, and music.
 - [x] Set `/srv/media/data` ownership to UID/GID 1000 (`ian:ian`).
 - [x] Apply `2775` directory permissions with setgid inheritance and verify owner/group.
+- [x] Verify container read/write access to `/srv/media/data` using an Alpine test container with UID/GID 1000:1000.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
 - [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
 - [ ] Test imports, hardlinks, playback, and permissions.
