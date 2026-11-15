@@ -55,6 +55,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed the Proxmox Updates view reports `No updates available`.
 - Noted that a newer Proxmox kernel and manager package were included; reboot and active-version verification remain pending until the extended Seagate SMART test completes.
 
+### Storage architecture planning
+- Selected a capacity-focused proposal for the two 6 TB drives: independent ext4 filesystems, with optional MergerFS pooling to provide one namespace without striping or mirroring.
+- Kept active VM system disks on the internal NVMe; HDDs are intended for bulk data and local backup targets.
+- Documented the proposed design separately from implementation. No formatting, mounting, or pool creation has occurred.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface; the displayed manager version will be rechecked after the post-upgrade reboot.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
