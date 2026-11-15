@@ -94,6 +94,11 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified host-to-guest agent communication with `qm agent 100 ping`; it returned without output or error.
 - Connected remotely from Windows PowerShell to the Debian VM over SSH; host key was accepted and authentication succeeded as `ian`.
 
+### Seagate passthrough preparation
+- Identified the installed Seagate as a separate USB-attached 5.5 TiB disk on the Proxmox host; it has no partitions, filesystem, or mount point.
+- Located the persistent model-based `/dev/disk/by-id` link that resolves to the physical disk.
+- Kept the device-specific identifier and serial out of the public repository. Physical passthrough to VM 100 has not yet been configured.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
