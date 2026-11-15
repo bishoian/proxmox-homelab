@@ -28,8 +28,10 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Confirm management interface is reachable from the home LAN.
 - [x] Configure Proxmox VE and Ceph no-subscription package repositories.
 - [x] Refresh package lists successfully from all configured sources.
-- [ ] Review available package upgrades.
-- [ ] Apply available updates.
+- [x] Review and apply available package upgrades.
+- [x] Confirm the Updates view reports no available updates after the upgrade.
+- [ ] Reboot to activate the updated kernel after the Seagate extended SMART test finishes.
+- [ ] Verify the active kernel and Proxmox manager version after reboot.
 - [ ] Configure time and administrative settings.
 - [ ] Document host recovery and console access.
 
@@ -105,6 +107,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
+| 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view now reports no updates available; reboot pending to activate the updated kernel and verify running versions |
 
 ## Change notes
 
