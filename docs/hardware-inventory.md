@@ -10,7 +10,7 @@ The equipment below makes up the Proxmox homelab. Installation and commissioning
 |---:|---|---|---|
 | 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Proxmox VE 9.2.2 installed; web interface accessible |
 
-The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T.
+The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
 
 ## Storage
 
@@ -42,7 +42,7 @@ The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and
 
 The switch's exact hardware revision, firmware version, management method, port assignments, and feature set will be recorded after inspection. VLANs have not yet been configured.
 
-The Lenovo's negotiated Ethernet link speed will be verified rather than inferred from the switch's maximum port speed.
+The Lenovo's onboard Ethernet link is currently negotiated at 1 Gbps. The RealHD switch supports 2.5GbE, but the present connection is limited by the host's negotiated link speed. The physical path to the switch will be confirmed when the rack network is connected and traced.
 
 ## Rack and power
 
@@ -69,7 +69,7 @@ The HDMI cables are for displays, not network connections. The RJ45/HDMI pass-th
 - [x] Install Proxmox VE and verify web interface access.
 - [ ] Record BIOS/UEFI version and installed RAM layout.
 - [ ] Record NVMe model and health.
-- [ ] Verify the Lenovo's negotiated Ethernet speed.
+- [x] Verify the Lenovo's onboard Ethernet link at 1 Gbps.
 - [ ] Identify the RealHD switch's exact model/revision and firmware.
 - [ ] Document switch port assignments.
 - [x] Connect the D4-320 to the Lenovo.
