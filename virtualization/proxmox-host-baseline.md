@@ -55,6 +55,27 @@ The interface status and link-speed checks reported:
 
 The host's wired network link is currently 1 Gbps. Although the RealHD switch supports 2.5GbE, the active link negotiates at 1 Gbps. The physical connection path and switch-side port status will be checked separately once the rack cabling is traced.
 
+## CPU and network interface verification
+
+The Proxmox Shell reported the following CPU details:
+
+| Field | Result |
+|---|---|
+| Model | Intel Core i5-8500 CPU @ 3.00 GHz |
+| Socket count | 1 |
+| Logical CPUs | 6 (online CPUs 0–5) |
+
+The interface status and link-speed checks reported:
+
+| Interface | State | Link speed | Notes |
+|---|---|---:|---|
+| `nic0` | UP | 1000 Mb/s | Physical Ethernet interface |
+| `vmbr0` | UP | 1000 Mb/s | Proxmox bridge using the physical uplink |
+| `wlo1` | DOWN | Not reported | Wireless interface, not used for host connectivity |
+| `lo` | UP | Not applicable | Loopback interface |
+
+The host's wired network link is currently 1 Gbps. Lenovo's M920 Tiny product specifications list onboard Gigabit Ethernet using the Intel I219-LM controller, which matches the observed link speed. The RealHD switch supports 2.5GbE, but the onboard NIC is the current speed limit. The physical connection path and switch-side port status will be checked separately once the rack cabling is traced.
+
 ## Management access
 
 The host is reachable through its HTTPS management interface on TCP port 8006 from the home LAN. The management address is recorded in the local network configuration.
