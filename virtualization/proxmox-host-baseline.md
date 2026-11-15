@@ -2,8 +2,8 @@
 
 **Project owner:** Ian Bishop  
 **Host:** Lenovo ThinkCentre M920q Tiny  
-**Proxmox release:** 9.2.2  
-**Status:** Web interface accessible; hardware and storage inspection in progress.
+**Proxmox release:** 9.2 (updated package set)  
+**Status:** Web interface accessible; package upgrade and reboot verified; media VM not yet created.
 
 ## First dashboard access
 
@@ -28,9 +28,9 @@ These figures are initial observations, not performance benchmarks. A subsequent
 | Memory | 1.65 GiB of 15.46 GiB (10.66%) |
 | Root filesystem | 4.14 GiB of 67.73 GiB (6.11%) |
 | Swap | 0 B of 8.00 GiB |
-| Kernel | Linux 7.0.2-6-pve |
+| Kernel at initial Summary capture | Linux 7.0.2-6-pve |
 | Boot mode | EFI |
-| Manager | pve-manager 9.2.2 |
+| Manager at initial Summary capture | pve-manager 9.2.2 |
 
 The processor was subsequently confirmed as the standard Intel Core i5-8500, not the i5-8500T originally listed. The hardware inventory now reflects the installed CPU. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
 
@@ -107,18 +107,31 @@ See [Package Repository Configuration](../docs/package-repositories.md) for the 
 
 The package database refresh completed successfully. The task output showed successful access to the Debian Trixie, Debian Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription repositories. A total of 530 kB was fetched, package lists were read, and the task ended with `TASK OK`. The available upgrades were reviewed and installed successfully. The Updates view now reports no available updates. The batch included a newer Proxmox kernel and manager package. The host has not yet been rebooted, so the active kernel and running manager version remain to be verified.
 
-## Package upgrade
+## Post-upgrade reboot and version verification
 
-The available upgrades were applied without reported errors. The Proxmox Updates view now reports `No updates available`. The update batch included a newer Proxmox kernel and manager package. A reboot is pending; the active kernel and running Proxmox manager version will be checked after reboot. The extended SMART test has been stopped early, so the host can now be rebooted to activate the installed kernel updates.
+The package upgrade completed without reported errors, and the Updates view reported `No updates available`. The host was rebooted successfully after the extended SMART test was stopped.
+
+The post-reboot shell output reported:
+
+| Package / field | Verified value |
+|---|---|
+| Running kernel (`uname -r`) | `7.0.14-29-pve` |
+| `pve-manager` | `9.2.27` |
+| `proxmox-ve` meta-package | `9.2.0` |
+| `proxmox-kernel-7.0` | `7.0.14-29` |
+| `pve-qemu-kvm` | `11.1.3-1` |
+| `qemu-server` | `9.2.15` |
+| `ceph-fuse` | `20.2.5-pve1` |
+
+The `proxmox-ve` line is the installed release meta-package version; the `pve-manager` line reports the web-management package version. The previous signed kernel package `7.0.2-6-pve` remains installed alongside the newer kernel package, while `7.0.14-29-pve` is the active kernel.
+
+The host is now running the updated kernel and manager package. The initial ISO/UI version and the post-upgrade package versions are recorded separately to preserve the installation history.
 
 ## Next validation tasks
 
-1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
-2. Reboot to activate the updated kernel.
-3. Verify the active kernel, Proxmox manager version, and node health after reboot.
-4. Create the Debian media-services VM.
-5. Pass the Seagate disk through to the VM and create the filesystem inside Debian.
-6. Record the NVMe model and health.
-7. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
+1. Confirm the `pve` node remains online and the Updates view is clean.
+2. Create the Debian media-services VM on the NVMe-backed `local-lvm` storage.
+3. Identify the Seagate by a persistent `/dev/disk/by-id` path and pass it through to Debian.
+4. Create the ext4 filesystem and persistent mount inside Debian.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
