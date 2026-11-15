@@ -23,8 +23,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 ## Milestone 1 — Proxmox host baseline
 
 - [x] Verify the Proxmox summary reports six CPUs and 15.46 GiB of usable memory.
-- [ ] Confirm the detected CPU model against the original hardware listing.
-- [ ] Verify NVMe model and NIC link speed.
+- [x] Confirm the installed CPU model as Intel Core i5-8500.
+- [ ] Verify NVMe model and health.
+- [x] Verify onboard Ethernet link speed at 1 Gbps.
 - [x] Confirm management interface is reachable from the home LAN.
 - [x] Configure Proxmox VE and Ceph no-subscription package repositories.
 - [x] Refresh package lists successfully from all configured sources.
@@ -105,6 +106,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Reviewed the Seagate's initial SMART attribute table | Zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC counts; 24°C reported temperature |
 | 2026-11-15 | Started the Seagate extended SMART self-test | Test running in the background; estimated duration approximately 10 hours; final result pending |
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
+| 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view now reports no updates available; reboot pending to activate the updated kernel and verify running versions |
