@@ -119,8 +119,13 @@ A concise record of the homelab's major build and documentation milestones.
 - Created one full-capacity partition, `/dev/sdb1`, approximately 5.5 TiB.
 - Verified the partition is present and still has no filesystem or mount point. Ext4 creation remains pending.
 
+### Seagate ext4 filesystem
+- Formatted the full-size GPT partition `/dev/sdb1` as ext4 with filesystem label `media`.
+- Verified the filesystem type, label, and generated UUID with `lsblk -f`.
+- The filesystem is not mounted yet; the next step is a persistent UUID-based mount at `/srv/media`.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk with one GPT partition (`/dev/sdb1`); the partition remains unformatted.
+- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk with one GPT partition (`/dev/sdb1`) formatted as ext4 and labeled `media`; persistent mounting remains pending.
