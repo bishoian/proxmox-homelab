@@ -38,7 +38,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 ## Milestone 2 — Storage commissioning
 
-**Proposed layout:** Two independent ext4 filesystems, with MergerFS as an optional combined namespace after both drives pass health checks. The layout has been documented but not implemented. See [Proposed Storage Layout](../storage/storage-layout.md).
+**Selected layout:** Use the first 6 TB Seagate as a standalone ext4 data disk dedicated to the Debian media-services VM. The disk will be passed through to the VM using a stable by-id path. The second 6 TB drive will be left for later expansion. See [Media Storage Design](../storage/storage-layout.md).
 
 - [x] Connect the TerraMaster D4-320 to the Lenovo over USB.
 - [x] Verify that Proxmox detects the installed drive.
