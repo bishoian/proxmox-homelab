@@ -10,7 +10,7 @@ The equipment below makes up the Proxmox homelab. Installation and commissioning
 |---:|---|---|---|
 | 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Proxmox VE 9.2.2 installed; web interface accessible |
 
-The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
+The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is UP and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
 
 ## Storage
 
