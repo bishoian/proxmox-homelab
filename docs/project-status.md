@@ -107,6 +107,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Started the Seagate extended SMART self-test | Test running in the background; estimated duration approximately 10 hours; final result pending |
 | 2026-11-15 | Reviewed the Proxmox node Summary | Six CPUs and 15.46 GiB usable RAM reported; CPU confirmed as Intel Core i5-8500 (standard model, not 8500T) |
 | 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
+| 2026-11-15 | Checked host network interfaces from the Proxmox Shell | `nic0` UP at 1000 Mb/s; `vmbr0` UP on the same 1 Gbps uplink; `wlo1` DOWN; loopback interface present |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view now reports no updates available; reboot pending to activate the updated kernel and verify running versions |
