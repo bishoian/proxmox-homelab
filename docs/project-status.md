@@ -60,7 +60,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Reload the systemd manager configuration with `sudo systemctl daemon-reload`.
 - [x] Validate `/etc/fstab` with `findmnt --verify --verbose`; zero parse errors and zero errors. The only warning is the empty virtual CD-ROM at `/media/cdrom0`.
 - [ ] Verify the mount survives a reboot.
-- [ ] Set media-directory ownership and access permissions.
+- [x] Create the shared `/srv/media/data` directory structure for torrents, usenet, movies, TV, and music.
+- [ ] Set media-directory ownership and access permissions for the planned container UID/GID.
+- [ ] Verify directory ownership and setgid permissions.
 - [ ] Design and test an independent backup plan before storing irreplaceable data.
 
 **Current disk inventory:** One 6 TB Seagate Exos drive is installed in the enclosure and passed through to Debian VM 100. Its GPT partition `/dev/sdb1` is formatted as ext4 and labeled `media`; it is not yet mounted. The second matching 6 TB drive is awaiting delivery.
@@ -148,6 +150,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Formatted the Seagate data partition | Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`; `lsblk -f` confirmed ext4 and a filesystem UUID |
 | 2026-11-15 | Configured and tested the Seagate mount | Added a UUID-based `/etc/fstab` entry for `/srv/media`; `sudo mount -a` succeeded. `findmnt` confirmed `/dev/sdb1` mounted read/write as ext4, and `df -hT` reported approximately 5.4 TiB available. |
 | 2026-11-15 | Validated the persistent mount configuration | Ran `sudo systemctl daemon-reload` and `sudo findmnt --verify --verbose`; zero parse errors and zero errors. One expected warning identifies the empty virtual CD-ROM at `/media/cdrom0`. Reboot persistence check remains pending |
+| 2026-11-15 | Created the media directory structure in Debian | Created torrent, usenet, movie, TV, and music directories under `/srv/media/data`; confirmed the directory tree with `find` |
+| 2026-11-15 | Checked the Debian account identity for container permissions | `id` confirmed account `ian` uses UID 1000 and primary GID 1000 and belongs to the `sudo` group. Media directory ownership and permission changes are the next step |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
 | 2026-11-15 | Applied all available package upgrades | Upgrade completed without reported errors; Updates view reported no updates available |
