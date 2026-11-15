@@ -48,12 +48,16 @@ The package source configuration uses the Debian Trixie base and security reposi
 
 See [Package Repository Configuration](../docs/package-repositories.md) for the configured sources.
 
+## Package database refresh
+
+The package database refresh completed successfully. The task output showed successful access to the Debian Trixie, Debian Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription repositories. A total of 530 kB was fetched, package lists were read, and the task ended with `TASK OK`. The available upgrades have not yet been reviewed or installed.
+
 ## Next validation tasks
 
 1. Inspect **Node → Summary** and record CPU, RAM, uptime, and installed version.
 2. Run an extended SMART self-test and review the result.
-3. Refresh package lists and review available updates.
-4. Apply available updates.
+3. Review the available package upgrades.
+4. Apply available updates after reviewing the proposed changes.
 5. Plan the data disk's filesystem, mount point, permissions, and backup strategy before using it for media.
 
 No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
