@@ -170,6 +170,14 @@ A concise record of the homelab's major build and documentation milestones.
 - Validated the project with `docker compose config --quiet`; command completed with exit status 0.
 - Application containers have not yet been deployed; service startup and health checks remain next.
 
+### Initial media-stack deployment
+- Pulled the Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent container images.
+- Created the Compose network and started all five application containers.
+- Verified with `docker compose ps`: Jellyfin reported healthy; Radarr, Sonarr, Prowlarr, and qBittorrent reported running.
+- Reviewed startup logs: Jellyfin completed initial startup and migrations; Radarr and Sonarr applied database migrations; Prowlarr started its HTTP listener; qBittorrent initialized its Web UI.
+- qBittorrent generated a temporary first-start administrator password. The credential is excluded from the public repository and must be rotated during first-run setup.
+- Application UI setup, authentication hardening, and end-to-end integrations remain pending.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
