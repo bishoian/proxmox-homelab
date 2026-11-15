@@ -86,11 +86,11 @@ The media disk will not be part of the Debian VM's ordinary virtual system disk.
 
 The initial SMART overall result was `PASSED`. The captured attribute table showed zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors, with a reported temperature of 24°C.
 
-The extended SMART self-test was started but will be stopped before completion to proceed with the build. Its result must be recorded as aborted/incomplete, not passed. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for media data with the understanding that important files need a separate backup.
+The extended SMART self-test was started and then intentionally stopped before completion. The self-test log reports Aborted by host with 80% remaining and no first-error LBA recorded. This is an incomplete test, not a pass. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for the initial media build with routine monitoring and separate backups for important files.
 
 ## Implementation checklist
 
-- [ ] Stop the current extended SMART self-test and confirm the recorded state.
+- [x] Stop the extended SMART self-test and record the Aborted by host result.
 - [ ] Reboot Proxmox to activate the installed kernel updates.
 - [ ] Create a Debian VM with its system disk on the NVMe.
 - [ ] Identify the Seagate using a persistent `/dev/disk/by-id` path.
