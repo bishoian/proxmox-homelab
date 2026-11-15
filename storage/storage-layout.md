@@ -27,7 +27,7 @@ The physical disk was identified on the Proxmox host as a separate USB-attached 
 
 ## Filesystem and directory structure
 
-The selected filesystem is ext4. It has been created inside the Debian VM on `/dev/sdb1` and labeled `media`.
+The selected filesystem is ext4. It has been created inside the Debian VM on `/dev/sdb1` and labeled `media`. A UUID-based entry has been added to `/etc/fstab`; `sudo mount -a` successfully mounted it at `/srv/media`. `findmnt` confirms the source `/dev/sdb1`, filesystem `ext4`, and read/write options. `df -hT` reports approximately 5.4 TiB available. A reboot persistence check remains pending.
 
 Proposed mount point:
 
@@ -101,7 +101,9 @@ The extended SMART self-test was started and then intentionally stopped before c
 - [ ] Confirm the disk appears in Debian and identify it by model and capacity.
 - [x] Create a GPT partition table on the guest data disk with one full-size partition (`/dev/sdb1`).
 - [x] Create an ext4 filesystem inside Debian on `/dev/sdb1`, labeled `media`.
-- [ ] Mount the filesystem persistently by UUID at `/srv/media`.
+- [x] Add the UUID-based `/etc/fstab` entry for `/srv/media` and test it with `sudo mount -a`.
+- [x] Verify `/dev/sdb1` is mounted read/write as ext4 with `findmnt` and `df -hT`.
+- [ ] Reload systemd manager configuration and verify the mount after reboot.
 - [ ] Create the shared `/srv/media/data` directory structure.
 - [ ] Configure Docker Compose and consistent container paths/permissions.
 - [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
