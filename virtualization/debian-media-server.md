@@ -115,6 +115,28 @@ Created an ext4 filesystem on `/dev/sdb1` with filesystem label `media`. The sub
 
 The ext4 filesystem UUID was used in `/etc/fstab` to configure `/srv/media` with filesystem type `ext4`, options `defaults,nofail`, and filesystem check fields `0 2`. `sudo mount -a` completed successfully. `findmnt /srv/media` confirmed `/dev/sdb1` mounted as ext4 with read/write options, and `df -hT /srv/media` reported approximately 5.5 TiB total and 5.4 TiB available. An initial `systemctl daemon-reload` attempt was run without `sudo` and was denied; the mount itself succeeded. A privileged systemd reload and reboot persistence check remain pending. The filesystem UUID is kept out of the public build record.
 
+## Media directory structure
+
+Created and verified the following directories on the mounted ext4 filesystem:
+
+```text
+/srv/media/data/
+├── torrents/
+│   ├── movies/
+│   └── tv/
+├── usenet/
+│   ├── incomplete/
+│   └── complete/
+│       ├── movies/
+│       └── tv/
+└── media/
+    ├── movies/
+    ├── tv/
+    └── music/
+```
+
+The `lost+found` directory at the filesystem root is the standard ext4 recovery directory and is left untouched. The Debian account `ian` has UID 1000 and primary GID 1000. The planned container applications will use a consistent UID/GID mapping; directory ownership and permissions are being configured.
+
 ## Planned media storage
 
 The 6 TB Seagate Exos will be passed through to this Debian VM after first-boot configuration. It is formatted as ext4 inside Debian and will be mounted for media, downloads, and application data. The second 6 TB drive remains reserved for future expansion.
