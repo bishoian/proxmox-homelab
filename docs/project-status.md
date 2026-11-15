@@ -94,8 +94,11 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Create a version-controlled Docker Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
 - [x] Create the `/opt/media-stack` project and service configuration/cache directories on Debian.
 - [x] Download the version-controlled Compose file from GitHub and validate it with `docker compose config --quiet` (exit status 0).
-- [ ] Deploy the media stack with `docker compose up -d`.
-- [ ] Verify container health, service logs, web interfaces, and storage mappings.
+- [x] Deploy the media stack with `docker compose up -d`; all five application containers started.
+- [x] Confirm `docker compose ps` reports Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running.
+- [x] Review initial service logs; application migrations/startup completed and qBittorrent Web UI initialized.
+- [ ] Rotate qBittorrent's temporary first-start Web UI password and configure strong application credentials.
+- [ ] Complete each application’s first-run setup and verify service connectivity and storage mappings.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
@@ -164,7 +167,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 | 2026-11-15 | Added Docker’s official Debian package repository | Configured the Docker Debian Trixie stable repository and successfully ran `sudo apt update`; Docker package indexes downloaded successfully and APT reported all package lists current |
 | 2026-11-15 | Installed Docker Engine and Compose in the Debian VM | Installed Docker Engine/CLI 29.9.3, containerd 2.4.2, and Docker Compose 5.7.1; Docker service reports `active` |
 | 2026-11-15 | Validated container access to Seagate media storage | Ran an Alpine container as UID/GID 1000:1000 with `/srv/media/data` bind-mounted at `/data`; the container created and deleted a test file and printed `Container write test passed` |
-| 2026-11-15 | Prepared and validated the media-stack Compose project | Created `/opt/media-stack` configuration/cache directories, downloaded the version-controlled Compose file from GitHub, and confirmed `docker compose config --quiet` exits with status 0. Application containers have not yet been started |
+| 2026-11-15 | Prepared and validated the media-stack Compose project | Created `/opt/media-stack` configuration/cache directories, downloaded the version-controlled Compose file from GitHub, and confirmed `docker compose config --quiet` exits with status 0 |
+| 2026-11-15 | Deployed the initial media stack | Pulled Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent images; created the Compose network; started all five containers. `docker compose ps` reported Jellyfin healthy and the other four containers running |
+| 2026-11-15 | Reviewed initial media-stack startup logs | Jellyfin completed startup and database migrations; Radarr and Sonarr applied database migrations; Prowlarr began listening on its configured port; qBittorrent initialized its Web UI and issued a temporary first-start administrator password. The temporary credential is intentionally excluded from public documentation and must be changed during initial configuration |
 | 2026-11-15 | Ran the Docker `hello-world` test container | Pulled `hello-world:latest` from Docker Hub, created and executed the container, and received the expected success message |
 | 2026-11-15 | Configured Proxmox package sources | Proxmox VE no-subscription and Ceph Tentacle no-subscription enabled; Debian Trixie and security sources retained; Enterprise and Ceph Squid Enterprise entries disabled |
 | 2026-11-15 | Refreshed the APT package database | Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories fetched successfully; package lists read and task completed with `TASK OK` |
