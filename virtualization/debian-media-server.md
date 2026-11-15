@@ -49,7 +49,7 @@ The partition changes were written only to the VM's virtual system disk. The Sea
 
 Debian displayed the installer completion screen after the base system and selected packages had been installed. GRUB installation was confirmed for the VM's virtual disk.
 
-The VM has booted from its installed Debian system. Login succeeded with the `ian` account. The `hostnamectl` output confirmed hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture. The `ip -br addr` output showed the VirtIO interface `ens18` UP with an IPv4 address assigned. DNS resolution, internet connectivity, and SSH remote access have not yet been tested. Confirm the installer ISO remains detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
+The VM has booted from its installed Debian system. Login succeeded with the `ian` account. The `hostnamectl` output confirmed hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture. The `ip -br addr` output showed the VirtIO interface `ens18` UP with an IPv4 address assigned. DNS resolution has been verified with `getent hosts deb.debian.org`; the SSH service reports `active` via `systemctl is-active ssh`; `sudo -v` completed without an authentication error. The default route is present through the home gateway. Outbound package downloads and SSH login from another LAN device have not yet been tested. Confirm the installer ISO remains detached from the virtual CD/DVD drive to prevent a later reboot from returning to the installer.
 
 ## First-boot checklist
 
@@ -58,8 +58,10 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 - [ ] Confirm Debian reaches its login prompt.
 - [ ] Log in with the regular account created during installation.
 - [ ] Confirm the guest obtained a LAN IP address.
-- [ ] Verify DNS and internet connectivity.
-- [ ] Verify SSH access from another LAN device.
+- [x] Verify DNS resolution for `deb.debian.org`.
+- [ ] Verify outbound package downloads and internet connectivity.
+- [x] Confirm the SSH service is active.
+- [ ] Verify SSH login from another LAN device.
 - [ ] Install the `qemu-guest-agent` package and enable its service.
 - [ ] Apply Debian updates.
 - [x] Record the guest's hostname, Debian release, kernel, architecture, and interface status.
@@ -76,7 +78,11 @@ The VM has booted from its installed Debian system. Login succeeded with the `ia
 | Architecture | x86-64 |
 | Virtualization | KVM |
 | Network interface | `ens18`, UP |
-| IPv4 | Address assigned; exact private address omitted from this public record |
+| IPv4 | DHCP address assigned; exact private address omitted from this public record |
+| Default route | Present through home gateway |
+| DNS | `deb.debian.org` resolved successfully |
+| SSH daemon | Service reports `active` |
+| Sudo | `sudo -v` succeeded |
 
 ## Planned media storage
 
