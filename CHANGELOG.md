@@ -28,3 +28,13 @@ Notable project documentation and infrastructure milestones are recorded here.
 
 ### Status
 - Proxmox VE installation completed; first web-interface login remains to be verified.
+
+
+### Added
+- Recorded first successful login to the Proxmox VE 9.2.2 web interface and confirmed the `pve` node is online.
+- Added an initial Proxmox host baseline record.
+- Recorded the TerraMaster D4-320 as physically connected to the Lenovo over USB; disk detection and health checks remain pending.
+
+### Updated
+- Updated the README, project checklist, hardware inventory, network architecture, and installation notes to reflect the verified dashboard access and current storage connection.
+- Removed repetitive publication/security reminders from supporting documentation, keeping the general documentation practice on the main README.
