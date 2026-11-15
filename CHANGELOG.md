@@ -24,6 +24,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Reviewed the initial SMART attribute table: zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts; 24°C reported temperature.
 - Recorded the displayed power-on-hours and head-flying-hours counters.
 - Started an extended SMART self-test on the Seagate; the drive estimated approximately 10 hours to completion.
+- Stopped the test early. The self-test log reports Aborted by host with 80% remaining and no first-error LBA; the test is recorded as incomplete, not passed.
 
 ### Host baseline
 - Reviewed the Proxmox node Summary: six CPUs, 15.46 GiB usable RAM, EFI boot, and Proxmox manager 9.2.2.
@@ -68,7 +69,10 @@ A concise record of the homelab's major build and documentation milestones.
 - Kept the VM operating system and container configuration on the internal NVMe; media, downloads, and library data will share one filesystem in the guest.
 - The storage design is selected but has not been implemented.
 
+### SMART test disposition
+- Recorded the extended SMART self-test as intentionally aborted by the host at 80% remaining; no successful extended-test result is claimed.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface; the displayed manager version will be rechecked after the post-upgrade reboot.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
-- The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; detailed health checks and storage configuration remain pending.
+- The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete. The selected next step is a single-disk Debian media-services setup.
