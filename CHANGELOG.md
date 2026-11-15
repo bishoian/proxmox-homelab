@@ -153,8 +153,13 @@ A concise record of the homelab's major build and documentation milestones.
 - Pulled and ran `hello-world:latest` from Docker Hub; the container printed the expected success message.
 - Retained `sudo docker` usage rather than adding the administrative account to the Docker group.
 
+### Docker media-storage bind-mount validation
+- Ran an Alpine test container as UID/GID `1000:1000` with `/srv/media/data` bind-mounted at `/data`.
+- The container created and deleted a test file successfully and printed `Container write test passed`.
+- Confirmed the directory ownership and setgid permission model works for a non-root container process.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
 - The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk with one GPT partition (`/dev/sdb1`) formatted as ext4 and labeled `media`; persistent mounting remains pending.
+- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk with one GPT partition (`/dev/sdb1`) formatted as ext4 and labeled `media`, mounted read/write at `/srv/media` by UUID. The media directory tree and ownership are configured; container read/write validation passed.
