@@ -12,7 +12,7 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from 
 
 - Administer a Proxmox VE virtualization host.
 - Deploy and maintain Debian virtual machines and Linux containers.
-- Host self-managed applications, including a planned Jellyfin media server.
+- Host and maintain self-managed applications, including Jellyfin and supporting media services.
 - Practice direct-attached storage administration, disk health monitoring, filesystem management, and backups.
 - Learn managed switching, network documentation, and VLAN concepts.
 - Build a Windows Server and Active Directory practice environment.
@@ -73,7 +73,7 @@ See [Hardware Inventory](docs/hardware-inventory.md) for the complete component 
                                 6 TB installed
 ```
 
-The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB rather than to the Ethernet switch. The enclosure is connected, and the installed drive is visible to Proxmox. Its overall SMART status reports `PASSED`; detailed health attributes and an extended self-test remain to be reviewed.
+The TerraMaster D4-320 is **direct-attached storage (DAS)**. It connects to the Lenovo over USB rather than to the Ethernet switch. The enclosure is connected, and the installed drive is visible to Proxmox. Its overall SMART status reports `PASSED`; the initial health attributes were reviewed, while the extended self-test was stopped early and remains incomplete.
 
 The diagram shows the target network layout. Switch cabling, port assignments, and VLAN configuration will be documented as they are confirmed. Planned virtual machines and services are not considered deployed until they have been configured and tested.
 
