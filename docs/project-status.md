@@ -140,7 +140,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Interrupt `tun0` and verify a DNS-based public-IP request fails.
 - [x] Verify the kill switch with a direct-IP HTTPS test to `1.1.1.1`; the request returned HTTP 000 and timed out.
 - [x] Recreate Gluetun and qBittorrent and confirm Gluetun returns healthy, qBittorrent returns running, and VPN egress is restored.
-- [ ] Verify recovery and interface binding after a full Debian VM reboot.
+- [x] Verify recovery and interface binding after a full Debian VM reboot; Gluetun returned healthy, qBittorrent remained on `tun0`, and VPN egress was restored.
 - [ ] Perform a lawful test download and verify the Radarr/Sonarr import workflow.
 
 ## Milestone 7 — Monitoring and operations
@@ -173,6 +173,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
+| 2026-11-16 | Rebooted the Debian VM and verified the VPN stack recovered | Gluetun reported healthy, qBittorrent showed `tun0`, qBittorrent's public IP check returned VPN egress, and Radarr/Sonarr each reached `gluetun:8080` with HTTP 200 |
 | 2026-11-16 | Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent | Gluetun established the tunnel, created `tun0`, and reported healthy; VPN credentials are stored locally in a root-owned mode-600 environment file and are not committed |
 | 2026-11-16 | Moved qBittorrent into Gluetun's network namespace and bound it to `tun0` | qBittorrent shares Gluetun networking and uses the VPN interface; its Web UI is published through Gluetun on TCP 8080 |
 | 2026-11-16 | Updated Radarr and Sonarr download-client connections | Both applications reached the qBittorrent Web UI through `gluetun:8080`; each returned HTTP 200 |
