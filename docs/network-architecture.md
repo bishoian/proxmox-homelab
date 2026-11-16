@@ -56,7 +56,7 @@ NPM and the media stack initially used separate Docker bridge networks. The NPM 
 
 ## qBittorrent VPN path
 
-qBittorrent shares the Gluetun container's network namespace. Gluetun establishes the ExpressVPN OpenVPN tunnel and provides the firewall kill switch. qBittorrent is bound to the tunnel interface `tun0`; its Web UI is published by Gluetun on TCP 8080. Radarr and Sonarr reach the Web UI through the Gluetun service name on port 8080. A direct-IP HTTPS request from qBittorrent timed out while `tun0` was down, and the VPN stack recovered after container recreation. Full Debian VM reboot validation remains pending.
+qBittorrent shares the Gluetun container's network namespace. Gluetun establishes the ExpressVPN OpenVPN tunnel and provides the firewall kill switch. qBittorrent is bound to the tunnel interface `tun0`; its Web UI is published by Gluetun on TCP 8080. Radarr and Sonarr reach the Web UI through the Gluetun service name on port 8080. A direct-IP HTTPS request from qBittorrent timed out while `tun0` was down, and the VPN stack recovered after container recreation. A full Debian VM reboot was subsequently tested: Gluetun returned healthy, qBittorrent retained the `tun0` interface, VPN egress was restored, and Radarr/Sonarr each reached the qBittorrent Web UI with HTTP 200.
 
 ### Planned DNS services
 
