@@ -10,7 +10,8 @@ Docker Compose project for the Debian 13 media-services VM.
 | Radarr | Movie library management | 7878 |
 | Sonarr | Television library management | 8989 |
 | Prowlarr | Indexer management | 9696 |
-| qBittorrent | Download client | 8080 |
+| Gluetun | ExpressVPN gateway and firewall | Shared with qBittorrent |
+| qBittorrent | Download client, routed through Gluetun | 8080 via Gluetun |
 
 ## Storage design
 
@@ -21,6 +22,7 @@ Docker Compose project for the Debian 13 media-services VM.
 - Consistent `/data` paths keep download and library directories on the same filesystem, allowing hardlinks where the applications and download client are configured to use them.
 - LinuxServer containers use PUID/PGID 1000 and UMASK 002 to align with the Debian `ian` account and shared setgid directories.
 - Jellyfin runs as UID/GID 1000:1000.
+- qBittorrent shares Gluetun's network namespace rather than using an independent Docker network route. Its configured network interface is `tun0`.
 
 ## Deployment location
 
@@ -29,10 +31,11 @@ On the Debian VM, the Compose project is stored at `/opt/media-stack`:
 - `compose.yaml` — service definitions
 - `config/<service>/` — persistent application settings and databases
 - `cache/jellyfin/` — Jellyfin cache
+- `.env` — local ExpressVPN manual OpenVPN credentials, excluded from Git; use `.env.example` as the template
 
 ## Web interfaces
 
-Use the Debian VM's current LAN address with the ports listed above. These are intended for trusted LAN access. Do not configure router port forwarding for the administration interfaces. Set strong application credentials during first-run configuration.
+Use the Debian VM's current LAN address with the ports listed above. The qBittorrent Web UI is published by Gluetun on TCP 8080; Radarr and Sonarr reach it at `http://gluetun:8080`. These interfaces are intended for trusted LAN access. Do not configure router port forwarding for the administration interfaces. Set strong application credentials during first-run configuration.
 
 The qBittorrent LinuxServer image prints a temporary Web UI password in its container log on first startup. Use the locally displayed first-start credential to sign in as `admin`, then immediately replace it with a strong unique password in qBittorrent settings. Never commit this temporary credential or the replacement password to this repository.
 
@@ -40,29 +43,43 @@ The qBittorrent LinuxServer image prints a temporary Web UI password in its cont
 
 The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debian VM. Project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. All five images were pulled and all five application containers were started with `docker compose up -d`. The subsequent `docker compose ps` output showed Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running. Initial logs showed normal Jellyfin startup, database migrations for Radarr and Sonarr, Prowlarr listening on its configured port, and qBittorrent Web UI initialization. Initial first-run setup has been completed in all five applications. The qBittorrent temporary administrator password was replaced. Radarr and Sonarr have their root folders configured and use qBittorrent as their download client with separate categories. Prowlarr is configured with Radarr and Sonarr application connections. End-to-end application sync, download/import behavior, hardlink creation, Jellyfin library scans, and playback still need validation.
 
-## Planned qBittorrent VPN isolation
+## qBittorrent VPN isolation
 
-The next privacy and network-isolation improvement is to route qBittorrent through a dedicated VPN gateway container rather than allowing it to use the media VM's ordinary Docker network path.
+**Deployment status:** Gluetun and qBittorrent are deployed together in the media-stack Compose project. Gluetun connects to ExpressVPN using OpenVPN. The provider is selected with `VPN_SERVICE_PROVIDER=expressvpn`, and the country selector uses `SERVER_COUNTRIES=USA`. The manual OpenVPN username and password are stored only in the VM's local `/opt/media-stack/.env` file. That file has `600` permissions and ownership `root:root`; no VPN credentials are committed to this repository.
 
-**Proposed design:** add [Gluetun](https://github.com/qdm12/gluetun) as the VPN gateway and run qBittorrent with `network_mode: service:gluetun`. qBittorrent would share Gluetun's network namespace, and Gluetun's firewall would block outbound traffic that is not allowed through the VPN tunnel. This fail-closed network behavior is the important kill-switch property: when the tunnel is down, torrent traffic has no ordinary-network fallback. The firewall blocks traffic; it does not necessarily change qBittorrent's UI state to a visibly paused state.
+### Network design
 
-**Existing ExpressVPN subscription:** Gluetun documents native ExpressVPN integration using manual OpenVPN credentials and supports UDP or TCP OpenVPN. This is sufficient to build a VPN-enforced qBittorrent container without changing providers. ExpressVPN's consumer apps now list WireGuard among supported protocols, but Gluetun's ExpressVPN provider integration currently documents OpenVPN credentials rather than native ExpressVPN WireGuard setup. Do not assume the app's protocol list means its WireGuard profile can be exported for Gluetun.
+- Gluetun runs with `NET_ADMIN` and `/dev/net/tun` and receives environment variables through the local `.env` file.
+- Gluetun publishes TCP port 8080 for the qBittorrent Web UI and permits that input port through its default interface.
+- qBittorrent uses `network_mode: service:gluetun` and waits for Gluetun's health check before starting.
+- qBittorrent does not publish independent ports. Its existing configuration and download/media bind mounts are retained.
+- qBittorrent's own **Network interface** setting is bound to `tun0`.
+- Radarr and Sonarr use `gluetun` as the qBittorrent download-client host on port 8080. Requests from each application to the Web UI returned HTTP 200.
+- The qBittorrent Web UI remains a LAN-facing administration interface. Do not forward port 8080 from the router or publish it through the public reverse proxy.
 
-**Potential provider change:** ExpressVPN does not provide port forwarding on its VPN servers. This does not prevent ordinary outbound torrent downloads, but it can limit incoming peer connections and seeding reachability. If port forwarding becomes important, evaluate a paid provider with P2P support, WireGuard, and port forwarding; Proton VPN documents these features for paid plans and P2P servers. A provider change is not required just to get a kill switch.
+### Kill-switch validation
 
-Implementation requirements before deployment:
+The VPN path and recovery were tested while qBittorrent downloads were paused:
 
-- Store VPN credentials and private keys in a local environment file or Docker secret, never in Git.
-- Move qBittorrent's Web UI and torrent port publication to the Gluetun service; do not publish the Web UI to the public internet.
-- Preserve LAN access needed by Radarr and Sonarr to communicate with qBittorrent through the VPN gateway.
-- Configure and test the Gluetun firewall's inbound allowances for the Web UI and trusted Docker networks.
-- Confirm public IP and DNS-leak tests show VPN egress while connected.
-- Simulate a tunnel outage and verify qBittorrent cannot reach the internet through the VM's normal gateway.
-- Re-test behavior after container restarts and VM reboots.
+1. Gluetun established the ExpressVPN OpenVPN tunnel and reported healthy. Its logs showed `tun0` initialized and a public egress IP returned through the tunnel.
+2. qBittorrent was confirmed to share Gluetun's network namespace. The `tun0` interface was visible from inside qBittorrent, and its public IP check matched Gluetun's reported VPN egress IP.
+3. Radarr and Sonarr each reached the qBittorrent Web UI through `http://gluetun:8080` and received HTTP 200.
+4. The `tun0` interface was deliberately brought down inside Gluetun. A DNS-based public-IP request failed at name resolution.
+5. A second test used a direct IP URL (`https://1.1.1.1/cdn-cgi/trace`) to avoid relying on DNS. The request returned HTTP 000 and timed out after approximately three seconds. This confirms outbound traffic was blocked while the VPN interface was down, rather than the first failure being DNS-only.
+6. Gluetun and qBittorrent were recreated with Docker Compose. Gluetun returned to healthy, qBittorrent returned to running, and a new public VPN egress IP was retrieved.
 
-This design is planned and is not yet deployed. The current qBittorrent container still uses the normal media-stack Docker network.
+This is a network-level fail-closed test. The firewall blocks traffic when the VPN route is unavailable; it does not necessarily change qBittorrent's UI state to visibly mark jobs as paused.
 
-References: [Gluetun ExpressVPN setup](https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/expressvpn.md), [Gluetun firewall / kill switch](https://github.com/qdm12/gluetun-wiki/blob/main/faq/firewall.md), [Gluetun Compose routing guide](https://gluetun.org/guides/docker-compose/), [ExpressVPN VPN-server port forwarding](https://www.expressvpn.com/blog/vpn-ports/), and [Proton VPN port forwarding](https://protonvpn.com/support/port-forwarding).
+### Remaining validation
+
+- [ ] Verify Gluetun and qBittorrent recover correctly after a full Debian VM reboot.
+- [ ] Re-check qBittorrent interface binding and Radarr/Sonarr download-client tests after reboot.
+- [ ] Perform a small lawful test transfer and verify completed download handling and imports.
+- [ ] Repeat the tunnel outage test after future Gluetun or qBittorrent image updates.
+
+ExpressVPN does not provide VPN-server port forwarding. This does not prevent outbound downloads, but can limit incoming peer connectivity and seeding reachability. A provider with supported P2P port forwarding may be evaluated later if that becomes important; a provider change is not required for the tested kill-switch behavior.
+
+References: [Gluetun ExpressVPN setup](https://github.com/qdm12/gluetun-wiki/blob/main/setup/providers/expressvpn.md), [Gluetun firewall / kill switch](https://github.com/qdm12/gluetun-wiki/blob/main/faq/firewall.md), [Gluetun firewall options](https://github.com/qdm12/gluetun-wiki/blob/main/setup/options/firewall.md), [Docker Compose environment files](https://docs.docker.com/compose/how-tos/environment-variables/set-environment-variables/), [Docker Compose network mode](https://docs.docker.com/reference/compose-file/services/#network_mode), and [ExpressVPN VPN-server port forwarding](https://www.expressvpn.com/blog/vpn-ports/).
 
 ## References
 
