@@ -91,6 +91,14 @@ The `qemu-guest-agent` package was already installed at the current repository v
 | SSH daemon | Service reports `active`; remote Windows PowerShell login successful |
 | Sudo | `sudo -v` succeeded |
 
+## qBittorrent VPN gateway
+
+Gluetun is deployed alongside the media stack as the ExpressVPN OpenVPN gateway. It is configured with `VPN_SERVICE_PROVIDER=expressvpn`, country selection `USA`, `NET_ADMIN`, and the `/dev/net/tun` device. Manual OpenVPN credentials are kept only in `/opt/media-stack/.env`, owned by root with mode `600`. The credential values are not included in the public build record.
+
+qBittorrent uses `network_mode: service:gluetun` and waits for Gluetun's healthy status before starting. The qBittorrent Web UI is published through Gluetun on TCP port 8080. qBittorrent's network interface setting is bound to `tun0`. Radarr and Sonarr use `gluetun` as the qBittorrent download-client host at port 8080; both connection tests returned HTTP 200.
+
+The kill-switch test was performed with downloads paused. Bringing `tun0` down caused a DNS-based public-IP request to fail. A direct-IP HTTPS request to `1.1.1.1` also returned HTTP 000 and timed out, verifying outbound traffic was blocked without relying on DNS. Gluetun and qBittorrent were recreated with Docker Compose; Gluetun returned healthy, qBittorrent returned running, and a new VPN egress IP was retrieved. This verifies network-level fail-closed behavior; it does not imply qBittorrent's UI automatically changes jobs to a paused state. A full Debian VM reboot test remains pending.
+
 ## Reverse proxy and custom domain
 
 Nginx Proxy Manager (NPM) is deployed on this Debian VM in a separate Docker Compose project. The running container is named `nginx-proxy-manager-app-1` and publishes TCP ports 80, 81, and 443. Port 81 is the NPM administration interface and is intended for LAN access only.
