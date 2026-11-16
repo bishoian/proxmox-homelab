@@ -72,8 +72,8 @@ This is a network-level fail-closed test. The firewall blocks traffic when the V
 
 ### Remaining validation
 
-- [ ] Verify Gluetun and qBittorrent recover correctly after a full Debian VM reboot.
-- [ ] Re-check qBittorrent interface binding and Radarr/Sonarr download-client tests after reboot.
+- [x] Verify Gluetun and qBittorrent recover correctly after a full Debian VM reboot.
+- [x] Re-check qBittorrent interface binding and Radarr/Sonarr download-client connectivity after reboot; `tun0` remained present and both application requests returned HTTP 200.
 - [ ] Perform a small lawful test transfer and verify completed download handling and imports.
 - [ ] Repeat the tunnel outage test after future Gluetun or qBittorrent image updates.
 
