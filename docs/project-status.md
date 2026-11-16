@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network works but still needs a persistent Compose declaration. Dynamic DNS, Pi-hole, and qBittorrent VPN isolation are planned.
+**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network is declared in Compose and verified after container recreation. Dynamic DNS, Pi-hole, and qBittorrent VPN isolation are planned.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -120,7 +120,9 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Configure the custom domain `moxxboxx.com` to proxy to Jellyfin at `jellyfin:8096`.
 - [x] Issue a Let's Encrypt certificate and verify Jellyfin loads through HTTPS at `https://moxxboxx.com`.
 - [x] Connect the NPM container to `media-stack_default`; this corrected the initial 502 Bad Gateway.
-- [ ] Add the existing media-stack Docker network as an external network in NPM's Compose file and verify the connection survives NPM container recreation.
+- [x] Add the existing media-stack Docker network as an external network in NPM's Compose file.
+- [x] Recreate the NPM container with Docker Compose and verify it reconnects to both Docker networks.
+- [x] Confirm `https://moxxboxx.com` responds successfully after NPM recreation (`HTTP/2 302` from OpenResty).
 - [ ] Implement Dynamic DNS for the domain using the selected DNS provider's update mechanism.
 - [ ] Deploy Pi-hole for LAN DNS filtering and local DNS records.
 - [ ] Decide whether DHCP remains on the router or moves to Pi-hole; avoid enabling two DHCP servers on the same LAN.
@@ -155,6 +157,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
+| 2026-11-15 | Made NPM's media network attachment persistent in `/home/ian/nginx-proxy-manager/docker-compose.yml` | Declared `media-stack_default` as an external Compose network while retaining NPM's default network and existing persistent volumes |
+| 2026-11-15 | Recreated NPM and verified network and HTTPS behavior | Container re-created successfully, attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://moxxboxx.com` returned `HTTP/2 302` |
 | 2026-11-15 | Created the public GitHub project and documented the initial hardware inventory and network architecture | Repository initialized |
 | 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS | BIOS virtualization settings enabled and saved |
 | 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Proxmox installer started successfully |
