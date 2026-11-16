@@ -91,6 +91,16 @@ The `qemu-guest-agent` package was already installed at the current repository v
 | SSH daemon | Service reports `active`; remote Windows PowerShell login successful |
 | Sudo | `sudo -v` succeeded |
 
+## Reverse proxy and custom domain
+
+Nginx Proxy Manager (NPM) is deployed on this Debian VM in a separate Docker Compose project. The running container is named `nginx-proxy-manager-app-1` and publishes TCP ports 80, 81, and 443. Port 81 is the NPM administration interface and is intended for LAN access only.
+
+The NPM proxy host for `moxxboxx.com` forwards HTTP internally to the Jellyfin service at `jellyfin:8096`. A Let's Encrypt certificate was issued successfully, and loading `https://moxxboxx.com` displays Jellyfin over HTTPS.
+
+The first request returned 502 Bad Gateway because NPM and Jellyfin were attached to separate Docker bridge networks. Running `docker network connect media-stack_default nginx-proxy-manager-app-1` attached NPM to the media stack's network and restored upstream reachability. The attachment works in the current runtime, but it is not yet declared in NPM's Compose file. Add the existing network as an external network to the NPM Compose project so the connection is recreated automatically when the NPM container is replaced.
+
+Dynamic DNS and Pi-hole are planned but not deployed. Dynamic DNS will keep the domain's public DNS record aligned with a changing home WAN address. Pi-hole is planned for LAN DNS filtering and local name resolution.
+
 ## Physical data disk passthrough
 
 The physical Seagate Exos disk is attached to VM 100 as SCSI1 using its persistent model-based device ID. The Proxmox VM configuration confirms SCSI0 remains the 64 GiB NVMe-backed Debian system disk and first in the boot order. The virtual CD/DVD drive has no installation ISO attached. The disk was partitioned and formatted inside Debian after read-only signature checks; its ext4 filesystem is mounted at `/srv/media`.
