@@ -52,7 +52,7 @@ The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The
 
 The Debian media-services VM runs Docker workloads, including Jellyfin and Nginx Proxy Manager. NPM is deployed as a separate Compose project and publishes TCP ports 80, 81, and 443 on the VM. The custom domain `moxxboxx.com` has a Let's Encrypt certificate and successfully reaches Jellyfin over HTTPS. NPM forwards the request to the Jellyfin service at `http://jellyfin:8096`.
 
-NPM and the media stack initially used separate Docker bridge networks. The NPM container was manually connected to `media-stack_default`, which resolved the 502 Bad Gateway and made the proxy route work. This connection must still be declared as an external network in NPM's Compose project to make it persistent when the NPM container is recreated. The NPM administration interface on port 81 is intended for LAN access only and must not be forwarded from the internet.
+NPM and the media stack initially used separate Docker bridge networks. The NPM container was manually connected to `media-stack_default`, which resolved the 502 Bad Gateway and made the proxy route work. The NPM Compose project now declares `media-stack_default` as an external network while retaining its own default network. The Compose configuration was validated and applied, the NPM container was recreated, and inspection confirmed it remained attached to both networks. A post-recreation request to `https://moxxboxx.com` returned `HTTP/2 302` from OpenResty. The NPM administration interface on port 81 is intended for LAN access only and must not be forwarded from the internet.
 
 ### Planned DNS services
 
