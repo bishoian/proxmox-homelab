@@ -155,13 +155,6 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
-| 2026-11-15 | Deployed Nginx Proxy Manager as a separate Docker Compose project on the Debian media-services VM | NPM container is running with host ports 80, 81, and 443 published |
-| 2026-11-15 | Configured `moxxboxx.com` in NPM and requested a Let's Encrypt certificate | Certificate issuance succeeded; Jellyfin is reachable through the custom domain over HTTPS |
-| 2026-11-15 | Diagnosed an initial 502 Bad Gateway from NPM to Jellyfin | NPM and the media stack were on separate Docker networks; connecting `nginx-proxy-manager-app-1` to `media-stack_default` restored upstream access |
-| 2026-11-15 | Planned Dynamic DNS, Pi-hole, and qBittorrent VPN isolation | Added to project scope; implementation remains pending |
-
-| Date | Activity | Result |
-|---|---|---|
 | 2026-11-15 | Created the public GitHub project and documented the initial hardware inventory and network architecture | Repository initialized |
 | 2026-11-15 | Enabled Intel VT-x and Intel VT-d in the Lenovo M920q BIOS | BIOS virtualization settings enabled and saved |
 | 2026-11-15 | Booted the Lenovo from the Proxmox USB installer | Proxmox installer started successfully |
