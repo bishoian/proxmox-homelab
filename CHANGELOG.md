@@ -189,6 +189,18 @@ A concise record of the homelab's major build and documentation milestones.
 - Added Radarr and Sonarr as applications in Prowlarr using their application API keys.
 - Initial setup is now complete across Jellyfin, qBittorrent, Radarr, Sonarr, and Prowlarr. End-to-end synchronization, download/import behavior, hardlinks, Jellyfin library scans, and playback remain to be verified.
 
+### Reverse proxy and custom domain
+- Deployed Nginx Proxy Manager as a separate Docker Compose project on the Debian media-services VM.
+- Configured `moxxboxx.com` to proxy to Jellyfin at `jellyfin:8096`.
+- Successfully issued a Let's Encrypt certificate and verified Jellyfin loads through HTTPS at `https://moxxboxx.com`.
+- Diagnosed the initial 502 Bad Gateway: NPM and Jellyfin were on separate Docker networks. Connected the NPM container to `media-stack_default`, restoring access.
+- Recorded the need to declare the media stack network as an external network in NPM's Compose file so the connection survives container recreation.
+
+### Planned network services
+- Added Dynamic DNS to the roadmap so the domain can follow changes to the home public IP address.
+- Added Pi-hole for LAN DNS filtering and local DNS records.
+- Added a qBittorrent VPN gateway and fail-closed kill switch to the media-stack roadmap. ExpressVPN can be used through Gluetun's OpenVPN integration; providers with P2P port forwarding may be evaluated later.
+
 ### Current state
 - Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
 - One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
