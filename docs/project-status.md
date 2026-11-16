@@ -173,6 +173,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
+| 2026-11-16 | Corrected Prowlarr external DNS resolution | Added Cloudflare and Google resolvers to Prowlarr's Compose service; Docker's embedded resolver then resolved `indexers.prowlarr.com` and HTTPS returned HTTP 200 |
 | 2026-11-16 | Diagnosed and corrected Radarr/Sonarr external DNS lookup failures | Added explicit upstream DNS resolvers to the Radarr and Sonarr Compose services; Docker's embedded resolver then resolved `api.radarr.video` and Radarr movie search returned results |
 | 2026-11-16 | Rebooted the Debian VM and verified the VPN stack recovered | Gluetun reported healthy, qBittorrent showed `tun0`, qBittorrent's public IP check returned VPN egress, and Radarr/Sonarr each reached `gluetun:8080` with HTTP 200 |
 | 2026-11-16 | Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent | Gluetun established the tunnel, created `tun0`, and reported healthy; VPN credentials are stored locally in a root-owned mode-600 environment file and are not committed |
