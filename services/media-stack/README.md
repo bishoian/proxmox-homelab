@@ -43,6 +43,20 @@ The qBittorrent LinuxServer image prints a temporary Web UI password in its cont
 
 The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debian VM. Project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. All five images were pulled and all five application containers were started with `docker compose up -d`. The subsequent `docker compose ps` output showed Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running. Initial logs showed normal Jellyfin startup, database migrations for Radarr and Sonarr, Prowlarr listening on its configured port, and qBittorrent Web UI initialization. Initial first-run setup has been completed in all five applications. The qBittorrent temporary administrator password was replaced. Radarr and Sonarr have their root folders configured and use qBittorrent as their download client with separate categories. Prowlarr is configured with Radarr and Sonarr application connections. End-to-end application sync, download/import behavior, hardlink creation, Jellyfin library scans, and playback still need validation.
 
+## Container DNS troubleshooting
+
+During Radarr movie lookup, Radarr and Sonarr returned DNS failures for `api.radarr.video` through Docker's embedded resolver at `127.0.0.11`. Debian itself resolved the hostname and made HTTPS requests successfully. Direct DNS queries from the Radarr container to the router resolver and public resolvers (Cloudflare and Google) also succeeded, and a direct-IP HTTPS request from Radarr returned HTTP 200. This isolated the issue to Docker's normal embedded-DNS forwarding path for those application containers.
+
+The Compose services for Radarr and Sonarr now specify explicit upstream resolvers:
+
+```yaml
+dns:
+  - 1.1.1.1
+  - 8.8.8.8
+```
+
+After recreating the two containers, Docker's embedded resolver (`127.0.0.11`) successfully resolved `api.radarr.video` from both. Radarr search then returned the Big Buck Bunny movie result. These explicit DNS settings apply only to Radarr and Sonarr. Gluetun and qBittorrent are intentionally not given these overrides so Gluetun retains control of VPN-side DNS. Prowlarr and Jellyfin DNS should be checked separately if they exhibit lookup failures.
+
 ## qBittorrent VPN isolation
 
 **Deployment status:** Gluetun and qBittorrent are deployed together in the media-stack Compose project. Gluetun connects to ExpressVPN using OpenVPN. The provider is selected with `VPN_SERVICE_PROVIDER=expressvpn`, and the country selector uses `SERVER_COUNTRIES=USA`. The manual OpenVPN username and password are stored only in the VM's local `/opt/media-stack/.env` file. That file has `600` permissions and ownership `root:root`; no VPN credentials are committed to this repository.
