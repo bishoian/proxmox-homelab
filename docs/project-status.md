@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE 9.2 updated, rebooted, and verified; D4-320 drive detected with an initial SMART overall status of passed.
+**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network works but still needs a persistent Compose declaration. Dynamic DNS, Pi-hole, and qBittorrent VPN isolation are planned.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -75,7 +75,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Complete Debian 13.7 base installation using the graphical installer.
 - [x] Install GRUB to the VM's virtual system disk.
 - [x] Boot the installed Debian system and reach the `media-server` tty1 login prompt.
-- [ ] Confirm the installer ISO is detached from the virtual CD/DVD drive.
+- [x] Confirm the installer ISO is detached from the virtual CD/DVD drive.
 - [x] Log in using the regular `ian` account.
 - [x] Confirm hostname `media-server`, Debian 13 Trixie, and x86-64 architecture.
 - [x] Confirm VirtIO interface `ens18` is up and has an IPv4 address assigned.
@@ -114,7 +114,18 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Document transcoding expectations and hardware limitations.
 - [ ] Configure backups for application configuration and metadata.
 
-## Milestone 5 — Monitoring and operations
+## Milestone 5 — Reverse proxy and DNS
+
+- [x] Deploy Nginx Proxy Manager in a separate Docker Compose project on the Debian VM.
+- [x] Configure the custom domain `moxxboxx.com` to proxy to Jellyfin at `jellyfin:8096`.
+- [x] Issue a Let's Encrypt certificate and verify Jellyfin loads through HTTPS at `https://moxxboxx.com`.
+- [x] Connect the NPM container to `media-stack_default`; this corrected the initial 502 Bad Gateway.
+- [ ] Add the existing media-stack Docker network as an external network in NPM's Compose file and verify the connection survives NPM container recreation.
+- [ ] Implement Dynamic DNS for the domain using the selected DNS provider's update mechanism.
+- [ ] Deploy Pi-hole for LAN DNS filtering and local DNS records.
+- [ ] Decide whether DHCP remains on the router or moves to Pi-hole; avoid enabling two DHCP servers on the same LAN.
+
+## Milestone 6 — Monitoring and operations
 
 - [ ] Deploy Uptime Kuma or equivalent monitoring.
 - [ ] Monitor host and service availability.
@@ -122,7 +133,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Test a restore procedure.
 - [ ] Record a troubleshooting incident with root cause and verification.
 
-## Milestone 6 — Windows administration lab
+## Milestone 7 — Windows administration lab
 
 - [ ] Create a Windows Server VM.
 - [ ] Create a separate Windows client VM.
@@ -131,7 +142,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Practice DNS, DHCP, users, groups, and Group Policy.
 - [ ] Document common support tasks and troubleshooting.
 
-## Milestone 7 — Networking
+## Milestone 8 — Networking
 
 - [ ] Identify the exact RealHD switch model and firmware.
 - [ ] Document the current switch port map and link speeds.
@@ -141,6 +152,13 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Validate allowed and blocked traffic with explicit tests.
 
 ## Evidence log
+
+| Date | Activity | Result |
+|---|---|---|
+| 2026-11-15 | Deployed Nginx Proxy Manager as a separate Docker Compose project on the Debian media-services VM | NPM container is running with host ports 80, 81, and 443 published |
+| 2026-11-15 | Configured `moxxboxx.com` in NPM and requested a Let's Encrypt certificate | Certificate issuance succeeded; Jellyfin is reachable through the custom domain over HTTPS |
+| 2026-11-15 | Diagnosed an initial 502 Bad Gateway from NPM to Jellyfin | NPM and the media stack were on separate Docker networks; connecting `nginx-proxy-manager-app-1` to `media-stack_default` restored upstream access |
+| 2026-11-15 | Planned Dynamic DNS, Pi-hole, and qBittorrent VPN isolation | Added to project scope; implementation remains pending |
 
 | Date | Activity | Result |
 |---|---|---|
