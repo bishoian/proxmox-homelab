@@ -1,8 +1,8 @@
 # Project Status
 
 **Project owner:** Ian Bishop  
-**Last updated:** 2026-11-15  
-**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network is declared in Compose and verified after container recreation. Dynamic DNS, Pi-hole, and qBittorrent VPN isolation are planned.
+**Last updated:** 2026-11-16  
+**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network is declared in Compose and verified after container recreation. Dynamic DNS and Pi-hole remain planned. qBittorrent now runs behind Gluetun using ExpressVPN OpenVPN, with qBittorrent bound to `tun0` and a direct-IP kill-switch outage test successfully completed.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -127,7 +127,23 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Deploy Pi-hole for LAN DNS filtering and local DNS records.
 - [ ] Decide whether DHCP remains on the router or moves to Pi-hole; avoid enabling two DHCP servers on the same LAN.
 
-## Milestone 6 — Monitoring and operations
+## Milestone 6 — qBittorrent VPN isolation
+
+- [x] Create a local ExpressVPN manual OpenVPN credential file at `/opt/media-stack/.env`, owned by root with mode `600`; keep credentials out of Git.
+- [x] Configure Gluetun with the ExpressVPN provider and USA server selection.
+- [x] Deploy Gluetun with `NET_ADMIN`, `/dev/net/tun`, and its built-in firewall enabled.
+- [x] Route qBittorrent through Gluetun using `network_mode: service:gluetun` and a Gluetun healthy-start dependency.
+- [x] Publish the qBittorrent Web UI through Gluetun on TCP 8080; do not publish the torrent port on the host.
+- [x] Bind qBittorrent's network interface to `tun0`.
+- [x] Update Radarr and Sonarr download-client host to `gluetun` on port 8080; both application connectivity tests returned HTTP 200.
+- [x] Confirm qBittorrent's public IP matches Gluetun's VPN egress IP.
+- [x] Interrupt `tun0` and verify a DNS-based public-IP request fails.
+- [x] Verify the kill switch with a direct-IP HTTPS test to `1.1.1.1`; the request returned HTTP 000 and timed out.
+- [x] Recreate Gluetun and qBittorrent and confirm Gluetun returns healthy, qBittorrent returns running, and VPN egress is restored.
+- [ ] Verify recovery and interface binding after a full Debian VM reboot.
+- [ ] Perform a lawful test download and verify the Radarr/Sonarr import workflow.
+
+## Milestone 7 — Monitoring and operations
 
 - [ ] Deploy Uptime Kuma or equivalent monitoring.
 - [ ] Monitor host and service availability.
@@ -135,7 +151,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Test a restore procedure.
 - [ ] Record a troubleshooting incident with root cause and verification.
 
-## Milestone 7 — Windows administration lab
+## Milestone 8 — Windows administration lab
 
 - [ ] Create a Windows Server VM.
 - [ ] Create a separate Windows client VM.
@@ -144,7 +160,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Practice DNS, DHCP, users, groups, and Group Policy.
 - [ ] Document common support tasks and troubleshooting.
 
-## Milestone 8 — Networking
+## Milestone 9 — Networking
 
 - [ ] Identify the exact RealHD switch model and firmware.
 - [ ] Document the current switch port map and link speeds.
@@ -157,6 +173,11 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
+| 2026-11-16 | Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent | Gluetun established the tunnel, created `tun0`, and reported healthy; VPN credentials are stored locally in a root-owned mode-600 environment file and are not committed |
+| 2026-11-16 | Moved qBittorrent into Gluetun's network namespace and bound it to `tun0` | qBittorrent shares Gluetun networking and uses the VPN interface; its Web UI is published through Gluetun on TCP 8080 |
+| 2026-11-16 | Updated Radarr and Sonarr download-client connections | Both applications reached the qBittorrent Web UI through `gluetun:8080`; each returned HTTP 200 |
+| 2026-11-16 | Tested qBittorrent VPN egress and kill-switch behavior | qBittorrent's public IP matched Gluetun's VPN IP; after `tun0` was brought down, both DNS-based egress and a direct-IP HTTPS request timed out (HTTP 000) |
+| 2026-11-16 | Recovered the VPN stack after the outage test | Docker Compose recreated Gluetun and qBittorrent; Gluetun returned healthy, qBittorrent returned running, and a new VPN egress IP was retrieved |
 | 2026-11-15 | Made NPM's media network attachment persistent in `/home/ian/nginx-proxy-manager/docker-compose.yml` | Declared `media-stack_default` as an external Compose network while retaining NPM's default network and existing persistent volumes |
 | 2026-11-15 | Recreated NPM and verified network and HTTPS behavior | Container re-created successfully, attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://moxxboxx.com` returned `HTTP/2 302` |
 | 2026-11-15 | Created the public GitHub project and documented the initial hardware inventory and network architecture | Repository initialized |
