@@ -17,6 +17,14 @@ A concise record of the homelab's major build and documentation milestones.
 - Rebooted the Debian VM and verified Gluetun returned healthy, qBittorrent retained `tun0`, VPN egress was restored, and Radarr/Sonarr both returned HTTP 200 from the qBittorrent Web UI.
 - A small lawful test download and end-to-end media import validation remain pending.
 
+## 2026-11-16
+
+### Media application DNS resolution
+- Diagnosed Radarr and Sonarr metadata lookup failures caused by Docker's embedded DNS forwarding path.
+- Confirmed Debian host DNS and direct DNS queries to the router, Cloudflare, and Google worked, while default lookups through Docker's embedded resolver returned SERVFAIL.
+- Added explicit Cloudflare and Google DNS resolvers to the Radarr and Sonarr Compose services.
+- Verified Docker's embedded resolver subsequently resolved `api.radarr.video` and Radarr search returned movie results.
+
 ## 2026-11-15
 
 ### Initial project setup
