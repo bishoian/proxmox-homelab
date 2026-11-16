@@ -194,7 +194,9 @@ A concise record of the homelab's major build and documentation milestones.
 - Configured `moxxboxx.com` to proxy to Jellyfin at `jellyfin:8096`.
 - Successfully issued a Let's Encrypt certificate and verified Jellyfin loads through HTTPS at `https://moxxboxx.com`.
 - Diagnosed the initial 502 Bad Gateway: NPM and Jellyfin were on separate Docker networks. Connected the NPM container to `media-stack_default`, restoring access.
-- Recorded the need to declare the media stack network as an external network in NPM's Compose file so the connection survives container recreation.
+- Updated NPM's Compose file at `/home/ian/nginx-proxy-manager/docker-compose.yml` to declare `media-stack_default` as an external network while retaining NPM's default network and persistent configuration/certificate volumes.
+- Validated the Compose configuration with `docker compose config --quiet` and recreated the NPM container.
+- Verified the recreated container remained attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty.
 
 ### Planned network services
 - Added Dynamic DNS to the roadmap so the domain can follow changes to the home public IP address.
