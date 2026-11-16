@@ -14,7 +14,8 @@ A concise record of the homelab's major build and documentation milestones.
 - Verified qBittorrent's public IP matched Gluetun's VPN egress address.
 - Tested the firewall kill switch by bringing `tun0` down. A DNS-based egress request failed, and a direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out.
 - Recreated Gluetun and qBittorrent after the test; Gluetun returned healthy, qBittorrent returned running, and VPN egress was restored.
-- Full Debian VM reboot validation and end-to-end media import testing remain pending.
+- Rebooted the Debian VM and verified Gluetun returned healthy, qBittorrent retained `tun0`, VPN egress was restored, and Radarr/Sonarr both returned HTTP 200 from the qBittorrent Web UI.
+- A small lawful test download and end-to-end media import validation remain pending.
 
 ## 2026-11-15
 
