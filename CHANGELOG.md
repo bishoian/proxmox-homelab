@@ -24,6 +24,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Confirmed Debian host DNS and direct DNS queries to the router, Cloudflare, and Google worked, while default lookups through Docker's embedded resolver returned SERVFAIL.
 - Added explicit Cloudflare and Google DNS resolvers to the Radarr and Sonarr Compose services.
 - Verified Docker's embedded resolver subsequently resolved `api.radarr.video` and Radarr search returned movie results.
+- Diagnosed the same embedded-DNS failure in Prowlarr for `indexers.prowlarr.com`, added the same explicit resolvers to its Compose service, and verified name resolution plus an HTTPS HTTP 200 response.
 
 ## 2026-11-15
 
