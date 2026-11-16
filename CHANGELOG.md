@@ -2,6 +2,20 @@
 
 A concise record of the homelab's major build and documentation milestones.
 
+## 2026-11-16
+
+### qBittorrent VPN isolation
+- Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent.
+- Kept manual OpenVPN credentials in the local `/opt/media-stack/.env` file with mode `600` and root ownership; the credential file is not included in Git.
+- Configured the Gluetun ExpressVPN provider and selected the USA server group using the accepted country value `USA`.
+- Moved qBittorrent into Gluetun's network namespace with a healthy-start dependency and published the Web UI through Gluetun on TCP 8080.
+- Bound qBittorrent's network interface to `tun0`.
+- Updated Radarr and Sonarr to reach qBittorrent at `gluetun:8080`; both Web UI connectivity tests returned HTTP 200.
+- Verified qBittorrent's public IP matched Gluetun's VPN egress address.
+- Tested the firewall kill switch by bringing `tun0` down. A DNS-based egress request failed, and a direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out.
+- Recreated Gluetun and qBittorrent after the test; Gluetun returned healthy, qBittorrent returned running, and VPN egress was restored.
+- Full Debian VM reboot validation and end-to-end media import testing remain pending.
+
 ## 2026-11-15
 
 ### Initial project setup
