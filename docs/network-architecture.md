@@ -26,7 +26,7 @@ This document outlines the homelab's physical network and the planned logical la
              storage
 ```
 
-The Proxmox host is installed and its web interface is accessible. The D4-320 is physically connected to the Lenovo over USB; disk detection and health checks are still pending.
+The Proxmox host is installed and its web interface is accessible. The D4-320 is physically connected to the Lenovo over USB, and the installed Seagate drive is detected with an initial SMART overall status of `PASSED`. The drive's extended self-test was stopped early and remains incomplete; see the SMART baseline notes.
 
 The patch panel is a passive cabling termination point. It does not switch or route traffic. The relationship between the switch, patch panel, rack shelf pass-through ports, router, and room cabling will be documented after the cables are traced.
 
@@ -47,6 +47,17 @@ The initial deployment uses the existing home LAN without VLANs or changes to ro
 The Proxmox host has a static management address reserved in the home router. The web interface is accessible from another device on the LAN.
 
 The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The Proxmox bridge (`vmbr0`) is UP and uses the same physical uplink. The wireless interface (`wlo1`) is DOWN; the server is using its wired connection. The current physical path from the Lenovo to the router or managed switch will be traced and documented separately. The host's network configuration and 1 Gbps link have been confirmed from the Proxmox Shell.
+
+## Public service path
+
+The Debian media-services VM runs Docker workloads, including Jellyfin and Nginx Proxy Manager. NPM is deployed as a separate Compose project and publishes TCP ports 80, 81, and 443 on the VM. The custom domain `moxxboxx.com` has a Let's Encrypt certificate and successfully reaches Jellyfin over HTTPS. NPM forwards the request to the Jellyfin service at `http://jellyfin:8096`.
+
+NPM and the media stack initially used separate Docker bridge networks. The NPM container was manually connected to `media-stack_default`, which resolved the 502 Bad Gateway and made the proxy route work. This connection must still be declared as an external network in NPM's Compose project to make it persistent when the NPM container is recreated. The NPM administration interface on port 81 is intended for LAN access only and must not be forwarded from the internet.
+
+### Planned DNS services
+
+- **Dynamic DNS:** add a provider-compatible updater so the public DNS record for `moxxboxx.com` follows changes to the home's public IP address. DNS provider and updater are not yet selected.
+- **Pi-hole:** deploy on the home LAN for DNS filtering and local DNS records. Decide whether the existing router or Pi-hole will provide DHCP before enabling DHCP on Pi-hole. Do not expose Pi-hole's DNS or administration ports publicly.
 
 ## Planned segmentation
 
@@ -94,4 +105,9 @@ The 10G SFP+ port is an uplink option; it does not mean the Lenovo currently has
 - [ ] Record switch port mappings.
 - [x] Confirm Proxmox management interface is accessible from a LAN device.
 - [ ] Confirm Proxmox detects the D4-320's installed drive.
+- [x] Deploy Nginx Proxy Manager and verify HTTPS access to Jellyfin through `moxxboxx.com`.
+- [x] Connect NPM to the media stack's Docker network to reach Jellyfin; persistence in the NPM Compose file remains pending.
+- [ ] Declare the media stack network as external in NPM's Compose project and verify persistence after container recreation.
+- [ ] Select and configure a Dynamic DNS provider/updater.
+- [ ] Deploy Pi-hole for LAN DNS filtering and local name resolution.
 - [ ] Plan VLANs after the baseline LAN is stable.
