@@ -39,9 +39,9 @@ The issue was corrected at runtime by running:
 sudo docker network connect media-stack_default nginx-proxy-manager-app-1
 ```
 
-NPM can now resolve the Jellyfin service name on the shared network. The current manual network attachment works, but must be made persistent in the NPM Compose file.
+NPM can now resolve the Jellyfin service name on the shared network. The runtime attachment was then made persistent in the NPM Compose project at `/home/ian/nginx-proxy-manager/docker-compose.yml`.
 
-### Persistent Compose configuration to apply
+### Persistent Compose configuration
 
 The NPM Compose service is named `app` (inferred from the current container name). Add the external media network to the existing `app` service while retaining its existing default network:
 
@@ -60,12 +60,15 @@ networks:
 
 Merge this into the existing NPM Compose file; do not replace its existing ports, volumes, environment variables, database configuration, or other settings. Validate the Compose file before recreating the container. Docker Compose external networks are managed outside the NPM project lifecycle and can be shared across Compose projects. See the [Docker Compose networking documentation](https://docs.docker.com/compose/how-tos/networking/).
 
-The actual Compose file location and complete service configuration should be discovered on the VM before making the change. No credentials, database contents, certificate private keys, or other secrets belong in this repository.
+The existing Compose file was inspected before editing. Its image, published ports, restart policy, and persistent bind mounts (`./data` and `./letsencrypt`) were retained. The additional network configuration was merged into the existing file, validated with `sudo docker compose config --quiet`, and applied with `sudo docker compose up -d`.
+
+The recreated container was verified on both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty, confirming the public HTTPS proxy path remained functional after container recreation. No credentials, database contents, certificate private keys, or other secrets are included in this repository.
 
 ## Planned improvements
 
-- [ ] Make the `media-stack_default` network attachment persistent in the NPM Compose project.
-- [ ] Verify NPM remains attached to the media network after container recreation and VM reboot.
+- [x] Make the `media-stack_default` network attachment persistent in the NPM Compose project.
+- [x] Verify NPM remains attached to both Docker networks after container recreation.
+- [ ] Verify the network attachment after a full Debian VM reboot.
 - [ ] Implement Dynamic DNS for the domain using the selected DNS provider's API or supported updater.
 - [ ] Review and document the router's public port-forwarding rules; keep NPM administration and application-management interfaces LAN-only.
 - [ ] Consider additional subdomains only when there is a clear need and each service has an appropriate authentication and access-control plan.
@@ -79,6 +82,7 @@ Dynamic DNS is not installed yet. Its purpose is to update the public DNS record
 - [x] Let's Encrypt certificate issuance completed for `moxxboxx.com`.
 - [x] Jellyfin loads at `https://moxxboxx.com`.
 - [x] NPM has runtime connectivity to Jellyfin through `media-stack_default`.
-- [ ] External network configuration committed to the NPM Compose file.
-- [ ] Persistent network connection tested after container recreation.
+- [x] External network configuration committed to the NPM Compose file.
+- [x] Persistent network connection tested after container recreation.
+- [x] HTTPS endpoint returns a successful redirect after NPM container recreation.
 - [ ] Dynamic DNS updater implemented and tested.
