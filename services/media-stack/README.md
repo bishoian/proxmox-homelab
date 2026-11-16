@@ -45,9 +45,9 @@ The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debia
 
 ## Container DNS troubleshooting
 
-During Radarr movie lookup, Radarr and Sonarr returned DNS failures for `api.radarr.video` through Docker's embedded resolver at `127.0.0.11`. Debian itself resolved the hostname and made HTTPS requests successfully. Direct DNS queries from the Radarr container to the router resolver and public resolvers (Cloudflare and Google) also succeeded, and a direct-IP HTTPS request from Radarr returned HTTP 200. This isolated the issue to Docker's normal embedded-DNS forwarding path for those application containers.
+During Radarr movie lookup, Radarr and Sonarr returned DNS failures for `api.radarr.video` through Docker's embedded resolver at `127.0.0.11`. Prowlarr separately returned DNS failures for `indexers.prowlarr.com` and could not download indexer definitions. Debian itself resolved the hostname and made HTTPS requests successfully. Direct DNS queries from the Radarr container to the router resolver and public resolvers (Cloudflare and Google) also succeeded, and a direct-IP HTTPS request from Radarr returned HTTP 200. This isolated the issue to Docker's normal embedded-DNS forwarding path for those application containers.
 
-The Compose services for Radarr and Sonarr now specify explicit upstream resolvers:
+The Compose services for Radarr, Sonarr, and Prowlarr now specify explicit upstream resolvers:
 
 ```yaml
 dns:
@@ -55,7 +55,7 @@ dns:
   - 8.8.8.8
 ```
 
-After recreating the two containers, Docker's embedded resolver (`127.0.0.11`) successfully resolved `api.radarr.video` from both. Radarr search then returned the Big Buck Bunny movie result. These explicit DNS settings apply only to Radarr and Sonarr. Gluetun and qBittorrent are intentionally not given these overrides so Gluetun retains control of VPN-side DNS. Prowlarr and Jellyfin DNS should be checked separately if they exhibit lookup failures.
+After recreating Radarr and Sonarr, Docker's embedded resolver (`127.0.0.11`) successfully resolved `api.radarr.video` from both, and Radarr search returned the Big Buck Bunny movie result. Prowlarr initially showed the same `SERVFAIL` behavior for its indexer-definition host. It now has the same explicit DNS resolvers; after recreation, its embedded resolver successfully resolved `indexers.prowlarr.com` and HTTPS to that endpoint returned HTTP 200. These explicit DNS settings apply only to Radarr, Sonarr, and Prowlarr. Gluetun and qBittorrent are intentionally not given these overrides so Gluetun retains control of VPN-side DNS. Jellyfin DNS has not required troubleshooting.
 
 ## qBittorrent VPN isolation
 
