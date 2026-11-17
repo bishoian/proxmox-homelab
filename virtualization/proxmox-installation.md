@@ -6,9 +6,7 @@
 
 ## Preparation
 
-- Enabled Intel VT-x and VT-d in BIOS.
-- Disconnected the TerraMaster DAS and data disks to avoid selecting the wrong installation target.
-- Created a bootable Proxmox VE installer USB.
+I enabled Intel VT-x and VT-d in BIOS, disconnected the TerraMaster DAS and data disks to avoid selecting the wrong installation target, and created a bootable Proxmox VE installer USB.
 
 ## Installer configuration
 
@@ -25,7 +23,7 @@
 
 ## Installation and first login
 
-The installer completed, and the host rebooted to the Proxmox console. The web interface was opened from another device on the home LAN. Root authentication through the Linux PAM realm succeeded, and the `pve` node appeared online.
+The installer completed and I rebooted the host to the Proxmox console. I opened the web interface from another device on my home LAN, authenticated as root through the Linux PAM realm, and confirmed that the `pve` node appeared online.
 
 ## Verified installation tasks
 
