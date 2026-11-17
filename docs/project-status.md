@@ -96,7 +96,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [ ] Deploy Mealie and Audiobookshelf, complete first-run setup, and validate their persistent storage.
 - [x] Create the `/opt/media-stack` project and service configuration/cache directories on Debian.
 - [x] Download the version-controlled Compose file from GitHub and validate it with `docker compose config --quiet` (exit status 0).
-- [x] Deploy the media stack with `docker compose up -d`; all five application containers started.
+- [x] Deploy the initial core media stack with `docker compose up -d`; the original five application containers started.
 - [x] Confirm the original media containers start; Jellyfin reported healthy and Radarr, Sonarr, Prowlarr, and qBittorrent reported running.
 - [x] Deploy Seerr in the existing media-stack project; its container reported healthy.
 - [x] Complete Seerr's local setup, sync the Jellyfin Movies and Shows libraries, and configure its Radarr and Sonarr servers.
