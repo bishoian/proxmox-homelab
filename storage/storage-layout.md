@@ -8,9 +8,9 @@
 
 ## Design
 
-The first 6 TB disk is dedicated to media and downloads for the Debian VM. The second matching disk is reserved for later expansion. The initial design uses a standalone ext4 filesystem, not RAID, MergerFS, or a pooled volume.
+I dedicated the first 6 TB disk to media and downloads for my Debian VM. I have reserved the second matching disk for later expansion. The initial design uses a standalone ext4 filesystem, not RAID, MergerFS, or a pooled volume.
 
-The physical disk is passed through to VM 100 as SCSI1 using a persistent `/dev/disk/by-id` identifier. The exact identifier and serial are intentionally omitted. Debian manages the partition table, filesystem, mount, and directories.
+I pass the physical disk through to VM 100 as SCSI1 using a persistent `/dev/disk/by-id` identifier. I omit the exact identifier and serial from this public repository. Debian manages the partition table, filesystem, mount, and directories.
 
 ## Storage placement
 
@@ -22,7 +22,7 @@ The physical disk is passed through to VM 100 as SCSI1 using a persistent `/dev/
 
 ## Filesystem and directory layout
 
-The Seagate has one GPT partition, `/dev/sdb1`, formatted as ext4 and labeled `media`. A UUID-based `/etc/fstab` entry mounts it at `/srv/media`. `mount -a`, `findmnt`, and `df -hT` confirmed a read/write mount with approximately 5.4 TiB available. The mount source has not yet been rechecked after a VM reboot.
+I created one GPT partition (`/dev/sdb1`), formatted it as ext4, and labeled it `media`. I added a UUID-based `/etc/fstab` entry to mount it at `/srv/media`. I used `mount -a`, `findmnt`, and `df -hT` to confirm a read/write mount with approximately 5.4 TiB available. I still need to recheck the mount source after a VM reboot.
 
 ```text
 /srv/media/data/
@@ -40,13 +40,13 @@ The Seagate has one GPT partition, `/dev/sdb1`, formatted as ext4 and labeled `m
     └── music/
 ```
 
-The directory tree is owned by UID/GID 1000 (`ian:ian`). Directories use mode `2775` with setgid inheritance. A non-root Alpine container running as UID/GID 1000:1000 successfully created and deleted a test file in the bind mount.
+I set the directory tree ownership to UID/GID 1000 (`ian:ian`) and directory permissions to `2775` with setgid inheritance. I verified non-root access by running an Alpine container as UID/GID 1000:1000 and creating and deleting a test file through the bind mount.
 
 ## Container path strategy
 
-Radarr, Sonarr, and qBittorrent share the same host data tree at the same container path, `/data`. Jellyfin receives the media library read-only at `/media`. Keeping downloads and library folders on one filesystem allows hardlinks and atomic moves when paths and permissions are configured consistently.
+I mapped the same host data tree to `/data` in Radarr, Sonarr, and qBittorrent, and mounted the media library read-only at `/media` in Jellyfin. I chose this shared-path layout because keeping downloads and library folders on one filesystem allows hardlinks and atomic moves when paths and permissions are configured consistently.
 
-Hardlink/inode behavior has not yet been directly verified. Application sorting, metadata, imports, Jellyfin refresh, and playback have been verified separately.
+I have not yet directly verified hardlink/inode behavior. I have separately verified application sorting, metadata, imports, Jellyfin library refresh, and playback.
 
 Application configuration and databases remain on the VM's NVMe-backed system disk. The media disk is separate from the VM's virtual system disk, so a VM backup alone will not protect its contents.
 
@@ -65,6 +65,6 @@ The initial SMART overall status was `PASSED`, and the captured attributes showe
 - [x] Configure and test the UUID-based `/etc/fstab` mount at `/srv/media`.
 - [x] Create the shared directory structure and configure UID/GID 1000 permissions.
 - [x] Verify non-root container write access.
-- [ ] Recheck the mounted source after a Debian VM reboot.
-- [ ] Verify hardlink behavior between download and library paths.
-- [ ] Define and test independent backups for VM configuration and important media data.
+- [ ] I will reboot my Debian VM and confirm that the expected disk remains mounted at `/srv/media`.
+- [ ] I will compare inode numbers between a downloaded file and its library copy to verify hardlink behavior.
+- [ ] I will define and test independent backups for my VM configuration and important media data.
