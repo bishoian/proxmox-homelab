@@ -3,11 +3,11 @@
 **Owner:** Ian Bishop  
 **Last updated:** 2026-11-16
 
-Proxmox VE and the Debian media-services VM are running. Radarr and Sonarr correctly import and sort media with the expected metadata. Jellyfin's automatic library refresh and playback are verified, and Seerr's external HTTPS request portal is working. The Gluetun/qBittorrent VPN path passed a fail-closed test and recovered after a full VM reboot.
+I have Proxmox VE and my Debian media-services VM running. I verified that Radarr and Sonarr import and sort media with the expected metadata, that Jellyfin automatically refreshes its library and plays new media, and that Seerr's external HTTPS request portal works. I also tested the Gluetun/qBittorrent VPN path for fail-closed behavior and confirmed that it recovered after a full VM reboot.
 
-Mealie and Audiobookshelf are defined in the Compose project but not deployed. Remaining work includes hardlink verification, mount persistence verification, backups, monitoring, Dynamic DNS, Pi-hole, and network documentation.
+I have added Mealie and Audiobookshelf to the Compose project, but I have not deployed them yet. My remaining work includes verifying hardlinks and mount persistence, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
 
-This checklist reflects verified results. Historical observations are retained in the evidence log where they help explain how the build progressed.
+I use this checklist to separate work I have verified from work I still intend to complete. The evidence log records key milestones and the results I observed.
 
 ## 1. Proxmox host
 
@@ -18,8 +18,8 @@ This checklist reflects verified results. Historical observations are retained i
 - [x] Configure Proxmox VE and Ceph no-subscription repositories.
 - [x] Refresh package lists and apply available upgrades.
 - [x] Reboot and verify kernel `7.0.14-29-pve` and `pve-manager 9.2.27`.
-- [ ] Record BIOS/UEFI version and RAM module layout.
-- [ ] Document host recovery and console access.
+- [ ] I will record the BIOS/UEFI version and RAM module layout.
+- [ ] I will document my host recovery and console-access process.
 
 ## 2. Storage
 
@@ -34,9 +34,9 @@ This checklist reflects verified results. Historical observations are retained i
 - [x] Verify the mount with `mount -a`, `findmnt`, and `df -hT`.
 - [x] Create the media/download directory structure and configure UID/GID 1000 permissions.
 - [x] Verify non-root container write access with an Alpine test container.
-- [ ] Recheck the mounted device source after a Debian VM reboot.
-- [ ] Complete an extended SMART self-test during a maintenance window.
-- [ ] Establish and test independent backups.
+- [ ] I will reboot the Debian VM and confirm that the expected device remains mounted at `/srv/media`.
+- [ ] I will run and record a complete extended SMART self-test during a maintenance window.
+- [ ] I will establish independent backups and perform a restore test.
 
 ## 3. Debian VM and Docker
 
@@ -48,7 +48,7 @@ This checklist reflects verified results. Historical observations are retained i
 - [x] Install Docker Engine and Compose.
 - [x] Validate Docker with the official `hello-world` container.
 - [x] Create and validate the version-controlled media-stack Compose project.
-- [ ] Establish a routine for Debian updates and maintenance.
+- [ ] I will define a routine for Debian updates and maintenance.
 
 ## 4. Media applications
 
@@ -61,10 +61,10 @@ This checklist reflects verified results. Historical observations are retained i
 - [x] Enable Jellyfin real-time monitoring for Movies and Shows.
 - [x] Verify automatic Jellyfin library refresh without a manual scan.
 - [x] Verify Jellyfin playback using a newly downloaded movie.
-- [ ] Verify hardlink/inode behavior between download and library paths.
-- [ ] Deploy Mealie and Audiobookshelf and verify persistent storage.
-- [ ] Document service health checks, updates, and recovery.
-- [ ] Configure and test backups for application configuration and metadata.
+- [ ] I will compare inode numbers between a downloaded file and its library copy to verify whether hardlinks are being used.
+- [ ] I will deploy Mealie and Audiobookshelf, then verify that their data persists across container recreation.
+- [ ] I will document how I check service health, apply updates, and recover services.
+- [ ] I will configure backups for application configuration and metadata, then test a restore.
 
 ## 5. Reverse proxy and DNS
 
@@ -74,10 +74,10 @@ This checklist reflects verified results. Historical observations are retained i
 - [x] Connect NPM to `media-stack_default` and make the attachment persistent in its Compose project.
 - [x] Verify NPM remains attached to both Docker networks after container recreation.
 - [x] Correct NPM container DNS resolution for the Let's Encrypt API.
-- [ ] Verify NPM's network attachment after a full Debian VM reboot.
-- [ ] Select and test a Dynamic DNS provider/updater.
-- [ ] Deploy Pi-hole for LAN DNS filtering and local records.
-- [ ] Decide whether DHCP remains on the router or moves to Pi-hole.
+- [ ] I will reboot the Debian VM and confirm that NPM reconnects to both Docker networks.
+- [ ] I will choose a Dynamic DNS provider and test that its updater follows changes to my WAN address.
+- [ ] I plan to deploy Pi-hole for LAN DNS filtering and local records.
+- [ ] I will decide whether to keep DHCP on my router or move it to Pi-hole before enabling Pi-hole's DHCP service.
 
 Public hostnames are masked throughout this repository.
 
@@ -91,17 +91,17 @@ Public hostnames are masked throughout this repository.
 - [x] Bring `tun0` down and verify a direct-IP HTTPS request is blocked.
 - [x] Recreate the services and verify VPN recovery.
 - [x] Reboot the Debian VM and verify Gluetun, qBittorrent, and application connectivity recover.
-- [ ] Repeat the outage test after future Gluetun or qBittorrent image updates.
+- [ ] I will repeat the VPN outage test after future Gluetun or qBittorrent image updates.
 
 ## 7. Networking and future lab work
 
-- [ ] Identify the RealHD switch's exact model, hardware revision, and firmware.
-- [ ] Trace rack cabling and document switch port assignments.
-- [ ] Verify router capabilities relevant to VLANs.
-- [ ] Design and implement VLANs with a tested recovery path.
-- [ ] Create Windows Server and Windows client VMs.
-- [ ] Build an isolated Active Directory practice domain.
-- [ ] Practice DNS, DHCP, users, groups, and Group Policy.
+- [ ] I will identify my RealHD switch's exact model, hardware revision, and firmware.
+- [ ] I will trace my rack cabling and document switch port assignments.
+- [ ] I will verify that my router supports the VLAN interfaces, routing, DHCP, and firewall policies I intend to use.
+- [ ] I plan to design VLANs for management, servers, trusted devices, and lab/testing. Before moving devices, I will validate router support and test a recovery path so I do not lose management access.
+- [ ] I plan to create Windows Server and Windows client VMs.
+- [ ] I plan to build an isolated Active Directory practice domain.
+- [ ] I plan to use the domain to practice DNS, DHCP, user and group management, and Group Policy.
 
 ## Troubleshooting records
 
@@ -123,4 +123,4 @@ Public hostnames are masked throughout this repository.
 | 2026-11-15 | Initial media stack | Deployed the core containers and completed initial application setup |
 | 2026-11-15 | D4-320 diagnosis | Found the enclosure's rear power switch was off; powering it on restored disk detection |
 
-The full implementation details live in the relevant service, virtualization, storage, and troubleshooting documents.
+I keep implementation details in the relevant service, virtualization, storage, and troubleshooting documents.
