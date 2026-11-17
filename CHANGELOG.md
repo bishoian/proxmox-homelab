@@ -4,6 +4,29 @@ A concise record of the homelab's major build and documentation milestones.
 
 ## 2026-11-16
 
+### Seerr request portal
+- Added Seerr to the media-stack Compose project using its persistent configuration directory and LAN port 5055.
+- Started the Seerr container successfully; `docker compose ps seerr` reported it running and healthy.
+- Completed local setup, selected the Jellyfin Movies and Shows libraries, and configured the Radarr and Sonarr servers.
+- Local Seerr access is working. The intended public endpoint is `requests.moxxboxx.com`; final certificate and external-client verification remain pending.
+
+### Nginx Proxy Manager DNS troubleshooting
+- Compared Debian host DNS with DNS inside the NPM container. The host resolved `acme-v02.api.letsencrypt.org`, while the container initially failed through Docker's embedded resolver.
+- Added explicit Cloudflare and Google DNS resolvers to the NPM app service in its separate local Compose project.
+- Recreated NPM and confirmed the DNS-resolution failure cleared; the ACME request advanced to challenge validation.
+- The later challenge error was traced by the user to a mistyped value. The final Seerr HTTPS endpoint still needs external verification.
+
+### Mealie and Audiobookshelf service definitions
+- Added Mealie and Audiobookshelf to the version-controlled media-stack Compose file.
+- Mealie is configured with a pinned stable image, SQLite-backed local application data, a 1 GB memory limit, and LAN port 9925.
+- Audiobookshelf is configured with local NVMe-backed configuration/metadata, Seagate-backed audiobook/podcast folders, UID/GID 1000:1000, and LAN port 13378.
+- Container deployment and first-run validation remain pending.
+
+### Media import and library observations
+- Filesystem inspection found a movie file in the configured media library root.
+- Downloaded TV season folders were still in the torrent area and the TV library root was empty; Sonarr import behavior remains to be corrected.
+- Jellyfin real-time monitoring was enabled for Movies and Shows, but the observed library update still required a manual scan. Automatic refresh and playback remain open validation items.
+
 ### qBittorrent VPN isolation
 - Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent.
 - Kept manual OpenVPN credentials in the local `/opt/media-stack/.env` file with mode `600` and root ownership; the credential file is not included in Git.
@@ -15,7 +38,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Tested the firewall kill switch by bringing `tun0` down. A DNS-based egress request failed, and a direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out.
 - Recreated Gluetun and qBittorrent after the test; Gluetun returned healthy, qBittorrent returned running, and VPN egress was restored.
 - Rebooted the Debian VM and verified Gluetun returned healthy, qBittorrent retained `tun0`, VPN egress was restored, and Radarr/Sonarr both returned HTTP 200 from the qBittorrent Web UI.
-- A small lawful test download and end-to-end media import validation remain pending.
+- The download/import workflow is only partially validated: one movie appeared in the library root, while TV season folders remained in the torrent area. Sonarr TV imports and hardlink behavior remain to be verified.
 
 ## 2026-11-16
 
