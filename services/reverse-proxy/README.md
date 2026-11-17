@@ -18,16 +18,16 @@ The NPM administration interface on port 81 is for trusted LAN access only. Do n
 
 | Setting | Value |
 |---|---|
-| Domain | `moxxboxx.com` |
+| Public hostname | `m*******.com` (masked) |
 | Upstream scheme | HTTP |
 | Upstream host | `jellyfin` |
 | Upstream port | `8096` |
 | TLS certificate | Let's Encrypt |
-| External URL | [https://moxxboxx.com](https://moxxboxx.com) |
+| External URL | `https://m*******.com` (masked) |
 
 The Let's Encrypt certificate request succeeded, and Jellyfin was verified working through the custom domain over HTTPS.
 
-Seerr has been deployed in the media-stack Compose project and is working locally on TCP port 5055. The intended public endpoint is `requests.moxxboxx.com`, forwarded to `http://seerr:5055` over the shared media Docker network. The ACME request initially failed after the NPM DNS problem was corrected; the remaining challenge error was traced by the user to a mistyped value. Final certificate issuance and remote-client access still need an explicit verification before this endpoint is recorded as complete.
+Seerr is deployed in the media-stack Compose project and is available on LAN TCP port 5055. Its external request endpoint `requests.m*******.com` is forwarded to `http://seerr:5055` over the shared media Docker network. The initial ACME challenge issue was traced to a mistyped value and corrected; Seerr's external HTTPS endpoint and reverse-proxy route have since been verified.
 
 TLS terminates at NPM. NPM communicates with Jellyfin over the Docker bridge network. This is why the upstream scheme is HTTP even though clients use HTTPS externally.
 
@@ -64,7 +64,7 @@ Merge this into the existing NPM Compose file; do not replace its existing ports
 
 The existing Compose file was inspected before editing. Its image, published ports, restart policy, and persistent bind mounts (`./data` and `./letsencrypt`) were retained. The additional network configuration was merged into the existing file, validated with `sudo docker compose config --quiet`, and applied with `sudo docker compose up -d`.
 
-The recreated container was verified on both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty, confirming the public HTTPS proxy path remained functional after container recreation. No credentials, database contents, certificate private keys, or other secrets are included in this repository.
+The recreated container was verified on both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent HTTPS request to the masked Jellyfin endpoint returned `HTTP/2 302` from OpenResty, confirming the public HTTPS proxy path remained functional after container recreation. No credentials, database contents, certificate private keys, or other secrets are included in this repository.
 
 ## NPM container DNS
 
@@ -93,12 +93,12 @@ Dynamic DNS is not installed yet. Its purpose is to update the public DNS record
 
 - [x] NPM container is running.
 - [x] NPM publishes ports 80, 81, and 443.
-- [x] Let's Encrypt certificate issuance completed for `moxxboxx.com`.
-- [x] Jellyfin loads at `https://moxxboxx.com`.
+- [x] Let's Encrypt certificate issuance completed for the Jellyfin public hostname (masked in this repository).
+- [x] Jellyfin loads through its masked external HTTPS endpoint.
 - [x] NPM has runtime connectivity to Jellyfin through `media-stack_default`.
 - [x] External network configuration committed to the NPM Compose file.
 - [x] Persistent network connection tested after container recreation.
 - [x] HTTPS endpoint returns a successful redirect after NPM container recreation.
 - [x] Fix DNS resolution from the NPM container to the Let's Encrypt API with explicit upstream resolvers.
-- [ ] Verify the Seerr upstream route and `requests.moxxboxx.com` certificate from an external client.
+- [x] Verify the Seerr upstream route and HTTPS certificate from an external client.
 - [ ] Dynamic DNS updater implemented and tested.
