@@ -101,7 +101,7 @@ The kill-switch test was performed with downloads paused. Bringing `tun0` down c
 
 ## Seerr, Mealie, and Audiobookshelf
 
-Seerr is deployed in the media-stack Compose project and reported healthy after startup. Its initial setup connected to the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Local access is working. Its intended NPM endpoint is `requests.moxxboxx.com`; certificate issuance and access from an external client remain to be verified.
+Seerr is deployed in the media-stack Compose project and its initial setup connected to the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Its external NPM endpoint `requests.m*******.com` has been verified, including HTTPS access.
 
 Mealie and Audiobookshelf have been added to the version-controlled Compose definition but are not yet deployed. The planned Mealie SQLite data directory is on the VM's local NVMe-backed system disk. Audiobookshelf's database/configuration and metadata will also stay on the local system disk; audiobook and podcast media directories will reside on the passed-through Seagate filesystem.
 
@@ -109,9 +109,9 @@ Mealie and Audiobookshelf have been added to the version-controlled Compose defi
 
 Nginx Proxy Manager (NPM) is deployed on this Debian VM in a separate Docker Compose project. The running container is named `nginx-proxy-manager-app-1` and publishes TCP ports 80, 81, and 443. Port 81 is the NPM administration interface and is intended for LAN access only.
 
-The NPM proxy host for `moxxboxx.com` forwards HTTP internally to the Jellyfin service at `jellyfin:8096`. A Let's Encrypt certificate was issued successfully, and loading `https://moxxboxx.com` displays Jellyfin over HTTPS.
+The NPM proxy host for the masked Jellyfin hostname `m*******.com` forwards HTTP internally to the Jellyfin service at `jellyfin:8096`. A Let's Encrypt certificate was issued successfully, and the external HTTPS route was verified.
 
-The first request returned 502 Bad Gateway because NPM and Jellyfin were attached to separate Docker bridge networks. Running `docker network connect media-stack_default nginx-proxy-manager-app-1` attached NPM to the media stack's network and restored upstream reachability. The network attachment was made persistent in `/home/ian/nginx-proxy-manager/docker-compose.yml` by declaring `media-stack_default` as an external while retaining NPM's default network. The Compose file passed `sudo docker compose config --quiet`. `sudo docker compose up -d` recreated the NPM container, and `docker inspect` confirmed it was attached to both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty, confirming the HTTPS proxy path remained functional after recreation.
+The first request returned 502 Bad Gateway because NPM and Jellyfin were attached to separate Docker bridge networks. Running `docker network connect media-stack_default nginx-proxy-manager-app-1` attached NPM to the media stack's network and restored upstream reachability. The network attachment was made persistent in `/home/ian/nginx-proxy-manager/docker-compose.yml` by declaring `media-stack_default` as an external while retaining NPM's default network. The Compose file passed `sudo docker compose config --quiet`. `sudo docker compose up -d` recreated the NPM container, and `docker inspect` confirmed it was attached to both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent HTTPS request to the masked Jellyfin endpoint returned `HTTP/2 302` from OpenResty, confirming the HTTPS proxy path remained functional after recreation.
 
 Dynamic DNS and Pi-hole are planned but not deployed. Dynamic DNS will keep the domain's public DNS record aligned with a changing home WAN address. Pi-hole is planned for LAN DNS filtering and local name resolution.
 
