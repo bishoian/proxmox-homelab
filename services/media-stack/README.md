@@ -12,6 +12,9 @@ Docker Compose project for the Debian 13 media-services VM.
 | Prowlarr | Indexer management | 9696 |
 | Gluetun | ExpressVPN gateway and firewall | Shared with qBittorrent |
 | qBittorrent | Download client, routed through Gluetun | 8080 via Gluetun |
+| Seerr | Jellyfin-connected media request portal using Radarr and Sonarr | 5055 |
+| Mealie | Self-hosted recipes, meal planning, and shopping lists | 9925 |
+| Audiobookshelf | Audiobook and podcast library/server | 13378 |
 
 ## Storage design
 
@@ -31,17 +34,28 @@ On the Debian VM, the Compose project is stored at `/opt/media-stack`:
 - `compose.yaml` — service definitions
 - `config/<service>/` — persistent application settings and databases
 - `cache/jellyfin/` — Jellyfin cache
+- `config/seerr/`, `config/mealie/`, and `config/audiobookshelf/` — persistent application state on the VM's NVMe-backed disk
 - `.env` — local ExpressVPN manual OpenVPN credentials, excluded from Git; use `.env.example` as the template
 
 ## Web interfaces
 
 Use the Debian VM's current LAN address with the ports listed above. The qBittorrent Web UI is published by Gluetun on TCP 8080; Radarr and Sonarr reach it at `http://gluetun:8080`. These interfaces are intended for trusted LAN access. Do not configure router port forwarding for the administration interfaces. Set strong application credentials during first-run configuration.
 
+Mealie is published on LAN TCP 9925 and Audiobookshelf on LAN TCP 13378. Seerr is published on LAN TCP 5055. Do not forward these ports directly from the router; use NPM if external access is later desired.
+
 The qBittorrent LinuxServer image prints a temporary Web UI password in its container log on first startup. Use the locally displayed first-start credential to sign in as `admin`, then immediately replace it with a strong unique password in qBittorrent settings. Never commit this temporary credential or the replacement password to this repository.
 
 ## Deployment status
 
-The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debian VM. Project configuration and cache directories were created, ownership was set to UID/GID 1000, and `docker compose config --quiet` completed with exit status 0. All five images were pulled and all five application containers were started with `docker compose up -d`. The subsequent `docker compose ps` output showed Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running. Initial logs showed normal Jellyfin startup, database migrations for Radarr and Sonarr, Prowlarr listening on its configured port, and qBittorrent Web UI initialization. Initial first-run setup has been completed in all five applications. The qBittorrent temporary administrator password was replaced. Radarr and Sonarr have their root folders configured and use qBittorrent as their download client with separate categories. Prowlarr is configured with Radarr and Sonarr application connections. End-to-end application sync, download/import behavior, hardlink creation, Jellyfin library scans, and playback still need validation.
+The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debian VM and is maintained in this repository. Application configuration is kept under the project directory on the VM's NVMe-backed system disk; the Seagate filesystem stores media and downloads.
+
+The original Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, and qBittorrent services are deployed. Gluetun is healthy after a full Debian VM reboot, qBittorrent remains bound to `tun0`, and Radarr/Sonarr can reach the qBittorrent Web UI through `gluetun:8080`. Radarr and Sonarr have explicit DNS resolvers, as does Prowlarr, to work around the Docker embedded-DNS forwarding issue encountered during setup.
+
+Seerr has been added to the same Compose project. Its container started successfully and reported healthy. The local setup wizard connected Seerr to the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Local Seerr access is working. Public access through `requests.moxxboxx.com` remains subject to final DNS, certificate, and external-client verification.
+
+Mealie and Audiobookshelf service definitions have now been added to the version-controlled Compose file, but their containers have not yet been deployed. Mealie uses a pinned stable image and local SQLite-backed application storage. Audiobookshelf stores its database/configuration and metadata on the VM's NVMe-backed disk and reads audiobook/podcast content from separate Seagate-backed directories. Their deployment and first-run setup remain pending.
+
+Prowlarr's Radarr/Sonarr application connection tests succeeded. A filesystem inspection found a movie file under the configured movie library root, while the downloaded TV season folders were still in the torrent download area and the TV library root was empty. Sonarr's TV import workflow, hardlink verification, Jellyfin playback, and automatic library-refresh behavior therefore remain open validation items.
 
 ## Container DNS troubleshooting
 
@@ -101,3 +115,15 @@ References: [Gluetun ExpressVPN setup](https://github.com/qdm12/gluetun-wiki/blo
 - [LinuxServer Radarr documentation](https://docs.linuxserver.io/images/docker-radarr/)
 - [LinuxServer qBittorrent documentation](https://docs.linuxserver.io/images/docker-qbittorrent/)
 - [LinuxServer Prowlarr documentation](https://docs.linuxserver.io/images/docker-prowlarr/)
+
+
+## Mealie and Audiobookshelf deployment plan
+
+The Compose file defines both applications, but deployment is not complete until the directories are created and the containers are started and checked.
+
+- Mealie uses the official `ghcr.io/mealie-recipes/mealie:v3.31.0` image, publishes host TCP 9925 to container TCP 9000, stores data under `./config/mealie`, and uses SQLite for this small household deployment. Sign-up is disabled; change the documented first-run default password immediately after the first login.
+- Audiobookshelf uses `ghcr.io/advplyr/audiobookshelf:latest`, publishes host TCP 13378 to container TCP 80, and runs as UID/GID 1000:1000. Its `/config` database and `/metadata` directories are stored on the VM's local system disk. The separate `/srv/media/data/audiobooks` and `/srv/media/data/podcasts` directories are mounted as the media libraries.
+- Both services use explicit DNS resolvers because of the Docker DNS forwarding issue previously observed with other containers.
+- Keep ports 9925 and 13378 LAN-only. Use the reverse proxy for any future remote access rather than forwarding application ports directly from the router.
+
+Official setup references: [Mealie SQLite installation](https://mealie.io/documentation/getting-started/installation/sqlite/), [Mealie backend configuration](https://mealie.io/documentation/getting-started/installation/backend-config/), and [Audiobookshelf Docker installation](https://audiobookshelf.org/docs/documentation/install/docker/).
