@@ -3,9 +3,9 @@
 **Owner:** Ian Bishop  
 **Status:** Active build and documentation project
 
-A small self-hosted infrastructure lab built to develop practical skills in virtualization, Linux administration, storage, Docker, networking, and service operations.
+I am building this homelab to develop and demonstrate practical skills in virtualization, Linux administration, storage, Docker, networking, and service operations.
 
-The lab runs on a Lenovo ThinkCentre M920q Tiny with Proxmox VE. A Debian VM hosts the media stack, while a TerraMaster D4-320 provides USB-attached storage.
+I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my media stack, and a TerraMaster D4-320 provides USB-attached storage.
 
 ## Current environment
 
@@ -17,29 +17,29 @@ The lab runs on a Lenovo ThinkCentre M920q Tiny with Proxmox VE. A Debian VM hos
 - **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, and Seerr are deployed. Mealie and Audiobookshelf are defined in Compose but not yet deployed.
 - **Remote access:** Nginx Proxy Manager provides verified HTTPS access to Jellyfin and Seerr. Public hostnames are intentionally masked in this repository.
 
-## Verified work
+## What I have completed
 
-- Installed and updated Proxmox VE; verified the active kernel and package versions after reboot.
-- Built a Debian 13 VM, configured SSH and QEMU Guest Agent, and verified host-to-guest agent communication.
-- Passed the Seagate disk through to Debian, created an ext4 filesystem, configured a UUID-based mount, and validated container write access using UID/GID 1000.
-- Deployed the Docker media stack and configured connections between Prowlarr, Radarr, Sonarr, qBittorrent, Seerr, and Jellyfin.
-- Verified Radarr and Sonarr import and sort media correctly with the expected metadata.
-- Verified Jellyfin automatically refreshes its library and plays newly downloaded media.
-- Verified Seerr through its external HTTPS request endpoint.
-- Routed qBittorrent through Gluetun and ExpressVPN. A direct-IP test confirmed outbound traffic is blocked when the VPN interface is down. The stack recovered after a full Debian VM reboot.
-- Diagnosed and corrected Docker DNS failures affecting the media applications and Nginx Proxy Manager.
-- Corrected NPM's Docker network connectivity and made its media-network attachment persistent.
+- I installed and updated Proxmox VE, then verified the active kernel and package versions after reboot.
+- I built a Debian 13 VM, configured SSH and QEMU Guest Agent, and verified host-to-guest agent communication.
+- I passed the Seagate disk through to Debian, created an ext4 filesystem, configured a UUID-based mount, and validated container write access using UID/GID 1000.
+- I deployed the Docker media stack and configured connections between Prowlarr, Radarr, Sonarr, qBittorrent, Seerr, and Jellyfin.
+- I verified that Radarr and Sonarr import and sort media correctly with the expected metadata.
+- I verified that Jellyfin automatically refreshes its library and plays newly downloaded media.
+- I verified Seerr through its external HTTPS request endpoint.
+- I routed qBittorrent through Gluetun and ExpressVPN. A direct-IP test confirmed that outbound traffic is blocked when the VPN interface is down, and the stack recovered after a full Debian VM reboot.
+- I diagnosed and corrected Docker DNS failures affecting the media applications and Nginx Proxy Manager.
+- I corrected NPM's Docker network connectivity and made its media-network attachment persistent.
 
-## Current work and known gaps
+## What I plan to do next
 
-- Deploy and configure Mealie and Audiobookshelf.
-- Verify hardlink behavior between download and library paths.
-- Confirm the Seagate mount source after a VM reboot.
-- Complete an extended SMART test. The first test was stopped at 20% and is recorded as incomplete, not passed.
-- Establish independent backups and test a restore.
-- Add service monitoring and document routine maintenance.
-- Select and deploy Dynamic DNS and Pi-hole.
-- Map switch ports, trace rack cabling, and plan VLAN segmentation.
+- I plan to deploy and configure Mealie and Audiobookshelf.
+- I plan to verify hardlink behavior between download and library paths.
+- I will confirm the Seagate mount source after a VM reboot.
+- I plan to complete an extended SMART test. I stopped the first test at 20%, so I have recorded it as incomplete rather than passed.
+- I plan to establish independent backups and test a restore.
+- I plan to add service monitoring and document my routine maintenance process.
+- I plan to select and deploy Dynamic DNS and Pi-hole.
+- I plan to map switch ports, trace rack cabling, and design VLAN segmentation.
 
 ## Hardware
 
@@ -99,6 +99,6 @@ The D4-320 connects directly to the Lenovo over USB, not through the Ethernet sw
 
 ## Documentation conventions
 
-Documentation distinguishes verified configuration from planned work. Troubleshooting records focus on the symptom, evidence, root cause, fix, and validation. Secrets, private addresses, disk serials, filesystem UUIDs, and usable public hostnames are not published.
+I write this portfolio in the first person. I document completed work in the past tense and explain planned work in terms of what I intend to do, how I plan to approach it, and why. Troubleshooting records capture what I encountered, how I investigated it, what I changed, and how I verified the result. Secrets, private addresses, disk serials, filesystem UUIDs, and usable public hostnames are not published.
 
 No open-source license has been selected. Public visibility does not grant permission to reuse the repository's contents.
