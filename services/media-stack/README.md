@@ -1,6 +1,6 @@
 # Media Stack
 
-Docker Compose project hosted on the Debian 13 media-services VM at `/opt/media-stack`.
+I host this Docker Compose project on my Debian 13 media-services VM at `/opt/media-stack`.
 
 ## Services
 
@@ -16,7 +16,7 @@ Docker Compose project hosted on the Debian 13 media-services VM at `/opt/media-
 | Mealie | Recipes and meal planning | 9925 |
 | Audiobookshelf | Audiobooks and podcasts | 13378 |
 
-Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, and Seerr are deployed. Mealie and Audiobookshelf are defined in Compose but not yet deployed.
+I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, and Seerr. I have added Mealie and Audiobookshelf to Compose, but have not deployed them yet.
 
 ## Storage and permissions
 
@@ -27,11 +27,11 @@ Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, and Seerr are deployed
 - LinuxServer containers use PUID/PGID 1000 and UMASK 002. Jellyfin runs as UID/GID 1000:1000.
 - The shared `/data` path keeps downloads and library folders on one filesystem, allowing hardlinks where configured. Hardlink/inode behavior has not yet been directly tested.
 
-The directory tree is owned by UID/GID 1000 (`ian:ian`), with setgid directories. A non-root Alpine container write/delete test passed.
+I set the directory tree ownership to UID/GID 1000 (`ian:ian`) and configured setgid directories. I verified non-root write access by creating and deleting a test file from an Alpine container.
 
 ## Deployment and access
 
-The Compose definition is version-controlled at [compose.yaml](compose.yaml). The VM's local `.env` contains ExpressVPN credentials and is excluded from Git; `.env.example` documents the required variable names without credentials.
+I keep the Compose definition in version control at [compose.yaml](compose.yaml). My VM's local `.env` file contains ExpressVPN credentials and is excluded from Git; `.env.example` documents the required variable names without exposing credentials.
 
 Use the VM's LAN address with the ports above. These administration interfaces should remain LAN-only. Do not forward them directly from the router. qBittorrent's Web UI is published through Gluetun on TCP 8080; Radarr and Sonarr connect to it at `http://gluetun:8080`.
 
@@ -39,24 +39,24 @@ Replace qBittorrent's temporary first-start administrator password during setup.
 
 ## Application verification
 
-- Radarr and Sonarr correctly import and sort media with the expected metadata.
-- Prowlarr's application connections to Radarr and Sonarr passed their connection tests.
-- Seerr is configured with the Jellyfin Movies and Shows libraries and the Radarr/Sonarr servers. Its external HTTPS request endpoint has been verified.
-- Jellyfin automatically refreshes its library and successfully played a newly downloaded movie from a client.
-- After a full Debian VM reboot, Gluetun returned healthy, qBittorrent remained bound to `tun0`, VPN egress was restored, and Radarr/Sonarr reached the qBittorrent Web UI.
+- I verified that Radarr and Sonarr import and sort media with the expected metadata.
+- I tested Prowlarr's application connections to Radarr and Sonarr successfully.
+- I connected Seerr to my Jellyfin Movies and Shows libraries and Radarr/Sonarr servers, then verified its external HTTPS request endpoint.
+- I verified that Jellyfin automatically refreshes its library and plays a newly downloaded movie from a client.
+- After rebooting my Debian VM, I confirmed that Gluetun returned healthy, qBittorrent remained bound to `tun0`, VPN egress was restored, and Radarr/Sonarr could reach the qBittorrent Web UI.
 
 ## VPN isolation
 
-Gluetun connects to ExpressVPN using OpenVPN. qBittorrent uses `network_mode: service:gluetun`, waits for Gluetun's health check, and binds its network interface to `tun0`. The local environment file is root-owned with mode `600`; credentials are not stored in this repository.
+I configured Gluetun to connect to ExpressVPN using OpenVPN. qBittorrent uses `network_mode: service:gluetun`, waits for Gluetun's health check, and binds its network interface to `tun0`. I keep the local environment file root-owned with mode `600` and do not store credentials in this repository.
 
-The kill switch was tested with downloads paused:
+I tested the kill switch with downloads paused:
 
-1. Gluetun established the tunnel and reported healthy.
-2. qBittorrent shared Gluetun's network namespace, and its public IP matched the VPN egress IP.
-3. Radarr and Sonarr each reached the qBittorrent Web UI through `gluetun:8080` with HTTP 200.
-4. Bringing `tun0` down caused a DNS-based public-IP request to fail.
-5. A direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out, confirming the failure was not DNS-only.
-6. Recreating the services restored Gluetun health, qBittorrent operation, and VPN egress.
+1. I confirmed that Gluetun established the tunnel and reported healthy.
+2. I confirmed that qBittorrent shared Gluetun's network namespace and its public IP matched the VPN egress IP.
+3. I confirmed that Radarr and Sonarr each reached the qBittorrent Web UI through `gluetun:8080` with HTTP 200.
+4. I brought `tun0` down and confirmed that a DNS-based public-IP request failed.
+5. I tested HTTPS directly against `1.1.1.1`; the request returned HTTP 000 and timed out, confirming that the failure was not limited to DNS.
+6. I recreated the services and confirmed that Gluetun health, qBittorrent operation, and VPN egress recovered.
 
 This verifies network-level fail-closed behavior. It does not mean qBittorrent's interface automatically marks jobs as paused when the tunnel drops.
 
@@ -64,11 +64,11 @@ ExpressVPN does not provide VPN-server port forwarding, which can limit incoming
 
 ## Remaining work
 
-- [ ] Deploy Mealie and Audiobookshelf; complete first-run setup and verify persistent storage.
-- [ ] Verify hardlink/inode behavior between download and library paths.
-- [ ] Repeat the VPN outage test after future Gluetun or qBittorrent image updates.
-- [ ] Document routine service updates, health checks, and recovery.
-- [ ] Add backups for application configuration and important media data.
+- [ ] I will deploy Mealie and Audiobookshelf, complete first-run setup, and verify persistent storage.
+- [ ] I will verify hardlink/inode behavior between download and library paths.
+- [ ] I will repeat the VPN outage test after future Gluetun or qBittorrent image updates.
+- [ ] I will document my routine service updates, health checks, and recovery process.
+- [ ] I will add backups for application configuration and important media data.
 
 ## Troubleshooting
 
