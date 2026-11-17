@@ -99,6 +99,6 @@ The D4-320 connects directly to the Lenovo over USB, not through the Ethernet sw
 
 ## Documentation conventions
 
-I write this portfolio in the first person. I document completed work in the past tense and explain planned work in terms of what I intend to do, how I plan to approach it, and why. Troubleshooting records capture what I encountered, how I investigated it, what I changed, and how I verified the result. Secrets, private addresses, disk serials, filesystem UUIDs, and usable public hostnames are not published.
+Secrets, private addresses, disk serials, filesystem UUIDs, and usable public hostnames are not published.
 
 No open-source license has been selected. Public visibility does not grant permission to reuse the repository's contents.
