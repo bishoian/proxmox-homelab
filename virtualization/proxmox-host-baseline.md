@@ -16,18 +16,18 @@
 | Ethernet | `nic0` and `vmbr0` up at 1 Gbps |
 | Wireless | `wlo1`, not used |
 
-The installed processor is the standard i5-8500, not the i5-8500T. The M920q's onboard Ethernet is Gigabit Ethernet, so the current 1 Gbps link is expected even though the RealHD switch supports 2.5GbE.
+I confirmed that the installed processor is the standard i5-8500, not the i5-8500T. The M920q's onboard Ethernet is Gigabit Ethernet, so I expect a 1 Gbps link even though my RealHD switch supports 2.5GbE.
 
 ## Storage layout
 
-The internal NVMe contains the Proxmox EFI and LVM layout:
+I installed Proxmox on the internal NVMe, which contains the following EFI and LVM layout:
 
 - 1 GB EFI partition mounted at `/boot/efi`.
 - 8 GB swap volume.
 - Approximately 69.4 GB root filesystem.
 - LVM-thin data pool for VM disks.
 
-The Seagate Exos is passed through to Debian VM 100 and is managed by the guest. See [Media Storage Design](../storage/storage-layout.md).
+I pass the Seagate Exos through to Debian VM 100 and manage its filesystem from the guest. See [Media Storage Design](../storage/storage-layout.md).
 
 ## Network baseline
 
@@ -38,13 +38,13 @@ The Seagate Exos is passed through to Debian VM 100 and is managed by the guest.
 | `wlo1` | DOWN | Not applicable | Wireless |
 | `lo` | UP | Not applicable | Loopback |
 
-The Proxmox web interface is reachable from the home LAN on TCP 8006. The management address is kept in local network configuration rather than published here.
+I access the Proxmox web interface from my home LAN on TCP 8006. I keep its management address in my local network configuration rather than publishing it here.
 
 ## Package sources and updates
 
-Enabled sources are Debian Trixie and Trixie Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription. Proxmox VE Enterprise and Ceph Squid Enterprise entries are disabled. No Ceph cluster is deployed.
+I enabled Debian Trixie and Trixie Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription sources. I disabled the Proxmox VE Enterprise and Ceph Squid Enterprise entries. I have not deployed a Ceph cluster.
 
-After package refresh, upgrades, and reboot, the following versions were verified:
+After refreshing package lists, applying upgrades, and rebooting, I verified the following versions:
 
 | Package / field | Version |
 |---|---|
@@ -60,7 +60,7 @@ The no-subscription repositories are used for this personal lab, not as a produc
 
 ## Remaining host tasks
 
-- [ ] Record BIOS/UEFI version and RAM module layout.
-- [ ] Review detailed NVMe health attributes.
-- [ ] Document host recovery and console access.
-- [ ] Establish a maintenance and backup routine.
+- [ ] I will record the BIOS/UEFI version and RAM module layout.
+- [ ] I will review the NVMe's detailed health attributes.
+- [ ] I will document my host recovery and console-access process.
+- [ ] I will establish a maintenance and backup routine.
