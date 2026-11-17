@@ -1,6 +1,6 @@
 # Network Architecture
 
-The home LAN remains a flat network. VLANs and Dynamic DNS are planned, not deployed.
+I currently run a flat home LAN. I have not deployed VLANs or Dynamic DNS yet; both are part of my planned network improvements.
 
 ## Physical topology
 
@@ -19,21 +19,21 @@ Proxmox VE            USB
 Debian media VM    TerraMaster D4-320
 ```
 
-The D4-320 is USB direct-attached storage, not a NAS. The patch panel is passive and does not switch or route traffic.
+I connect the D4-320 directly to the Lenovo over USB, so I treat it as direct-attached storage rather than a NAS. My patch panel is passive and does not switch or route traffic.
 
 ## Current network
 
-- Proxmox management is available from the home LAN.
-- The Lenovo's physical interface `nic0` and bridge `vmbr0` are up at 1 Gbps.
-- The RealHD switch supports 2.5GbE, but the M920q's onboard NIC is Gigabit Ethernet.
-- The physical cable path, switch port assignments, and switch management details still need to be documented.
+- I access Proxmox management from my home LAN.
+- My Lenovo's physical interface `nic0` and bridge `vmbr0` are up at 1 Gbps.
+- My RealHD switch supports 2.5GbE, but the M920q's onboard NIC is limited to Gigabit Ethernet.
+- I still need to trace my physical cable paths, identify switch port assignments, and document switch management details.
 - No VLANs are configured.
 
 ## Public service path
 
-Nginx Proxy Manager (NPM) runs in a separate Compose project on the Debian VM and publishes ports 80, 81, and 443. Jellyfin and Seerr have verified HTTPS access through NPM. Public hostnames are masked in this repository.
+I run Nginx Proxy Manager (NPM) in a separate Compose project on my Debian VM, publishing ports 80, 81, and 443. I have verified HTTPS access to Jellyfin and Seerr through NPM. I mask public hostnames in this repository.
 
-NPM shares the `media-stack_default` Docker network with the media applications while retaining its own default network. Port 81 is for LAN administration only and must not be forwarded from the internet.
+I connected NPM to the `media-stack_default` Docker network while retaining its own default network. I reserve port 81 for LAN administration and do not forward it from the internet.
 
 See [Reverse Proxy](../services/reverse-proxy/README.md) for the current configuration and [Docker DNS and Reverse Proxy Troubleshooting](../troubleshooting/docker-dns-and-reverse-proxy.md) for the original 502 and DNS issues.
 
@@ -48,7 +48,7 @@ The kill switch was tested by bringing `tun0` down. A DNS-based request failed, 
 - **Dynamic DNS:** no provider or updater has been selected. The goal is to keep the public DNS record aligned with a changing home WAN address.
 - **Pi-hole:** planned for LAN DNS filtering and local DNS records. Decide whether DHCP stays on the router or moves to Pi-hole before enabling DHCP on Pi-hole.
 
-Do not expose Pi-hole's DNS or administration ports publicly.
+I intend to keep Pi-hole's DNS service and administration interface private to my LAN. I will not expose either directly to the internet through WAN port forwarding.
 
 ## Planned VLANs
 
@@ -61,7 +61,7 @@ These are examples for a future segmentation exercise, not configured networks.
 | 30 | Trusted personal devices | Proposed |
 | 40 | Isolated lab/testing | Proposed |
 
-Before implementing VLANs, verify that the router or firewall supports the required VLAN interfaces, routing, DHCP, and firewall policies. Keep a known-good management path and recovery method available.
+My VLAN design depends on my router or firewall supporting VLAN interfaces, inter-VLAN routing, DHCP, and the firewall policies I need. Before I move devices onto separate VLANs, I will confirm those capabilities and test a recovery path that preserves access to Proxmox management.
 
 ## Port map
 
@@ -72,9 +72,9 @@ Before implementing VLANs, verify that the router or firewall supports the requi
 
 ## Remaining network tasks
 
-- [ ] Trace the router-to-switch uplink and rack patching.
-- [ ] Identify switch model/revision, firmware, and management interface.
-- [ ] Record switch port assignments and negotiated speeds.
-- [ ] Select and test a Dynamic DNS provider/updater.
-- [ ] Deploy Pi-hole and decide which device provides DHCP.
-- [ ] Design and test VLAN segmentation after the LAN baseline is documented.
+- [ ] I will trace the router-to-switch uplink and rack patching.
+- [ ] I will identify the switch model, hardware revision, firmware, and management interface.
+- [ ] I will record switch port assignments and negotiated link speeds.
+- [ ] I will select and test a Dynamic DNS provider and updater.
+- [ ] I plan to deploy Pi-hole after deciding whether my router or Pi-hole will provide DHCP.
+- [ ] After documenting my current LAN, I plan to design and test VLAN segmentation.
