@@ -1,137 +1,66 @@
 # Proxmox Host Baseline
 
-**Project owner:** Ian Bishop  
 **Host:** Lenovo ThinkCentre M920q Tiny  
-**Proxmox release:** 9.2 (updated package set)  
-**Status:** Web interface accessible; package upgrade and reboot verified; media VM not yet created.
+**Node:** `pve`  
+**Current kernel:** `7.0.14-29-pve`  
+**Proxmox manager:** `pve-manager 9.2.27`
 
-## First dashboard access
+## Hardware summary
 
-The Proxmox management interface was opened from another device on the home network, and the initial login succeeded.
-
-The dashboard confirmed:
-
-- The web interface loads successfully.
-- The `pve` node is displayed with a green online indicator.
-- The platform is Proxmox Virtual Environment 9.2.2.
-- The node view reports six CPU cores.
-- At the time of the screenshot, CPU utilization was approximately 0.2% and memory utilization was approximately 10.2%.
-
-These figures are initial observations, not performance benchmarks. A subsequent Node → Summary inspection reported:
-
-| Summary field | Displayed value |
-|---|---:|
-| Uptime at capture | 1 hour, 4 minutes |
-| CPU usage | 0.08% of 6 CPUs |
-| Load average | 0.11 / 0.04 / 0.01 |
-| CPU label | Intel Core i5-8500 @ 3.00 GHz, 1 socket |
-| Memory | 1.65 GiB of 15.46 GiB (10.66%) |
-| Root filesystem | 4.14 GiB of 67.73 GiB (6.11%) |
-| Swap | 0 B of 8.00 GiB |
-| Kernel at initial Summary capture | Linux 7.0.2-6-pve |
+| Resource | Verified value |
+|---|---|
+| CPU | Intel Core i5-8500, 1 socket, 6 logical CPUs |
+| Memory | 15.46 GiB usable |
+| NVMe | Lenovo NVMe 2280S 256 GB; Linux reports 238.5 GB |
 | Boot mode | EFI |
-| Manager at initial Summary capture | pve-manager 9.2.2 |
+| Ethernet | `nic0` and `vmbr0` up at 1 Gbps |
+| Wireless | `wlo1`, not used |
 
-The processor was subsequently confirmed as the standard Intel Core i5-8500, not the i5-8500T originally listed. The hardware inventory now reflects the installed CPU. The 67.73 GiB figure is the dashboard's root filesystem capacity, not the advertised capacity of the 256 GB NVMe; the installer also created separate LVM storage.
+The installed processor is the standard i5-8500, not the i5-8500T. The M920q's onboard Ethernet is Gigabit Ethernet, so the current 1 Gbps link is expected even though the RealHD switch supports 2.5GbE.
 
-## Disk and partition inventory
+## Storage layout
 
-The Proxmox Shell `lsblk` output reported:
+The internal NVMe contains the Proxmox EFI and LVM layout:
 
-| Device | Size | Model / type | Layout / status |
-|---|---:|---|---|
-| `/dev/nvme0n1` | 238.5G | Lenovo NVMe 2280S 256GB SSD | EFI and Proxmox LVM partitions |
-| `/dev/sda` | 5.5T | Seagate Exos ST6000NM0115-1YZ110 | No partitions, filesystem, or mount point shown |
+- 1 GB EFI partition mounted at `/boot/efi`.
+- 8 GB swap volume.
+- Approximately 69.4 GB root filesystem.
+- LVM-thin data pool for VM disks.
 
-The NVMe partition layout includes a small BIOS boot partition, a 1 GB EFI partition mounted at `/boot/efi`, and an LVM physical volume. The Proxmox LVM layout includes an 8 GB swap volume, a 69.4 GB root filesystem, and an LVM-thin data pool with approximately 141.2 GB of data space plus metadata.
+The Seagate Exos is passed through to Debian VM 100 and is managed by the guest. See [Media Storage Design](../storage/storage-layout.md).
 
-The Seagate is currently a raw, unpartitioned disk. No filesystem, mount point, or Proxmox storage definition has been created on it. This is intentional until the final storage layout is selected.
+## Network baseline
 
-## CPU and network interface verification
-
-The Proxmox Shell reported the following CPU details:
-
-| Field | Result |
-|---|---|
-| Model | Intel Core i5-8500 CPU @ 3.00 GHz |
-| Socket count | 1 |
-| Logical CPUs | 6 (online CPUs 0–5) |
-
-The interface status and link-speed checks reported:
-
-| Interface | State | Link speed | Notes |
+| Interface | State | Speed | Role |
 |---|---|---:|---|
-| `nic0` | UP | 1000 Mb/s | Physical Ethernet interface |
-| `vmbr0` | UP | 1000 Mb/s | Proxmox bridge using the physical uplink |
-| `wlo1` | DOWN | Not reported | Wireless interface, not used for host connectivity |
-| `lo` | UP | Not applicable | Loopback interface |
+| `nic0` | UP | 1000 Mb/s | Physical Ethernet |
+| `vmbr0` | UP | 1000 Mb/s | Proxmox bridge |
+| `wlo1` | DOWN | Not applicable | Wireless |
+| `lo` | UP | Not applicable | Loopback |
 
-The host's wired network link is currently 1 Gbps. Although the RealHD switch supports 2.5GbE, the active link negotiates at 1 Gbps. The physical connection path and switch-side port status will be checked separately once the rack cabling is traced.
+The Proxmox web interface is reachable from the home LAN on TCP 8006. The management address is kept in local network configuration rather than published here.
 
-## CPU and network interface verification
+## Package sources and updates
 
-The Proxmox Shell reported the following CPU details:
+Enabled sources are Debian Trixie and Trixie Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription. Proxmox VE Enterprise and Ceph Squid Enterprise entries are disabled. No Ceph cluster is deployed.
 
-| Field | Result |
+After package refresh, upgrades, and reboot, the following versions were verified:
+
+| Package / field | Version |
 |---|---|
-| Model | Intel Core i5-8500 CPU @ 3.00 GHz |
-| Socket count | 1 |
-| Logical CPUs | 6 (online CPUs 0–5) |
-
-The interface status and link-speed checks reported:
-
-| Interface | State | Link speed | Notes |
-|---|---|---:|---|
-| `nic0` | UP | 1000 Mb/s | Physical Ethernet interface |
-| `vmbr0` | UP | 1000 Mb/s | Proxmox bridge using the physical uplink |
-| `wlo1` | DOWN | Not reported | Wireless interface, not used for host connectivity |
-| `lo` | UP | Not applicable | Loopback interface |
-
-The host's wired network link is currently 1 Gbps. Lenovo's M920 Tiny product specifications list onboard Gigabit Ethernet using the Intel I219-LM controller, which matches the observed link speed. The RealHD switch supports 2.5GbE, but the onboard NIC is the current speed limit. The physical connection path and switch-side port status will be checked separately once the rack cabling is traced.
-
-## Management access
-
-The host is reachable through its HTTPS management interface on TCP port 8006 from the home LAN. The management address is recorded in the local network configuration.
-
-## Storage connection
-
-The TerraMaster D4-320 is connected to the Lenovo over USB. The enclosure's rear power switch was initially off, so the drive did not appear in Proxmox. After switching the enclosure on and refreshing the disk list, Proxmox detected the 6 TB Seagate Exos as `/dev/sda`. The disk view reports SMART overall status `PASSED`. The initial attribute table shows zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts. The reported temperature is 24°C. The power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These values are recorded as displayed. The extended SMART self-test was intentionally stopped; its log reports Aborted by host with 80% remaining and no first-error LBA recorded. The extended test is incomplete, not passed.
-
-## Package repositories
-
-The package source configuration uses the Debian Trixie base and security repositories, the Proxmox VE no-subscription repository, and the Ceph Tentacle no-subscription repository. The Proxmox VE Enterprise and older Ceph Squid Enterprise entries are disabled. The repository interface displays informational warnings that no-subscription channels are not recommended for production use; this is a personal homelab environment. No Ceph cluster has been deployed.
-
-See [Package Repository Configuration](../docs/package-repositories.md) for the configured sources.
-
-## Package database refresh
-
-The package database refresh completed successfully. The task output showed successful access to the Debian Trixie, Debian Security, Proxmox VE no-subscription, and Ceph Tentacle no-subscription repositories. A total of 530 kB was fetched, package lists were read, and the task ended with `TASK OK`. The available upgrades were reviewed and installed successfully. The Updates view now reports no available updates. The batch included a newer Proxmox kernel and manager package. The host has not yet been rebooted, so the active kernel and running manager version remain to be verified.
-
-## Post-upgrade reboot and version verification
-
-The package upgrade completed without reported errors, and the Updates view reported `No updates available`. The host was rebooted successfully after the extended SMART test was stopped.
-
-The post-reboot shell output reported:
-
-| Package / field | Verified value |
-|---|---|
-| Running kernel (`uname -r`) | `7.0.14-29-pve` |
+| Running kernel | `7.0.14-29-pve` |
 | `pve-manager` | `9.2.27` |
-| `proxmox-ve` meta-package | `9.2.0` |
+| `proxmox-ve` | `9.2.0` |
 | `proxmox-kernel-7.0` | `7.0.14-29` |
 | `pve-qemu-kvm` | `11.1.3-1` |
 | `qemu-server` | `9.2.15` |
 | `ceph-fuse` | `20.2.5-pve1` |
 
-The `proxmox-ve` line is the installed release meta-package version; the `pve-manager` line reports the web-management package version. The previous signed kernel package `7.0.2-6-pve` remains installed alongside the newer kernel package, while `7.0.14-29-pve` is the active kernel.
+The no-subscription repositories are used for this personal lab, not as a production support arrangement. Repository details are in [Package Repository Configuration](../docs/package-repositories.md).
 
-The host is now running the updated kernel and manager package. The initial ISO/UI version and the post-upgrade package versions are recorded separately to preserve the installation history.
+## Remaining host tasks
 
-## Next validation tasks
-
-1. Confirm the `pve` node remains online and the Updates view is clean.
-2. Create the Debian media-services VM on the NVMe-backed `local-lvm` storage.
-3. Identify the Seagate by a persistent `/dev/disk/by-id` path and pass it through to Debian.
-4. Create the ext4 filesystem and persistent mount inside Debian.
-
-No disk initialization, formatting, partitioning, or storage-pool creation has been performed as part of this milestone.
+- [ ] Record BIOS/UEFI version and RAM module layout.
+- [ ] Review detailed NVMe health attributes.
+- [ ] Document host recovery and console access.
+- [ ] Establish a maintenance and backup routine.
