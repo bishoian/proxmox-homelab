@@ -51,11 +51,11 @@ The Compose definition is stored at `/opt/media-stack/compose.yaml` on the Debia
 
 The original Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, and qBittorrent services are deployed. Gluetun is healthy after a full Debian VM reboot, qBittorrent remains bound to `tun0`, and Radarr/Sonarr can reach the qBittorrent Web UI through `gluetun:8080`. Radarr and Sonarr have explicit DNS resolvers, as does Prowlarr, to work around the Docker embedded-DNS forwarding issue encountered during setup.
 
-Seerr has been added to the same Compose project. Its container started successfully and reported healthy. The local setup wizard connected Seerr to the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Local Seerr access is working. Public access through `requests.moxxboxx.com` remains subject to final DNS, certificate, and external-client verification.
+Seerr is deployed in the same Compose project. Its local setup connected the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Seerr's external request endpoint at `requests.m*******.com` has been verified through Nginx Proxy Manager, including HTTPS access.
 
 Mealie and Audiobookshelf service definitions have now been added to the version-controlled Compose file, but their containers have not yet been deployed. Mealie uses a pinned stable image and local SQLite-backed application storage. Audiobookshelf stores its database/configuration and metadata on the VM's NVMe-backed disk and reads audiobook/podcast content from separate Seagate-backed directories. Their deployment and first-run setup remain pending.
 
-Prowlarr's Radarr/Sonarr application connection tests succeeded. A filesystem inspection found a movie file under the configured movie library root, while the downloaded TV season folders were still in the torrent download area and the TV library root was empty. Sonarr's TV import workflow, hardlink verification, Jellyfin playback, and automatic library-refresh behavior therefore remain open validation items.
+Prowlarr's Radarr/Sonarr application connection tests succeeded. Radarr and Sonarr are both verified working, correctly importing and sorting media with the expected metadata. Jellyfin's automatic library refresh and playback were also verified with a newly downloaded movie. Hardlink/inode behavior remains a separate validation item.
 
 ## Container DNS troubleshooting
 
@@ -102,7 +102,7 @@ This is a network-level fail-closed test. The firewall blocks traffic when the V
 
 - [x] Verify Gluetun and qBittorrent recover correctly after a full Debian VM reboot.
 - [x] Re-check qBittorrent interface binding and Radarr/Sonarr download-client connectivity after reboot; `tun0` remained present and both application requests returned HTTP 200.
-- [ ] Verify the complete Radarr/Sonarr download-to-library workflow with authorized test media; one movie was present in the movie library root, while TV imports remained pending.
+- [x] Verify Radarr and Sonarr download/import workflows, correct sorting, and expected metadata.
 - [ ] Repeat the tunnel outage test after future Gluetun or qBittorrent image updates.
 
 ExpressVPN does not provide VPN-server port forwarding. This does not prevent outbound downloads, but can limit incoming peer connectivity and seeding reachability. A provider with supported P2P port forwarding may be evaluated later if that becomes important; a provider change is not required for the tested kill-switch behavior.
