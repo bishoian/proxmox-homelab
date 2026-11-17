@@ -154,7 +154,7 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Verify the kill switch with a direct-IP HTTPS test to `1.1.1.1`; the request returned HTTP 000 and timed out.
 - [x] Recreate Gluetun and qBittorrent and confirm Gluetun returns healthy, qBittorrent returns running, and VPN egress is restored.
 - [x] Verify recovery and interface binding after a full Debian VM reboot; Gluetun returned healthy, qBittorrent remained on `tun0`, and VPN egress was restored.
-- [ ] Perform a lawful test download and verify the Radarr/Sonarr import workflow.
+- [ ] Complete an authorized end-to-end download/import test for both movies and TV; movie-library presence is confirmed, but Sonarr TV imports and hardlink verification remain open.
 
 ## Milestone 7 — Monitoring and operations
 
