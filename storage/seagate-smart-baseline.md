@@ -9,7 +9,7 @@
 
 ## Detection
 
-After the D4-320 rear power switch was turned on, Proxmox detected the installed Seagate drive as a 6.00 TB hard disk at `/dev/sda`.
+After I turned on the D4-320's rear power switch, Proxmox detected the installed Seagate drive as a 6.00 TB hard disk at `/dev/sda`.
 
 The Proxmox disk inventory reported the drive's overall SMART status as `PASSED`.
 
@@ -50,7 +50,7 @@ The Power On Hours raw value of zero and low cycle counters should not be interp
 
 ## Extended self-test result
 
-The extended SMART test was started with `smartctl -t long /dev/sda`. The drive estimated approximately 10 hours for the test. It was intentionally stopped with `smartctl -X /dev/sda`.
+I started the extended SMART test with `smartctl -t long /dev/sda`. The drive estimated approximately 10 hours for the test, but I intentionally stopped it with `smartctl -X /dev/sda`.
 
 The resulting self-test log showed:
 
@@ -66,9 +66,9 @@ The test had progressed approximately 20% before it was stopped. The log contain
 
 ## Current decision
 
-The first Seagate will be used for the initial media-services build based on the encouraging initial SMART snapshot. The incomplete extended test will remain documented. The disk will be monitored during initial use, and important media or application data will require a separate backup.
+I decided to use the first Seagate for my initial media-services build based on the encouraging SMART snapshot. I will keep the incomplete extended test documented, monitor the disk during initial use, and maintain a separate backup of important media and application data.
 
-A completed extended SMART self-test can be run during a later maintenance window.
+I plan to run a completed extended SMART self-test during a later maintenance window.
 
 ## Follow-up
 
