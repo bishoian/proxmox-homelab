@@ -25,18 +25,18 @@ Configured Proxmox source endpoints:
 | Proxmox VE Enterprise | Requires an active subscription |
 | Ceph Squid Enterprise | Requires an active subscription; older Ceph release channel |
 
-The Proxmox VE and Ceph no-subscription channels display a warning that they are not recommended for production use. This configuration is intended for a personal homelab rather than a production environment.
+I use the Proxmox VE and Ceph no-subscription channels for this personal homelab. Proxmox warns that these channels are not recommended for production environments.
 
-The Ceph repository is configured for future package availability and learning. Ceph itself is not installed as a cluster and is not part of the current single-node storage design.
+I configured the Ceph repository so packages are available for future learning, but I have not installed a Ceph cluster and do not use Ceph in my current single-node storage design.
 
 ## Validation record
 
-- [x] Refresh package lists from **Node → Updates → Refresh**.
-- [x] Confirm Debian, Proxmox VE no-subscription, and Ceph Tentacle no-subscription sources were reached and package lists were read successfully.
-- [x] Review the available package list.
-- [x] Apply the available package upgrades.
-- [x] Confirm the Updates view reports no remaining upgrades.
-- [x] Rebooted after package upgrades to activate the updated kernel.
-- [x] Verified running kernel `7.0.14-29-pve` and `pve-manager` `9.2.27`.
+- [x] I refreshed package lists from **Node → Updates → Refresh**.
+- [x] I confirmed that Debian, Proxmox VE no-subscription, and Ceph Tentacle no-subscription sources were reached and their package lists were read successfully.
+- [x] I reviewed the available package list.
+- [x] I applied the available package upgrades.
+- [x] I confirmed that the Updates view reported no remaining upgrades.
+- [x] I rebooted after package upgrades to activate the updated kernel.
+- [x] I verified running kernel `7.0.14-29-pve` and `pve-manager` `9.2.27`.
 
-The refresh task completed with `TASK OK` and reported 530 kB fetched. The available package upgrades were subsequently applied without reported errors. The Updates view now reports no available updates. The package list included a newer Proxmox kernel and manager package; the host was rebooted and the running kernel was verified as `7.0.14-29-pve`; `pve-manager` is `9.2.27`.
+The refresh task completed with `TASK OK` and reported 530 kB fetched. I applied the available upgrades without reported errors. The Updates view then reported no remaining updates. After rebooting, I verified that the host was running kernel `7.0.14-29-pve` and `pve-manager` `9.2.27`.
