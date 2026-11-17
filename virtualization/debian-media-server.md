@@ -99,6 +99,12 @@ qBittorrent uses `network_mode: service:gluetun` and waits for Gluetun's healthy
 
 The kill-switch test was performed with downloads paused. Bringing `tun0` down caused a DNS-based public-IP request to fail. A direct-IP HTTPS request to `1.1.1.1` also returned HTTP 000 and timed out, verifying outbound traffic was blocked without relying on DNS. Gluetun and qBittorrent were recreated with Docker Compose; Gluetun returned healthy, qBittorrent returned running, and a new VPN egress IP was retrieved. This verifies network-level fail-closed behavior; it does not imply qBittorrent's UI automatically changes jobs to a paused state. A full Debian VM reboot was completed after deployment. Gluetun returned healthy, qBittorrent remained running with `tun0` present, a public IP request returned VPN egress, and Radarr and Sonarr each reached `http://gluetun:8080` with HTTP 200.
 
+## Seerr, Mealie, and Audiobookshelf
+
+Seerr is deployed in the media-stack Compose project and reported healthy after startup. Its initial setup connected to the Jellyfin Movies and Shows libraries and configured the Radarr and Sonarr servers. Local access is working. Its intended NPM endpoint is `requests.moxxboxx.com`; certificate issuance and access from an external client remain to be verified.
+
+Mealie and Audiobookshelf have been added to the version-controlled Compose definition but are not yet deployed. The planned Mealie SQLite data directory is on the VM's local NVMe-backed system disk. Audiobookshelf's database/configuration and metadata will also stay on the local system disk; audiobook and podcast media directories will reside on the passed-through Seagate filesystem.
+
 ## Reverse proxy and custom domain
 
 Nginx Proxy Manager (NPM) is deployed on this Debian VM in a separate Docker Compose project. The running container is named `nginx-proxy-manager-app-1` and publishes TCP ports 80, 81, and 443. Port 81 is the NPM administration interface and is intended for LAN access only.
@@ -184,3 +190,8 @@ The qBittorrent first-start log issued a temporary Web UI administrator password
 ## Media storage disposition
 
 The 6 TB Seagate Exos is passed through to this Debian VM and formatted as ext4 inside Debian. It is mounted at `/srv/media` for media, downloads, and application data. An Alpine container write/delete test passed against `/srv/media/data` using UID/GID 1000:1000. The second 6 TB drive remains reserved for future expansion.
+
+
+## Additional application services
+
+The media stack now includes Seerr alongside Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, and qBittorrent. Seerr's local setup and application connections have been completed. Mealie and Audiobookshelf are defined in Compose but await deployment and first-run checks. See [Media Stack Notes](../services/media-stack/README.md) for ports, storage paths, and deployment details.
