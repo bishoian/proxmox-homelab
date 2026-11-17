@@ -102,7 +102,7 @@ This is a network-level fail-closed test. The firewall blocks traffic when the V
 
 - [x] Verify Gluetun and qBittorrent recover correctly after a full Debian VM reboot.
 - [x] Re-check qBittorrent interface binding and Radarr/Sonarr download-client connectivity after reboot; `tun0` remained present and both application requests returned HTTP 200.
-- [ ] Perform a small lawful test transfer and verify completed download handling and imports.
+- [ ] Verify the complete Radarr/Sonarr download-to-library workflow with authorized test media; one movie was present in the movie library root, while TV imports remained pending.
 - [ ] Repeat the tunnel outage test after future Gluetun or qBittorrent image updates.
 
 ExpressVPN does not provide VPN-server port forwarding. This does not prevent outbound downloads, but can limit incoming peer connectivity and seeding reachability. A provider with supported P2P port forwarding may be evaluated later if that becomes important; a provider change is not required for the tested kill-switch behavior.
