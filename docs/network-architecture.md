@@ -50,9 +50,9 @@ The host's physical Ethernet interface (`nic0`) is UP at 1000 Mb/s (1 Gbps). The
 
 ## Public service path
 
-The Debian media-services VM runs Docker workloads, including Jellyfin and Nginx Proxy Manager. NPM is deployed as a separate Compose project and publishes TCP ports 80, 81, and 443 on the VM. The custom domain `moxxboxx.com` has a Let's Encrypt certificate and successfully reaches Jellyfin over HTTPS. NPM forwards the request to the Jellyfin service at `http://jellyfin:8096`.
+The Debian media-services VM runs Docker workloads, including Jellyfin and Nginx Proxy Manager. NPM is deployed as a separate Compose project and publishes TCP ports 80, 81, and 443 on the VM. The Jellyfin public hostname is masked as `m*******.com` in this repository; its Let's Encrypt certificate and HTTPS route have been verified. NPM forwards the request to the Jellyfin service at `http://jellyfin:8096`.
 
-NPM and the media stack initially used separate Docker bridge networks. The NPM container was manually connected to `media-stack_default`, which resolved the 502 Bad Gateway and made the proxy route work. The NPM Compose project now declares `media-stack_default` as an external network while retaining its own default network. The Compose configuration was validated and applied, the NPM container was recreated, and inspection confirmed it remained attached to both networks. A post-recreation request to `https://moxxboxx.com` returned `HTTP/2 302` from OpenResty. The NPM administration interface on port 81 is intended for LAN access only and must not be forwarded from the internet.
+NPM and the media stack initially used separate Docker bridge networks. The NPM container was manually connected to `media-stack_default`, which resolved the 502 Bad Gateway and made the proxy route work. The NPM Compose project now declares `media-stack_default` as an external network while retaining its own default network. The Compose configuration was validated and applied, the NPM container was recreated, and inspection confirmed it remained attached to both networks. A post-recreation HTTPS request to the masked Jellyfin endpoint returned `HTTP/2 302` from OpenResty. The NPM administration interface on port 81 is intended for LAN access only and must not be forwarded from the internet.
 
 ## qBittorrent VPN path
 
@@ -60,7 +60,7 @@ qBittorrent shares the Gluetun container's network namespace. Gluetun establishe
 
 ### Planned DNS services
 
-- **Dynamic DNS:** add a provider-compatible updater so the public DNS record for `moxxboxx.com` follows changes to the home's public IP address. DNS provider and updater are not yet selected.
+- **Dynamic DNS:** add a provider-compatible updater so the public DNS record for the masked Jellyfin hostname follows changes to the home's public IP address. DNS provider and updater are not yet selected.
 - **Pi-hole:** deploy on the home LAN for DNS filtering and local DNS records. Decide whether the existing router or Pi-hole will provide DHCP before enabling DHCP on Pi-hole. Do not expose Pi-hole's DNS or administration ports publicly.
 
 ## Planned segmentation
@@ -109,7 +109,7 @@ The 10G SFP+ port is an uplink option; it does not mean the Lenovo currently has
 - [ ] Record switch port mappings.
 - [x] Confirm Proxmox management interface is accessible from a LAN device.
 - [ ] Confirm Proxmox detects the D4-320's installed drive.
-- [x] Deploy Nginx Proxy Manager and verify HTTPS access to Jellyfin through `moxxboxx.com`.
+- [x] Deploy Nginx Proxy Manager and verify HTTPS access to Jellyfin through its masked public hostname.
 - [x] Connect NPM to the media stack's Docker network to reach Jellyfin; persistence in the NPM Compose file remains pending.
 - [ ] Declare the media stack network as external in NPM's Compose project and verify persistence after container recreation.
 - [ ] Select and configure a Dynamic DNS provider/updater.
