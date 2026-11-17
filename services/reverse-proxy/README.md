@@ -27,6 +27,8 @@ The NPM administration interface on port 81 is for trusted LAN access only. Do n
 
 The Let's Encrypt certificate request succeeded, and Jellyfin was verified working through the custom domain over HTTPS.
 
+Seerr has been deployed in the media-stack Compose project and is working locally on TCP port 5055. The intended public endpoint is `requests.moxxboxx.com`, forwarded to `http://seerr:5055` over the shared media Docker network. The ACME request initially failed after the NPM DNS problem was corrected; the remaining challenge error was traced by the user to a mistyped value. Final certificate issuance and remote-client access still need an explicit verification before this endpoint is recorded as complete.
+
 TLS terminates at NPM. NPM communicates with Jellyfin over the Docker bridge network. This is why the upstream scheme is HTTP even though clients use HTTPS externally.
 
 ## Docker network connectivity
@@ -64,6 +66,18 @@ The existing Compose file was inspected before editing. Its image, published por
 
 The recreated container was verified on both `media-stack_default` and `nginx-proxy-manager_default`. A subsequent `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty, confirming the public HTTPS proxy path remained functional after container recreation. No credentials, database contents, certificate private keys, or other secrets are included in this repository.
 
+## NPM container DNS
+
+NPM initially could not resolve `acme-v02.api.letsencrypt.org` from inside its container, even though the Debian VM host could resolve it. The container used Docker's embedded resolver at `127.0.0.11`. The NPM Compose service was updated with explicit upstream resolvers:
+
+```yaml
+dns:
+  - 1.1.1.1
+  - 8.8.8.8
+```
+
+After recreating the NPM service, the NPM container resolved the Let's Encrypt API hostname and the ACME request advanced to the HTTP challenge stage. The subsequent challenge failure was identified as a mistyped value rather than the earlier DNS-resolution failure. This DNS override is in the local NPM Compose project at `/home/ian/nginx-proxy-manager/docker-compose.yml`; that separate Compose file is not currently version-controlled in this repository.
+
 ## Planned improvements
 
 - [x] Make the `media-stack_default` network attachment persistent in the NPM Compose project.
@@ -85,4 +99,6 @@ Dynamic DNS is not installed yet. Its purpose is to update the public DNS record
 - [x] External network configuration committed to the NPM Compose file.
 - [x] Persistent network connection tested after container recreation.
 - [x] HTTPS endpoint returns a successful redirect after NPM container recreation.
+- [x] Fix DNS resolution from the NPM container to the Let's Encrypt API with explicit upstream resolvers.
+- [ ] Verify the Seerr upstream route and `requests.moxxboxx.com` certificate from an external client.
 - [ ] Dynamic DNS updater implemented and tested.
