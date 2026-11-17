@@ -1,39 +1,28 @@
 # Media Storage Design
 
 **Host:** Lenovo ThinkCentre M920q Tiny  
-**Hypervisor:** Proxmox VE  
-**Enclosure:** TerraMaster D4-320  
-**Initial data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
-**Workload:** Debian media-services VM (Jellyfin and supporting containers)  
-**Status:** Seagate physical-disk passthrough is configured as SCSI1 on VM 100. The 5.5 TiB disk has a GPT partition and ext4 filesystem, is mounted read/write at `/srv/media` by UUID, and the shared data directory permissions have been verified. A container write/delete test passed.
+**Enclosure:** TerraMaster D4-320 USB DAS  
+**Data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
+**Consumer:** Debian media-services VM 100  
+**Status:** Configured and in use; reboot mount-source verification and independent backup planning remain open.
 
-## Design decision
+## Design
 
-The first 6 TB Seagate will be used as a dedicated data disk for a Debian virtual machine running the media stack. The second matching 6 TB drive will remain unused until a later expansion phase.
+The first 6 TB disk is dedicated to media and downloads for the Debian VM. The second matching disk is reserved for later expansion. The initial design uses a standalone ext4 filesystem, not RAID, MergerFS, or a pooled volume.
 
-The two drives will not be combined into RAID, MergerFS, or another pool as part of the initial build.
+The physical disk is passed through to VM 100 as SCSI1 using a persistent `/dev/disk/by-id` identifier. The exact identifier and serial are intentionally omitted. Debian manages the partition table, filesystem, mount, and directories.
 
 ## Storage placement
 
 | Device | Location | Purpose |
 |---|---|---|
 | Lenovo 256 GB NVMe | Proxmox host | Hypervisor and Debian VM system disk |
-| First Seagate Exos 6 TB | D4-320, passed through to Debian VM | Media library, downloads, and application data |
-| Second Seagate Exos 6 TB | D4-320, reserved | Future capacity expansion |
+| First Seagate Exos 6 TB | D4-320, passed through to Debian | Media library and downloads |
+| Second Seagate Exos 6 TB | Reserved | Future expansion |
 
-The Debian VM's virtual system disk and container configuration will remain on the NVMe-backed Proxmox storage. The 6 TB disk will be attached to the VM as a physical disk using its persistent `/dev/disk/by-id` path. Debian will own the partition table, filesystem, mount, and directory structure on that disk.
+## Filesystem and directory layout
 
-The physical disk was identified on the Proxmox host as a separate USB-attached Seagate Exos with no partitions, filesystem, or mount point. A persistent model-based `/dev/disk/by-id` link was located and resolves to the Seagate. The exact device identifier and serial are intentionally kept out of the public repository. The current `/dev/sda` name is not suitable for a persistent VM configuration because Linux device enumeration can change.
-
-## Filesystem and directory structure
-
-The selected filesystem is ext4. It has been created inside the Debian VM on `/dev/sdb1` and labeled `media`. A UUID-based entry has been added to `/etc/fstab`; `sudo mount -a` successfully mounted it at `/srv/media`. `findmnt` confirms the source `/dev/sdb1`, filesystem `ext4`, and read/write options. `df -hT` reports approximately 5.4 TiB available. A reboot persistence check remains pending. The planned `/srv/media/data` directory tree for torrents, usenet, movies, TV, and music has been created and verified.
-
-Proposed mount point:
-
-`/srv/media`
-
-Proposed data structure:
+The Seagate has one GPT partition, `/dev/sdb1`, formatted as ext4 and labeled `media`. A UUID-based `/etc/fstab` entry mounts it at `/srv/media`. `mount -a`, `findmnt`, and `df -hT` confirmed a read/write mount with approximately 5.4 TiB available. The mount source has not yet been rechecked after a VM reboot.
 
 ```text
 /srv/media/data/
@@ -51,66 +40,31 @@ Proposed data structure:
     └── music/
 ```
 
-The download and library folders will live on the same ext4 filesystem. This allows Radarr and Sonarr to use hardlinks and atomic moves when the download client and applications have consistent paths and permissions. Hardlinks cannot span separate filesystems or mounts.
+The directory tree is owned by UID/GID 1000 (`ian:ian`). Directories use mode `2775` with setgid inheritance. A non-root Alpine container running as UID/GID 1000:1000 successfully created and deleted a test file in the bind mount.
 
 ## Container path strategy
 
-The media stack will run in Docker Compose inside Debian. A single host data directory will be mounted into the relevant containers at the same container path:
+Radarr, Sonarr, and qBittorrent share the same host data tree at the same container path, `/data`. Jellyfin receives the media library read-only at `/media`. Keeping downloads and library folders on one filesystem allows hardlinks and atomic moves when paths and permissions are configured consistently.
 
-- Radarr and Sonarr: `/data`
-- Download client: `/data`
-- Jellyfin: read-only access to `/data/media`
-- Prowlarr: application configuration and network access; no direct media-file access required
+Hardlink/inode behavior has not yet been directly verified. Application sorting, metadata, imports, Jellyfin refresh, and playback have been verified separately.
 
-Application configuration and databases will live on the Debian VM's system disk, separate from the large media data tree.
+Application configuration and databases remain on the VM's NVMe-backed system disk. The media disk is separate from the VM's virtual system disk, so a VM backup alone will not protect its contents.
 
-The initial application stack is expected to include:
+## Drive health
 
-- Jellyfin for media playback.
-- Radarr for movie library management.
-- Sonarr for television library management.
-- Prowlarr for indexer management.
-- A download client selected during deployment.
-- Jellyseerr for media requests, if desired.
-- Bazarr for subtitle management, if desired.
+The initial SMART overall status was `PASSED`, and the captured attributes showed no reallocated, pending, offline-uncorrectable, reported-uncorrectable, or UDMA CRC errors. The extended SMART test was aborted by the host at 80% remaining. It is incomplete, not a pass. See [Seagate SMART Baseline](seagate-smart-baseline.md).
 
-Folder ownership and shared group permissions will be configured consistently across the containers. The path strategy follows the guidance in [TRaSH Guides: Docker](https://trash-guides.info/Hardlinks/How-to-setup-for/Docker/) and the [Servarr Docker Guide](https://wiki.servarr.com/docker-guide).
+## Implementation status
 
-## Disk passthrough and backup implications
-
-The Seagate is passed through to the Debian VM as a physical disk. Proxmox manages the VM's virtual system disk, while Debian manages the Seagate's ext4 filesystem. The filesystem is mounted read/write at `/srv/media` using a UUID-based `/etc/fstab` entry.
-
-The media disk will not be part of the Debian VM's ordinary virtual system disk. VM backups therefore need to be paired with a separate backup plan for important media and application data. The second drive, when commissioned, may become a local backup target or additional storage, but a second disk in the same enclosure is not an independent off-site backup.
-
-## SMART and drive condition
-
-The initial SMART overall result was `PASSED`. The captured attribute table showed zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors, with a reported temperature of 24°C.
-
-The extended SMART self-test was started and then intentionally stopped before completion. The self-test log reports Aborted by host with 80% remaining and no first-error LBA recorded. This is an incomplete test, not a pass. The initial SMART snapshot is encouraging but does not replace a completed extended read test. The disk will be used for the initial media build with routine monitoring and separate backups for important files.
-
-## Implementation checklist
-
-- [x] Stop the extended SMART self-test and record the Aborted by host result.
-- [x] Reboot Proxmox to activate the installed kernel updates.
-- [ ] Create a Debian VM with its system disk on the NVMe.
-- [x] Identify the Seagate using a persistent `/dev/disk/by-id` path on the Proxmox host.
-- [x] Shut down VM 100 and attach the physical Seagate as SCSI1 using its persistent `/dev/disk/by-id` path.
-- [x] Boot Debian and verify the passed-through disk appears as a separate 5.5 TiB SCSI disk inside the guest.
-- [x] Inspect the guest disk with `lsblk -f`; no filesystem or mount point is reported.
-- [x] Run `wipefs --no-act` on the guest disk; no known signatures are reported and the command makes no changes.
-- [ ] Confirm the disk appears in Debian and identify it by model and capacity.
-- [x] Create a GPT partition table on the guest data disk with one full-size partition (`/dev/sdb1`).
-- [x] Create an ext4 filesystem inside Debian on `/dev/sdb1`, labeled `media`.
-- [x] Add the UUID-based `/etc/fstab` entry for `/srv/media` and test it with `sudo mount -a`.
-- [x] Verify `/dev/sdb1` is mounted read/write as ext4 with `findmnt` and `df -hT`.
-- [ ] Reload systemd manager configuration and verify the mount after reboot.
-- [x] Create the shared `/srv/media/data` directory structure for torrents, usenet, movies, TV, and music.
-- [x] Set `/srv/media/data` ownership to UID/GID 1000 (`ian:ian`).
-- [x] Apply `2775` directory permissions with setgid inheritance and verify owner/group.
-- [x] Verify container read/write access to `/srv/media/data` using an Alpine test container with UID/GID 1000:1000.
-- [x] Verify non-root container read/write access to `/srv/media/data` with UID/GID 1000:1000 using an Alpine test container.
-- [x] Create a version-controlled Docker Compose definition with a consistent `/data` path for the download client and *arr services; Jellyfin receives read-only access to the media library.
-- [ ] Deploy the Compose stack and verify imports, hardlinks, and playback.
-- [ ] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, and a download client.
-- [ ] Test imports, hardlinks, playback, and permissions.
-- [ ] Define and test backup coverage for VM configuration and important media data.
+- [x] Select a standalone ext4 data disk for the Debian media VM.
+- [x] Identify the disk with a persistent host-side `/dev/disk/by-id` path.
+- [x] Attach the disk to VM 100 as SCSI1.
+- [x] Confirm Debian detects the separate 5.5 TiB disk.
+- [x] Inspect signatures with `lsblk -f` and `wipefs --no-act` before formatting.
+- [x] Create a GPT partition and ext4 filesystem labeled `media`.
+- [x] Configure and test the UUID-based `/etc/fstab` mount at `/srv/media`.
+- [x] Create the shared directory structure and configure UID/GID 1000 permissions.
+- [x] Verify non-root container write access.
+- [ ] Recheck the mounted source after a Debian VM reboot.
+- [ ] Verify hardlink behavior between download and library paths.
+- [ ] Define and test independent backups for VM configuration and important media data.
