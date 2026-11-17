@@ -102,7 +102,7 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Refresh package lists successfully.
    - [x] Review and apply available package upgrades.
    - [x] Reboot to activate the updated kernel and verify the running kernel and Proxmox package versions.
-   - [x] Configure time and administrative settings.
+   - [ ] Configure time and administrative settings.
    - [x] Create VM 100 (`media-server`) with the planned CPU, memory, NVMe disk, and VirtIO network configuration.
    - [x] Complete Debian 13.7 base installation and install GRUB to the VM's virtual disk.
    - [x] Detach the installer ISO, reboot, and verify the first Debian boot.
