@@ -33,6 +33,8 @@ The lab is built around a **Lenovo ThinkCentre M920q Tiny** and is growing from 
 
 Jellyfin is reachable at [https://moxxboxx.com](https://moxxboxx.com) through Nginx Proxy Manager (NPM), with a Let's Encrypt certificate. NPM listens on TCP ports 80 and 443 for web traffic; its administration interface uses port 81 and is intended to remain LAN-only. NPM forwards the domain to Jellyfin over the Docker network using the `jellyfin:8096` service address. The NPM container initially returned 502 Bad Gateway because it was on a separate Docker network. The NPM Compose file now declares `media-stack_default` as an external network alongside its own default network, and successful HTTPS access was verified after recreating the container.
 
+Seerr is deployed locally and configured with Jellyfin, Radarr, and Sonarr. Its intended public endpoint is `requests.moxxboxx.com`, using NPM to forward to `seerr:5055`; external HTTPS/certificate verification remains open. NPM's separate Compose service also uses explicit Cloudflare and Google DNS resolvers after its container could not resolve the Let's Encrypt API through Docker's embedded resolver.
+
 Dynamic DNS is planned so the domain's DNS record can follow the home's public IP address if it changes. Pi-hole is planned as a LAN-only DNS service for network-level filtering and local DNS records. The DNS provider and update method, and whether the router or Pi-hole will provide DHCP, remain to be selected.
 
 qBittorrent now shares Gluetun's network namespace and uses ExpressVPN through OpenVPN. qBittorrent is bound to `tun0`; a direct-IP test to `1.1.1.1` timed out while the VPN interface was down, confirming fail-closed outbound blocking. Dynamic DNS and Pi-hole remain planned. A provider with VPN port forwarding may be evaluated later if inbound peer connectivity becomes a priority.
@@ -111,10 +113,12 @@ The diagram shows the target network layout. Switch cabling, port assignments, a
    - [x] Review the initial SMART attributes and record the reported power-on counters.
    - [x] Stop the extended SMART self-test early and record its incomplete result.
    - [ ] Consider a completed extended test during a later maintenance window.
-   - [ ] Configure a filesystem, mount point, and storage layout.
-   - [ ] Deploy Jellyfin.
+   - [x] Configure the Seagate ext4 filesystem, UUID-based mount at `/srv/media`, and shared media/download directory layout.
+   - [x] Deploy Jellyfin and configure its read-only media bind mount.
 4. **Application hosting and monitoring**
-   - [ ] Deploy Docker workloads in a Debian VM.
+   - [x] Deploy Docker workloads in the Debian VM, including Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, and qBittorrent.
+   - [x] Deploy and configure Seerr locally with Jellyfin, Radarr, and Sonarr.
+   - [ ] Deploy Mealie and Audiobookshelf; their Compose definitions are committed, but container startup and first-run setup remain.
    - [ ] Add service monitoring and alerting.
 5. **IT administration lab**
    - [ ] Build Windows Server and a Windows client VM.
