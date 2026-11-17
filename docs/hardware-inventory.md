@@ -1,86 +1,60 @@
 # Hardware Inventory
 
-The equipment below makes up the Proxmox homelab. Installation and commissioning status is tracked alongside each component.
-
-**Last updated:** 2026-11-15
+Current equipment and commissioning state for the Proxmox homelab.
 
 ## Compute
 
-| Quantity | Component | Specifications | Status |
+| Qty. | Component | Configuration | Status |
 |---:|---|---|---|
-| 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe SSD | Proxmox VE 9.2.2 installed; web interface accessible |
+| 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe | Proxmox VE 9.2 installed and updated |
 
-The M920q is the Proxmox host, equipped with an Intel Core i5-8500 processor and 16 GB RAM. Intel VT-x and VT-d are enabled in BIOS. The web dashboard is accessible and the node is online. The Proxmox Summary reports six CPUs and 15.46 GiB usable RAM. The processor model was confirmed as the standard i5-8500, not the i5-8500T. The onboard Ethernet interface (`nic0`) is UP and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink. The internal NVMe is identified as a Lenovo NVMe 2280S 256GB SSD and reports 238.5G in Linux. The onboard Ethernet interface (`nic0`) is up and negotiated at 1 Gbps; the Proxmox bridge (`vmbr0`) uses this same uplink.
+The CPU is the standard i5-8500, not the i5-8500T. Linux reports the NVMe as 238.5 GB. The host has 15.46 GiB usable memory. Intel VT-x and VT-d are enabled.
 
 ## Storage
 
-| Quantity | Component | Specifications | Status |
+| Qty. | Component | Configuration | Status |
 |---:|---|---|---|
-| 1 | TerraMaster D4-320 | Four-bay external USB DAS; diskless enclosure | Connected to Lenovo; drive detected by Proxmox |
-| 2 | Seagate Exos ST6000NM0115 | 3.5-inch; 6 TB; 7200 RPM; SATA 6 Gb/s; 512e; 256 MB cache | One 5.5 TiB Seagate detected; initial SMART overall status passed; ext4 data partition configured for Debian VM 100; second awaiting delivery |
+| 1 | TerraMaster D4-320 | Four-bay USB direct-attached enclosure | Connected to the Lenovo |
+| 2 | Seagate Exos ST6000NM0115 | 3.5-inch SATA, 6 TB, 7200 RPM | One installed and passed through to Debian; second reserved for later |
 
-### Storage notes
+The installed disk is detected by Proxmox as a 5.5 TiB device and passed through to VM 100 as SCSI1 using a persistent device identifier. Debian manages its GPT partition and ext4 filesystem, mounted at `/srv/media` through a UUID-based `/etc/fstab` entry.
 
-- The D4-320 is direct-attached storage. It connects to the Lenovo over USB; it is not an Ethernet NAS.
-- One 6 TB drive is installed in the enclosure and is detected by Proxmox as `/dev/sda` (5.5 TiB as displayed by Linux).
-- The Proxmox disk view reports SMART overall status `PASSED` for the Seagate and the internal NVMe.
-- The initial Seagate SMART table reports zero reallocated sectors, current pending sectors, offline-uncorrectable sectors, reported uncorrectable errors, and UDMA CRC errors. The reported temperature is 24°C.
-- The reported power-on-hours raw value is 0, while the head-flying-hours counter shows approximately 4 minutes and 17 seconds. These counters are recorded as displayed and should not be treated as proof of the drive's complete service history.
-- The extended SMART self-test was intentionally stopped early; the self-test log reports Aborted by host with 80% remaining. A complete extended test has not passed.
-- The Seagate is passed through to Debian VM 100. Debian contains one GPT partition formatted as ext4 and labeled `media`; the filesystem has not yet been mounted persistently.
-- A persistent model-based `/dev/disk/by-id` link has been identified for passing the physical disk to VM 100. The exact device identifier and drive serial are retained locally rather than published.
-- The second matching 6 TB drive is awaiting delivery.
-- Detailed drive health, power-on hours, and firmware information will be reviewed after the extended test.
-- Selected layout: the first 6 TB drive will be dedicated to the Debian media-services VM as a standalone ext4 filesystem. The second matching drive will remain unused for later expansion.
-- The first disk has been attached to Debian VM 100 as SCSI1 using a persistent device ID. Debian detects it as a separate 5.5 TiB SCSI disk; the virtual controller presents its model as `QEMU HARDDISK`. No partition, filesystem, or mount point is present. Filesystem, mount point, Docker paths, and permissions will be configured inside Debian after a final read-only signature check.
+Initial SMART overall status was `PASSED`. The initial attribute table showed no reallocated, pending, offline-uncorrectable, reported-uncorrectable, or UDMA CRC errors, and a reported temperature of 24°C. The extended SMART test was stopped by the host with 80% remaining. It is incomplete, not a passing test. See the [SMART baseline](../storage/seagate-smart-baseline.md).
+
+The disk's exact serial, persistent device path, and filesystem UUID are intentionally omitted. The second 6 TB disk has not yet been installed.
 
 ## Networking
 
-| Quantity | Component | Specifications | Status |
+| Qty. | Component | Configuration | Status |
 |---:|---|---|---|
-| 1 | RealHD web-managed Ethernet switch | 8 × 2.5GbE ports; 1 × 10G SFP+ port; metal housing; fanless | Installed in rack |
-| 1 | NETGEAR Nighthawk RAX41v2 | Existing home router | Existing equipment; assembled |
-| 1 | GeeekPi 12-port patch panel | 10-inch; 0.5U; CAT6; RackMate-compatible | Installed in rack |
-| 8 | CAT6A patch cables | 0.5 ft | Installed in rack |
+| 1 | RealHD managed switch | 8 × 2.5GbE, 1 × 10G SFP+ | Installed; exact revision and port map not yet documented |
+| 1 | NETGEAR Nighthawk RAX41v2 | Home router | In service |
+| 1 | GeeekPi 12-port patch panel | 10-inch, 0.5U, CAT6 | Installed |
+| 8 | CAT6A patch cables | 0.5 ft | Installed |
 
-The switch's exact hardware revision, firmware version, management method, port assignments, and feature set will be recorded after inspection. VLANs have not yet been configured.
-
-The Lenovo's onboard Ethernet link is currently negotiated at 1 Gbps. The RealHD switch supports 2.5GbE, but the present connection is limited by the host's negotiated link speed. The physical path to the switch will be confirmed when the rack network is connected and traced.
+The M920q's onboard Ethernet link negotiates at 1 Gbps. The switch supports 2.5GbE, but the host's onboard NIC is Gigabit Ethernet. VLANs are not configured.
 
 ## Rack and power
 
-| Quantity | Component | Specifications | Status |
+| Qty. | Component | Configuration | Status |
 |---:|---|---|---|
-| 1 | GeeekPi DeskPi RackMate T1 Plus | 8U; 10-inch rack; 260 mm / 10.23-inch depth | Assembled |
-| 1 | GeeekPi rack PDU | 10-inch; 1U; six outlets (two front, four rear); surge protected; 14 AWG | Installed in rack |
-| 1 | GeeekPi mini PC rack shelf | 10-inch; 1U; RJ45/CAT6 and HDMI pass-through ports | Installed in rack |
-| 2 | GeeekPi ventilated cantilever shelves | 0.5U; 7.87-inch depth | Installed in rack |
-| 2 | GeeekPi ventilated cantilever shelves | 1U; 7.87-inch depth | Installed in rack |
+| 1 | GeeekPi DeskPi RackMate T1 Plus | 8U, 10-inch, 260 mm depth | Assembled |
+| 1 | GeeekPi PDU | 1U, six outlets, surge protection, 14 AWG | Installed |
+| 1 | GeeekPi mini PC shelf | 10-inch, 1U, RJ45 and HDMI pass-through | Installed |
+| 2 | GeeekPi ventilated shelves | 0.5U, 7.87-inch depth | Installed |
+| 2 | GeeekPi ventilated shelves | 1U, 7.87-inch depth | Installed |
 
-Equipment clearances, ventilation, weight limits, cable strain relief, and PDU load will be checked during final rack commissioning.
+## Accessories
 
-## Display and cabling accessories
-
-| Quantity | Component | Specifications | Status |
+| Qty. | Component | Configuration | Status |
 |---:|---|---|---|
-| 2 | HDMI cables | 8K HDMI 2.1 | Available |
+| 2 | HDMI cables | HDMI 2.1, 8K rated | Available |
 
-The HDMI cables are for displays, not network connections. The RJ45/HDMI pass-through shelf provides convenient physical connections; its internal cabling path will be checked during rack cable documentation.
+## Remaining commissioning
 
-## Commissioning checklist
-
-- [x] Install Proxmox VE and verify web interface access.
 - [ ] Record BIOS/UEFI version and installed RAM layout.
-- [x] Record NVMe model and partition layout.
 - [ ] Review detailed NVMe health attributes.
-- [x] Verify the Lenovo's onboard Ethernet link at 1 Gbps.
-- [ ] Identify the RealHD switch's exact model/revision and firmware.
-- [ ] Document switch port assignments.
-- [x] Connect the D4-320 to the Lenovo.
-- [x] Confirm Proxmox detects the D4-320's installed drive.
-- [x] Confirm SMART overall status reports `PASSED`.
-- [x] Review initial SMART attributes and record the reported power-on counters.
-- [ ] Run an extended SMART self-test.
-- [x] Identify the Seagate's persistent `/dev/disk/by-id` link for VM passthrough.
-- [ ] Pass the physical disk through to VM 100 and configure a safe storage mount and backup strategy.
-- [ ] Verify PDU load and airflow under normal operating conditions.
+- [ ] Identify the switch's exact model, hardware revision, and firmware.
+- [ ] Document switch port assignments and trace rack cabling.
+- [ ] Verify PDU load and airflow under normal operation.
+- [ ] Complete an extended SMART test during a maintenance window.
