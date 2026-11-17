@@ -4,11 +4,11 @@ This document tracks planned DNS improvements for the homelab. No Dynamic DNS up
 
 ## Dynamic DNS
 
-The custom domain `moxxboxx.com` currently reaches the Jellyfin reverse proxy through Nginx Proxy Manager. If the home's public IPv4 address changes, the public DNS record may become stale. A Dynamic DNS client will be added to update the domain's DNS record when the WAN address changes.
+The masked public hostname `m*******.com` currently reaches the Jellyfin reverse proxy through Nginx Proxy Manager. If the home's public IPv4 address changes, the public DNS record may become stale. A Dynamic DNS client will be added to update the domain's DNS record when the WAN address changes.
 
 Implementation decisions:
 
-- Identify the authoritative DNS provider for `moxxboxx.com` and confirm it offers an API or supported Dynamic DNS update method.
+- Identify the authoritative DNS provider for the masked public hostname and confirm it offers an API or supported Dynamic DNS update method.
 - Choose a maintained updater compatible with that provider.
 - Keep API tokens in a local environment file or Docker secret. Never commit tokens or other credentials to Git.
 - Update only the necessary DNS record(s), and decide whether IPv6 (AAAA) updates are supported and wanted.
