@@ -2,7 +2,7 @@
 
 **Project owner:** Ian Bishop  
 **Last updated:** 2026-11-16  
-**Overall status:** Proxmox VE 9.2 updated and verified; Debian media stack deployed; Jellyfin is reachable through `https://moxxboxx.com` using Nginx Proxy Manager and a Let's Encrypt certificate. NPM's connection to the media Docker network is declared in Compose and verified after container recreation. Dynamic DNS and Pi-hole remain planned. qBittorrent now runs behind Gluetun using ExpressVPN OpenVPN, with qBittorrent bound to `tun0` and a direct-IP kill-switch outage test successfully completed.
+**Overall status:** Proxmox VE 9.2 and the Debian media-services VM are deployed. Jellyfin is reachable through Nginx Proxy Manager at `https://moxxboxx.com`; the Gluetun/qBittorrent VPN path passed a fail-closed outage test and recovered after a full VM reboot. Seerr is deployed and working locally with Jellyfin, Radarr, and Sonarr configured. Mealie and Audiobookshelf are now defined in the version-controlled Compose file but await deployment. TV imports, Jellyfin playback/automatic refresh, backup/restore, monitoring, Dynamic DNS, and Pi-hole remain open work.
 
 This checklist tracks completed, in-progress, and planned work. Items are marked complete after the change has been made and the result has been verified.
 
@@ -91,25 +91,36 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Install Docker Engine, CLI, containerd, Buildx, and Compose plugin in the Debian VM.
 - [x] Verify the Docker service is active and record installed versions.
 - [x] Pull and run the official `hello-world` container successfully.
-- [x] Create a version-controlled Docker Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
+- [x] Create a version-controlled Docker Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, and Seerr.
+- [x] Add Mealie and Audiobookshelf service definitions to the version-controlled Compose file.
+- [ ] Deploy Mealie and Audiobookshelf, complete first-run setup, and validate their persistent storage.
 - [x] Create the `/opt/media-stack` project and service configuration/cache directories on Debian.
 - [x] Download the version-controlled Compose file from GitHub and validate it with `docker compose config --quiet` (exit status 0).
 - [x] Deploy the media stack with `docker compose up -d`; all five application containers started.
-- [x] Confirm `docker compose ps` reports Jellyfin healthy and Radarr, Sonarr, Prowlarr, and qBittorrent running.
+- [x] Confirm the original media containers start; Jellyfin reported healthy and Radarr, Sonarr, Prowlarr, and qBittorrent reported running.
+- [x] Deploy Seerr in the existing media-stack project; its container reported healthy.
+- [x] Complete Seerr's local setup, sync the Jellyfin Movies and Shows libraries, and configure its Radarr and Sonarr servers.
 - [x] Review initial service logs; application migrations/startup completed and qBittorrent Web UI initialized.
 - [x] Complete initial Jellyfin setup.
 - [x] Complete initial qBittorrent setup and change the temporary first-start Web UI password.
 - [x] Complete Radarr and Sonarr first-run setup and configure their movie/TV root folders.
 - [x] Configure qBittorrent as the download client in Radarr and Sonarr with their respective categories.
-- [x] Configure Prowlarr application connections to Radarr and Sonarr using their API keys.
-- [ ] Verify end-to-end application sync, download handling, import paths, and hardlinks.
-- [ ] Verify Jellyfin library scans and playback from a trusted client.
+- [x] Configure Prowlarr application connections to Radarr and Sonarr using their API keys and pass both connection tests.
+- [x] Confirm at least one movie file was imported into the configured movie library root.
+- [ ] Verify Sonarr imports completed TV downloads into `/data/media/tv`; TV season folders were still present under the torrent download directory during the latest inspection.
+- [ ] Verify Radarr/Sonarr imports use hardlinks where expected; inode/hardlink behavior has not yet been checked.
+- [x] Enable Jellyfin real-time monitoring for the Movies and Shows libraries.
+- [ ] Verify automatic Jellyfin refresh; a manual scan was still required in the observed case.
+- [ ] Connect Radarr and Sonarr to Jellyfin for post-import library refresh notifications.
+- [ ] Verify Jellyfin playback from a trusted client.
 - [ ] Record service health checks, logs, and update procedure.
 
 ## Milestone 4 — Media service
 
 - [x] Deploy Jellyfin.
 - [x] Configure Jellyfin media library access to the read-only `/media` bind mount.
+- [x] Enable real-time monitoring for the Movies and Shows libraries.
+- [ ] Verify automatic refresh behavior without a manual scan.
 - [ ] Verify playback from a trusted client.
 - [ ] Document transcoding expectations and hardware limitations.
 - [ ] Configure backups for application configuration and metadata.
@@ -123,6 +134,8 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 - [x] Add the existing media-stack Docker network as an external network in NPM's Compose file.
 - [x] Recreate the NPM container with Docker Compose and verify it reconnects to both Docker networks.
 - [x] Confirm `https://moxxboxx.com` responds successfully after NPM recreation (`HTTP/2 302` from OpenResty).
+- [x] Correct NPM container DNS resolution for the Let's Encrypt API by adding explicit upstream resolvers to its separate Compose service.
+- [ ] Verify the Seerr proxy host, certificate, and `https://requests.moxxboxx.com` from an external client; a hostname/value typo was identified during the initial ACME challenge attempt.
 - [ ] Implement Dynamic DNS for the domain using the selected DNS provider's update mechanism.
 - [ ] Deploy Pi-hole for LAN DNS filtering and local DNS records.
 - [ ] Decide whether DHCP remains on the router or moves to Pi-hole; avoid enabling two DHCP servers on the same LAN.
@@ -173,6 +186,11 @@ This checklist tracks completed, in-progress, and planned work. Items are marked
 
 | Date | Activity | Result |
 |---|---|---|
+| 2026-11-16 | Deployed Seerr in the media-stack Compose project | `docker compose ps seerr` reported the container running and healthy; port 5055 was published |
+| 2026-11-16 | Completed Seerr's local setup | Jellyfin Movies and Shows libraries were selected, and Radarr and Sonarr servers were configured; Seerr works locally |
+| 2026-11-16 | Corrected NPM DNS resolution for Let's Encrypt | NPM initially could not resolve `acme-v02.api.letsencrypt.org`; explicit Cloudflare and Google DNS resolvers were added to its separate Compose service, after which the DNS-resolution error cleared |
+| 2026-11-16 | Investigated media import and Jellyfin visibility | Filesystem inspection found one movie in the media library root and TV season folders still in the torrent area; the TV library root was empty. Jellyfin real-time monitoring was enabled, but a manual scan was still needed in the observed case |
+| 2026-11-16 | Added Mealie and Audiobookshelf to the version-controlled Compose definition | Service definitions, persistent paths, ports, and DNS settings are documented; deployment and first-run validation remain pending |
 | 2026-11-16 | Corrected Prowlarr external DNS resolution | Added Cloudflare and Google resolvers to Prowlarr's Compose service; Docker's embedded resolver then resolved `indexers.prowlarr.com` and HTTPS returned HTTP 200 |
 | 2026-11-16 | Diagnosed and corrected Radarr/Sonarr external DNS lookup failures | Added explicit upstream DNS resolvers to the Radarr and Sonarr Compose services; Docker's embedded resolver then resolved `api.radarr.video` and Radarr movie search returned results |
 | 2026-11-16 | Rebooted the Debian VM and verified the VPN stack recovered | Gluetun reported healthy, qBittorrent showed `tun0`, qBittorrent's public IP check returned VPN egress, and Radarr/Sonarr each reached `gluetun:8080` with HTTP 200 |
