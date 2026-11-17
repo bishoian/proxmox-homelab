@@ -52,9 +52,9 @@ My M920q's onboard Ethernet link negotiates at 1 Gbps. Although my switch suppor
 
 ## Remaining commissioning
 
-- [ ] Record BIOS/UEFI version and installed RAM layout.
-- [ ] Review detailed NVMe health attributes.
-- [ ] Identify the switch's exact model, hardware revision, and firmware.
-- [ ] Document switch port assignments and trace rack cabling.
-- [ ] Verify PDU load and airflow under normal operation.
-- [ ] Complete an extended SMART test during a maintenance window.
+- [ ] I will record the BIOS/UEFI version and installed RAM layout.
+- [ ] I will review the NVMe's detailed health attributes.
+- [ ] I will identify the switch's exact model, hardware revision, and firmware.
+- [ ] I will document switch port assignments and trace my rack cabling.
+- [ ] I will check PDU load and rack airflow under normal operation.
+- [ ] I will complete an extended SMART test during a maintenance window.
