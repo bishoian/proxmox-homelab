@@ -1,266 +1,33 @@
 # Changelog
 
-A concise record of the homelab's major build and documentation milestones.
+A short record of significant project milestones. Current configuration and outstanding tasks are maintained in [Project Status](docs/project-status.md).
 
 ## 2026-11-16
 
-### Media-stack end-to-end verification and public endpoint privacy
-- Verified Radarr and Sonarr are both working and correctly importing/sorting media with the expected metadata.
-- Verified Seerr end to end, including its external request endpoint through Nginx Proxy Manager.
-- Confirmed Jellyfin automatically refreshes its library and successfully played a newly downloaded movie from a client.
-- Updated the project checklist and service documentation to reflect these completed validations; hardlink/inode verification remains a separate item.
-- Replaced public endpoint hostnames throughout the current documentation with masked forms: `m*******.com` and `requests.m*******.com`. No usable external server URL is published in the current documentation.
+### Media stack verification
+- Verified Radarr and Sonarr import and sort media correctly with expected metadata.
+- Verified Jellyfin automatic library refresh and playback using a newly downloaded movie.
+- Verified Seerr's external HTTPS request portal.
+- Added Mealie and Audiobookshelf service definitions to Compose; deployment remains pending.
 
-## 2026-11-16
-
-### Seerr request portal
-- Added Seerr to the media-stack Compose project using its persistent configuration directory and LAN port 5055.
-- Started the Seerr container successfully; `docker compose ps seerr` reported it running and healthy.
-- Completed local setup, selected the Jellyfin Movies and Shows libraries, and configured the Radarr and Sonarr servers.
-- Seerr's local setup was completed at this stage; subsequent external endpoint verification is recorded in the later media-stack validation entry.
-
-### Nginx Proxy Manager DNS troubleshooting
-- Compared Debian host DNS with DNS inside the NPM container. The host resolved `acme-v02.api.letsencrypt.org`, while the container initially failed through Docker's embedded resolver.
-- Added explicit Cloudflare and Google DNS resolvers to the NPM app service in its separate local Compose project.
-- Recreated NPM and confirmed the DNS-resolution failure cleared; the ACME request advanced to challenge validation.
-- The later challenge error was traced by the user to a mistyped value; Seerr's external endpoint was subsequently verified.
-
-### Mealie and Audiobookshelf service definitions
-- Added Mealie and Audiobookshelf to the version-controlled media-stack Compose file.
-- Mealie is configured with a pinned stable image, SQLite-backed local application data, a 1 GB memory limit, and LAN port 9925.
-- Audiobookshelf is configured with local NVMe-backed configuration/metadata, Seagate-backed audiobook/podcast folders, UID/GID 1000:1000, and LAN port 13378.
-- Container deployment and first-run validation remain pending.
-
-### Media import and library observations
-- Filesystem inspection found a movie file in the configured media library root.
-- At this point, downloaded TV season folders were still in the torrent area and the TV library root was empty. Sonarr's import/sorting behavior was subsequently corrected and verified.
-- Jellyfin real-time monitoring was enabled for Movies and Shows. Automatic library refresh and playback were subsequently verified successfully.
-
-### qBittorrent VPN isolation
-- Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent.
-- Kept manual OpenVPN credentials in the local `/opt/media-stack/.env` file with mode `600` and root ownership; the credential file is not included in Git.
-- Configured the Gluetun ExpressVPN provider and selected the USA server group using the accepted country value `USA`.
-- Moved qBittorrent into Gluetun's network namespace with a healthy-start dependency and published the Web UI through Gluetun on TCP 8080.
-- Bound qBittorrent's network interface to `tun0`.
-- Updated Radarr and Sonarr to reach qBittorrent at `gluetun:8080`; both Web UI connectivity tests returned HTTP 200.
-- Verified qBittorrent's public IP matched Gluetun's VPN egress address.
-- Tested the firewall kill switch by bringing `tun0` down. A DNS-based egress request failed, and a direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out.
-- Recreated Gluetun and qBittorrent after the test; Gluetun returned healthy, qBittorrent returned running, and VPN egress was restored.
-- Rebooted the Debian VM and verified Gluetun returned healthy, qBittorrent retained `tun0`, VPN egress was restored, and Radarr/Sonarr both returned HTTP 200 from the qBittorrent Web UI.
-- The initial download/import workflow was only partially validated at this point. Radarr and Sonarr sorting/imports and metadata were subsequently verified; hardlink/inode behavior remains a separate unverified item.
-
-## 2026-11-16
-
-### Media application DNS resolution
-- Diagnosed Radarr and Sonarr metadata lookup failures caused by Docker's embedded DNS forwarding path.
-- Confirmed Debian host DNS and direct DNS queries to the router, Cloudflare, and Google worked, while default lookups through Docker's embedded resolver returned SERVFAIL.
-- Added explicit Cloudflare and Google DNS resolvers to the Radarr and Sonarr Compose services.
-- Verified Docker's embedded resolver subsequently resolved `api.radarr.video` and Radarr search returned movie results.
-- Diagnosed the same embedded-DNS failure in Prowlarr for `indexers.prowlarr.com`, added the same explicit resolvers to its Compose service, and verified name resolution plus an HTTPS HTTP 200 response.
+### Troubleshooting and reliability
+- Corrected Docker DNS forwarding failures affecting Radarr, Sonarr, Prowlarr, and Nginx Proxy Manager.
+- Corrected NPM's Docker network attachment and verified the reverse-proxy routes.
+- Tested Gluetun's fail-closed behavior by taking down `tun0`; direct-IP HTTPS egress was blocked.
+- Recreated the VPN services and rebooted the Debian VM; Gluetun and qBittorrent recovered.
 
 ## 2026-11-15
 
-### Initial project setup
-- Created the public `proxmox-homelab` repository.
-- Added the project overview, hardware inventory, planned network architecture, and milestone checklist.
-- Documented the Lenovo M920q, TerraMaster D4-320, Seagate Exos drives, RealHD switch, RackMate cabinet, power distribution, patch panel, shelves, and cabling.
+### Platform and storage
+- Created the public repository and documented the hardware and network design.
+- Installed Proxmox VE on the M920q, configured package repositories, applied updates, and verified the updated kernel after reboot.
+- Created Debian VM 100 and verified SSH, DNS, APT, sudo, and QEMU Guest Agent connectivity.
+- Diagnosed the D4-320's missing disk: its rear power switch was off.
+- Passed the Seagate disk through to Debian, created a GPT partition and ext4 filesystem, and configured the `/srv/media` mount.
+- Set shared media-directory ownership and permissions; verified container write access.
 
-### Proxmox installation
-- Created the Proxmox VE installation USB.
-- Enabled Intel VT-x and Intel VT-d in the M920q BIOS.
-- Booted the installer and installed Proxmox VE 9.2.2 on the internal NVMe using ext4.
-- Rebooted successfully to the Proxmox local console.
-- Signed in to the web interface and confirmed the `pve` node was online.
+### Applications and remote access
+- Deployed the initial Docker media stack and completed first-run setup.
+- Configured Nginx Proxy Manager and corrected its Docker network connectivity to Jellyfin.
 
-### Storage
-- Connected the TerraMaster D4-320 to the Lenovo over USB.
-- Traced the initial missing-drive symptom to the enclosure's rear power switch being off.
-- Powered on the enclosure and refreshed Proxmox disk inventory; the 6 TB Seagate Exos appeared as `/dev/sda`.
-- Confirmed the SMART overall status reports `PASSED`.
-- Reviewed the initial SMART attribute table: zero reallocated, pending, offline-uncorrectable, reported-uncorrectable, and UDMA CRC error counts; 24°C reported temperature.
-- Recorded the displayed power-on-hours and head-flying-hours counters.
-- Started an extended SMART self-test on the Seagate; the drive estimated approximately 10 hours to completion.
-- Stopped the test early. The self-test log reports Aborted by host with 80% remaining and no first-error LBA; the test is recorded as incomplete, not passed.
-
-### Host baseline
-- Reviewed the Proxmox node Summary: six CPUs, 15.46 GiB usable RAM, EFI boot, and Proxmox manager 9.2.2.
-- Confirmed the installed processor is an Intel Core i5-8500 (standard model, not the i5-8500T).
-- Identified that the Enterprise package repository is enabled but requires a subscription; repository configuration for the unsubscribed lab is pending.
-
-### Host storage layout
-- Identified the internal NVMe as a Lenovo NVMe 2280S 256GB SSD; Linux reports 238.5G.
-- Recorded the Proxmox EFI and LVM layout, including the 8 GB swap volume, 69.4 GB root filesystem, and LVM-thin data pool.
-- Confirmed the Seagate Exos is visible as a separate 5.5T disk with no partitions, filesystem, or mount point.
-
-### Host hardware and network checks
-- Confirmed the installed processor from the Proxmox Shell as an Intel Core i5-8500 at 3.00 GHz with six logical CPUs.
-- Confirmed the physical Ethernet interface (`nic0`) is UP at 1000 Mb/s; the Proxmox bridge (`vmbr0`) uses the same uplink. The wireless interface is DOWN.
-- Recorded the host's current wired link as 1 Gbps; the switch-side path and port negotiation remain to be checked.
-
-### Host hardware and network checks
-- Confirmed the installed processor from the Proxmox Shell as an Intel Core i5-8500 at 3.00 GHz with six logical CPUs.
-- Confirmed the physical Ethernet interface (`nic0`) is UP at 1000 Mb/s; the Proxmox bridge (`vmbr0`) uses the same uplink. The wireless interface is DOWN.
-- Recorded the host's current wired link as 1 Gbps, matching Lenovo's M920 Tiny specification for onboard Intel I219-LM Gigabit Ethernet. The switch-side path and port negotiation remain to be checked.
-
-### Package repositories
-- Disabled the Proxmox VE Enterprise and Ceph Squid Enterprise entries.
-- Enabled the Proxmox VE no-subscription repository and Ceph Tentacle no-subscription repository.
-- Retained the Debian Trixie and Debian Security repositories.
-- Added documentation for the package source configuration.
-- Refreshed the APT package database successfully; Debian, Proxmox VE no-subscription, and Ceph Tentacle repositories were reached, 530 kB was fetched, and the task ended with `TASK OK`.
-- Reviewed and installed the available package upgrades without reported errors.
-- Confirmed the Proxmox Updates view reports `No updates available`.
-- Noted that a newer Proxmox kernel and manager package were included.
-
-### Storage architecture planning
-- Selected a capacity-focused proposal for the two 6 TB drives: independent ext4 filesystems, with optional MergerFS pooling to provide one namespace without striping or mirroring.
-- Kept active VM system disks on the internal NVMe; HDDs are intended for bulk data and local backup targets.
-- Documented the proposed design separately from implementation. No formatting, mounting, or pool creation has occurred.
-
-### Media storage design
-- Selected the first 6 TB Seagate as a standalone media and application-data disk for a Debian VM running Jellyfin and supporting services such as Radarr and Sonarr.
-- Decided to stop the extended SMART test early and proceed using the initial SMART snapshot; the test will be recorded as aborted/incomplete rather than passed.
-- Planned physical disk passthrough to the Debian VM using a persistent `/dev/disk/by-id` path and ext4 inside the guest.
-- Reserved the second 6 TB drive for later expansion. MergerFS and multi-disk pooling are no longer part of the initial setup.
-- Kept the VM operating system and container configuration on the internal NVMe; media, downloads, and library data will share one filesystem in the guest.
-- The storage design is selected but has not been implemented.
-
-### Post-upgrade reboot
-- Rebooted successfully after package upgrades.
-- Verified the active kernel as `7.0.14-29-pve`.
-- Verified `pve-manager` version `9.2.27` and the `proxmox-ve` meta-package version `9.2.0`.
-- Confirmed the upgraded Ceph client package version `20.2.5-pve1` is installed; no Ceph cluster is deployed.
-
-### SMART test disposition
-- Recorded the extended SMART self-test as intentionally aborted by the host at 80% remaining; no successful extended-test result is claimed.
-
-### First virtual machine
-- Created VM 100, `media-server`, on the Proxmox host.
-- Allocated four vCPUs, 4 GiB RAM, and a 64 GiB system disk on `local-lvm`.
-- Configured VirtIO SCSI single, QEMU Agent, and VirtIO networking through `vmbr0`.
-- Attached the Debian 13.7 netinst ISO and booted to the graphical installer in BIOS mode.
-- Completed the Debian 13.7 base installation with no desktop environment, SSH server, and standard system utilities selected.
-- Configured GRUB on the VM's virtual system disk.
-- Booted from the installed system and reached the `media-server` tty1 login prompt.
-- Logged in successfully as `ian`; verified hostname `media-server`, Debian GNU/Linux 13 (Trixie), kernel `6.12.17+deb13-amd64`, and x86-64 architecture.
-- Confirmed the VirtIO interface `ens18` is UP and received an IPv4 address.
-- Verified the default route through the home gateway, successful DNS resolution for `deb.debian.org`, working sudo authentication, and SSH service state `active`.
-- Ran `sudo apt update` successfully; Debian Security, Trixie, and Trixie Updates repositories responded, and APT reported all packages up to date.
-- Checked QEMU Guest Agent in Debian VM 100: package was already current and service reports `active`; Debian's static service unit does not require `systemctl enable`.
-- Verified host-to-guest agent communication with `qm agent 100 ping`; it returned without output or error.
-- Connected remotely from Windows PowerShell to the Debian VM over SSH; host key was accepted and authentication succeeded as `ian`.
-
-### Seagate passthrough preparation
-- Identified the installed Seagate as a separate USB-attached 5.5 TiB disk on the Proxmox host; it has no partitions, filesystem, or mount point.
-- Located the persistent model-based `/dev/disk/by-id` link that resolves to the physical disk.
-- Kept the device-specific identifier and serial out of the public repository. Physical passthrough to VM 100 has not yet been configured.
-
-### Seagate disk passthrough
-- Attached the whole Seagate Exos physical disk to VM 100 as SCSI1 using its persistent disk identifier.
-- Verified VM configuration preserves the 64 GiB Debian system disk as SCSI0 and keeps SCSI0 first in the boot order.
-- Confirmed the virtual CD/DVD drive has no installer ISO attached. The Seagate remains unpartitioned and unformatted; guest-side detection verification is next.
-
-### Guest-side Seagate detection
-- Started VM 100 after attaching the Seagate as SCSI1.
-- Confirmed Debian sees a separate 5.5 TiB SCSI disk as `/dev/sdb`; QEMU presents the model string as `QEMU HARDDISK`.
-- Confirmed the captured `lsblk` output shows no partitions, filesystem, or mount point on the data disk. A read-only signature check was completed with no known signatures reported; GPT initialization is the next step.
-
-### Read-only Seagate signature inspection
-- Checked the guest disk with `lsblk -f`; no filesystem or mount point was reported.
-- Ran `sudo wipefs --no-act` against the guest data disk; no known signatures were reported and the command made no changes.
-- Confirmed the disk remains unpartitioned and unformatted. GPT initialization is the next step.
-
-### Seagate GPT partitioning
-- Created a GPT partition table on the passed-through Seagate disk from inside Debian.
-- Created one full-capacity partition, `/dev/sdb1`, approximately 5.5 TiB.
-- Verified the partition is present and still has no filesystem or mount point. Ext4 creation remains pending.
-
-### Seagate ext4 filesystem
-- Formatted the full-size GPT partition `/dev/sdb1` as ext4 with filesystem label `media`.
-- Verified the filesystem type, label, and generated UUID with `lsblk -f`.
-- The filesystem is not mounted yet; the next step is a persistent UUID-based mount at `/srv/media`.
-
-### Seagate mount configuration
-- Added a UUID-based `/etc/fstab` entry to mount the ext4 filesystem at `/srv/media` with `defaults,nofail`.
-- Ran `sudo mount -a` successfully and verified the mount with `findmnt` and `df -hT`; the filesystem is mounted read/write with approximately 5.4 TiB available.
-- A `systemctl daemon-reload` attempt without elevated privileges was denied; the mount is active. A privileged `systemctl daemon-reload` completed successfully. `findmnt --verify --verbose` reported zero parse errors and zero errors; its only warning is the empty virtual CD-ROM at `/media/cdrom0`. A reboot persistence check remains pending.
-
-### Media directory layout
-- Created the shared `/srv/media/data` directory structure for torrent downloads, usenet incomplete and complete downloads, movies, television, and music.
-- Verified the directory tree from Debian.
-- Confirmed the Debian account `ian` uses UID 1000 and primary GID 1000 for consistent container permission mapping; ownership and permission configuration is next.
-
-### Media storage permissions
-- Set ownership of `/srv/media/data` to `ian:ian` (UID/GID 1000).
-- Applied directory mode `2775` with setgid inheritance and file mode `0664` to any existing files.
-- Verified the directory tree reports `drwxrwsr-x` with owner/group `ian:ian`.
-
-### Docker repository preparation
-- Checked for conflicting Docker/Podman packages; none were reported as installed.
-- Installed `ca-certificates` and `curl` prerequisites.
-- Added Docker’s official Debian signing key and stable APT repository for Debian Trixie amd64.
-- Ran `sudo apt update` successfully; Docker Release metadata and the stable package index were retrieved.
-- Docker Engine and Compose are installed and validated; media stack deployment remains pending.
-
-### Docker Engine installation and validation
-- Installed Docker Engine and CLI 29.9.3, containerd 2.4.2, and Docker Compose plugin 5.7.1.
-- Verified the Docker service reports `active`.
-- Verified Docker client/server versions and Compose plugin availability.
-- Pulled and ran `hello-world:latest` from Docker Hub; the container printed the expected success message.
-- Retained `sudo docker` usage rather than adding the administrative account to the Docker group.
-
-### Docker media-storage bind-mount validation
-- Ran an Alpine test container as UID/GID `1000:1000` with `/srv/media/data` bind-mounted at `/data`.
-- The container created and deleted a test file successfully and printed `Container write test passed`.
-- Confirmed the directory ownership and setgid permission model works for a non-root container process.
-
-### Docker Compose media stack preparation
-- Created a version-controlled Compose definition for Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent.
-- Kept application configuration and Jellyfin cache on the VM system disk; mapped media data separately from the Seagate filesystem.
-- Standardized the in-container `/data` path for Radarr, Sonarr, and qBittorrent; Jellyfin receives a read-only media-library mount.
-- The Compose file is in GitHub but has not yet been copied to or deployed on the Debian VM.
-
-### Media-stack Compose project validation
-- Created the `/opt/media-stack` project and per-service configuration/cache directories on Debian.
-- Downloaded the committed Compose definition from GitHub to the VM.
-- Validated the project with `docker compose config --quiet`; command completed with exit status 0.
-- Application containers have not yet been deployed; service startup and health checks remain next.
-
-### Initial media-stack deployment
-- Pulled the Jellyfin, Radarr, Sonarr, Prowlarr, and qBittorrent container images.
-- Created the Compose network and started all five application containers.
-- Verified with `docker compose ps`: Jellyfin reported healthy; Radarr, Sonarr, Prowlarr, and qBittorrent reported running.
-- Reviewed startup logs: Jellyfin completed initial startup and migrations; Radarr and Sonarr applied database migrations; Prowlarr started its HTTP listener; qBittorrent initialized its Web UI.
-- qBittorrent generated a temporary first-start administrator password. The credential is excluded from the public repository and must be rotated during first-run setup.
-- Initial application setup is complete in all five services; application-level download/import, hardlink, and playback validation remains pending.
-
-### Media application first-run configuration
-- Completed initial setup of Jellyfin and qBittorrent through their web interfaces.
-- Replaced qBittorrent's temporary first-start administrator password; no credentials are stored in the repository.
-- Completed initial setup of Radarr and Sonarr, configured their library root folders and qBittorrent download-client categories, and connected Prowlarr to Radarr and Sonarr. End-to-end synchronization, download/import behavior, hardlinks, and playback were not yet verified at this stage; subsequent validation is recorded above.
-
-### Radarr, Sonarr, and Prowlarr configuration
-- Completed first-run setup of Radarr and Sonarr and configured their movie/TV root folders.
-- Configured qBittorrent as the download client in Radarr and Sonarr with separate `radarr` and `sonarr` categories.
-- Added Radarr and Sonarr as applications in Prowlarr using their application API keys.
-- Initial setup is now complete across Jellyfin, qBittorrent, Radarr, Sonarr, and Prowlarr. Subsequent validation confirmed correct Radarr/Sonarr sorting and metadata, plus Jellyfin automatic refresh and playback; hardlink/inode behavior remains unverified.
-
-### Reverse proxy and custom domain
-- Deployed Nginx Proxy Manager as a separate Docker Compose project on the Debian media-services VM.
-- Configured `m*******.com` to proxy to Jellyfin at `jellyfin:8096`.
-- Successfully issued a Let's Encrypt certificate and verified Jellyfin loads through HTTPS at `https://m*******.com`.
-- Diagnosed the initial 502 Bad Gateway: NPM and Jellyfin were on separate Docker networks. Connected the NPM container to `media-stack_default`, restoring access.
-- Updated NPM's Compose file at `/home/ian/nginx-proxy-manager/docker-compose.yml` to declare `media-stack_default` as an external network while retaining NPM's default network and persistent configuration/certificate volumes.
-- Validated the Compose configuration with `docker compose config --quiet` and recreated the NPM container.
-- Verified the recreated container remained attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://m*******.com` returned `HTTP/2 302` from OpenResty.
-
-### Planned network services
-- Added Dynamic DNS to the roadmap so the domain can follow changes to the home public IP address.
-- Added Pi-hole for LAN DNS filtering and local DNS records.
-- Added a qBittorrent VPN gateway and fail-closed kill switch to the media-stack roadmap. ExpressVPN can be used through Gluetun's OpenVPN integration; providers with P2P port forwarding may be evaluated later.
-
-### Current state
-- Proxmox VE is installed and accessible through the web interface, with `pve-manager` 9.2.27 and kernel 7.0.14-29-pve active.
-- One 6 TB Seagate Exos drive is installed in the D4-320; the second matching drive is awaiting delivery.
-- The D4-320 drive is detected as `/dev/sda` and reports SMART overall status `PASSED`; the extended test was aborted early and is documented as incomplete.
-- VM 100 has Debian 13.7 installed; login, sudo authentication, default route, DNS resolution, APT repository connectivity, SSH service state, and Proxmox-to-guest QEMU Guest Agent communication are verified. Remote SSH login from Windows PowerShell is verified. The passed-through Seagate is visible inside Debian as a separate 5.5 TiB SCSI disk with one GPT partition (`/dev/sdb1`) formatted as ext4 and labeled `media`, mounted read/write at `/srv/media` by UUID. The media directory tree and ownership are configured; container read/write validation passed.
+Earlier diagnostic detail is retained in the dedicated troubleshooting records and service documentation.
