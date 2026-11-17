@@ -27,13 +27,13 @@ The installer completed and I rebooted the host to the Proxmox console. I opened
 
 ## Verified installation tasks
 
-- [x] Enable VT-x and VT-d in BIOS.
-- [x] Install Proxmox VE to the internal NVMe.
-- [x] Reboot to the local console.
-- [x] Access the web interface and authenticate.
-- [x] Confirm the `pve` node is online.
-- [x] Confirm the installation release is Proxmox VE 9.2.2.
-- [x] Verify CPU, memory, NVMe layout, and network link in the host baseline.
-- [x] Configure package repositories, apply upgrades, and reboot into the updated kernel.
+- [x] I enabled VT-x and VT-d in BIOS.
+- [x] I installed Proxmox VE to the internal NVMe.
+- [x] I rebooted to the local console.
+- [x] I accessed the web interface and authenticated.
+- [x] I confirmed that the `pve` node was online.
+- [x] I confirmed that the installation release was Proxmox VE 9.2.2.
+- [x] I verified the CPU, memory, NVMe layout, and network link in my host baseline.
+- [x] I configured package repositories, applied upgrades, and rebooted into the updated kernel.
 
 Current kernel and package versions are recorded in [Proxmox Host Baseline](proxmox-host-baseline.md). VM and storage commissioning are documented separately.
