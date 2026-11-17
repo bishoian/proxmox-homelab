@@ -1,6 +1,6 @@
 # Hardware Inventory
 
-Current equipment and commissioning state for the Proxmox homelab.
+This inventory records the equipment I use in my Proxmox homelab and its current commissioning state.
 
 ## Compute
 
@@ -8,7 +8,7 @@ Current equipment and commissioning state for the Proxmox homelab.
 |---:|---|---|---|
 | 1 | Lenovo ThinkCentre M920q Tiny | Intel Core i5-8500, 6 cores; 16 GB RAM; 256 GB NVMe | Proxmox VE 9.2 installed and updated |
 
-The CPU is the standard i5-8500, not the i5-8500T. Linux reports the NVMe as 238.5 GB. The host has 15.46 GiB usable memory. Intel VT-x and VT-d are enabled.
+I confirmed that the CPU is the standard i5-8500, not the i5-8500T. Linux reports the NVMe as 238.5 GB, and the host has 15.46 GiB of usable memory. I enabled Intel VT-x and VT-d in BIOS.
 
 ## Storage
 
@@ -17,11 +17,11 @@ The CPU is the standard i5-8500, not the i5-8500T. Linux reports the NVMe as 238
 | 1 | TerraMaster D4-320 | Four-bay USB direct-attached enclosure | Connected to the Lenovo |
 | 2 | Seagate Exos ST6000NM0115 | 3.5-inch SATA, 6 TB, 7200 RPM | One installed and passed through to Debian; second reserved for later |
 
-The installed disk is detected by Proxmox as a 5.5 TiB device and passed through to VM 100 as SCSI1 using a persistent device identifier. Debian manages its GPT partition and ext4 filesystem, mounted at `/srv/media` through a UUID-based `/etc/fstab` entry.
+I passed the installed disk through to VM 100 as SCSI1 using a persistent device identifier. Proxmox detects it as a 5.5 TiB device, while Debian manages its GPT partition and ext4 filesystem. I mounted it at `/srv/media` through a UUID-based `/etc/fstab` entry.
 
 Initial SMART overall status was `PASSED`. The initial attribute table showed no reallocated, pending, offline-uncorrectable, reported-uncorrectable, or UDMA CRC errors, and a reported temperature of 24°C. The extended SMART test was stopped by the host with 80% remaining. It is incomplete, not a passing test. See the [SMART baseline](../storage/seagate-smart-baseline.md).
 
-The disk's exact serial, persistent device path, and filesystem UUID are intentionally omitted. The second 6 TB disk has not yet been installed.
+I omit the disk's exact serial, persistent device path, and filesystem UUID from this public repository. I have reserved the second 6 TB disk but have not installed it.
 
 ## Networking
 
@@ -32,7 +32,7 @@ The disk's exact serial, persistent device path, and filesystem UUID are intenti
 | 1 | GeeekPi 12-port patch panel | 10-inch, 0.5U, CAT6 | Installed |
 | 8 | CAT6A patch cables | 0.5 ft | Installed |
 
-The M920q's onboard Ethernet link negotiates at 1 Gbps. The switch supports 2.5GbE, but the host's onboard NIC is Gigabit Ethernet. VLANs are not configured.
+My M920q's onboard Ethernet link negotiates at 1 Gbps. Although my switch supports 2.5GbE, the host's onboard NIC is Gigabit Ethernet. I have not configured VLANs.
 
 ## Rack and power
 
