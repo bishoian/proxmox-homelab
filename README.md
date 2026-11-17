@@ -97,8 +97,8 @@ The D4-320 connects directly to the Lenovo over USB, not through the Ethernet sw
 | [D4-320 Drive Not Detected](troubleshooting/d4-320-drive-not-detected.md) | Enclosure power-state diagnosis |
 | [Docker DNS and Reverse Proxy](troubleshooting/docker-dns-and-reverse-proxy.md) | Container DNS, Docker network, and NPM troubleshooting |
 
-## Documentation conventions
+## Privacy
 
-Secrets, private addresses, disk serials, filesystem UUIDs, and usable public hostnames are not published.
+I do not publish secrets, private addresses, disk serials, filesystem UUIDs, or usable public hostnames.
 
 No open-source license has been selected. Public visibility does not grant permission to reuse the repository's contents.
