@@ -20,7 +20,7 @@ The Debian system disk remains on the Proxmox NVMe. The Seagate data disk is pas
 
 ## Installation and guest validation
 
-Debian 13.7 was installed from the amd64 netinst ISO with no desktop environment, SSH server, and standard system utilities. GRUB was installed to the VM's virtual system disk. The installer ISO was detached after installation.
+I installed Debian 13.7 from the amd64 netinst ISO with no desktop environment, selecting the SSH server and standard system utilities. I installed GRUB to the VM's virtual system disk and detached the installer ISO after installation.
 
 Verified guest state:
 
@@ -42,9 +42,9 @@ The QEMU Guest Agent unit is static in Debian and does not need to be enabled wi
 
 ## Data disk passthrough
 
-The Seagate Exos disk is attached to VM 100 as SCSI1 using a persistent host-side `/dev/disk/by-id` path. The exact path and serial are omitted from this public record.
+I attached the Seagate Exos disk to VM 100 as SCSI1 using a persistent host-side `/dev/disk/by-id` path. I omit the exact path and serial from this public record.
 
-Inside Debian, the disk appears as a separate 5.5 TiB SCSI device. Before formatting, `lsblk -f` and `wipefs --no-act` found no existing filesystem or signatures.
+Inside Debian, I confirmed that the disk appeared as a separate 5.5 TiB SCSI device. Before formatting it, I used `lsblk -f` and `wipefs --no-act` to check for existing filesystems or signatures; none were found.
 
 The disk was then:
 
@@ -54,13 +54,13 @@ The disk was then:
 4. Verified read/write with `findmnt` and `df -hT`.
 5. Populated with the shared torrent, usenet, movie, TV, and music directory structure.
 
-The data tree is owned by UID/GID 1000 (`ian:ian`). Directories use mode `2775` with setgid inheritance. An Alpine container running as UID/GID 1000:1000 successfully created and deleted a test file through the bind mount.
+I set the data tree ownership to UID/GID 1000 (`ian:ian`) and directory permissions to `2775` with setgid inheritance. I verified the bind mount by running an Alpine container as UID/GID 1000:1000 and creating and deleting a test file.
 
 The mount source still needs to be checked after a VM reboot. Storage design and remaining tasks are in [Media Storage Design](../storage/storage-layout.md).
 
 ## Docker installation
 
-Docker Engine and the Compose plugin were installed from Docker's official Debian Trixie repository. The Docker service reported `active`, client/server versions matched, and Compose was available. The official `hello-world` container ran successfully.
+I installed Docker Engine and the Compose plugin from Docker's official Debian Trixie repository. I confirmed that the Docker service was `active`, client and server versions matched, Compose was available, and the official `hello-world` container ran successfully.
 
 The media Compose project is stored on the VM at `/opt/media-stack`. Application configuration and Jellyfin cache are on the VM's NVMe-backed system disk; media and downloads are on the passed-through Seagate disk.
 
@@ -84,8 +84,8 @@ See [Reverse Proxy](../services/reverse-proxy/README.md) and [Docker DNS and Rev
 
 ## Remaining VM tasks
 
-- [ ] Verify the Seagate mount source after a full Debian VM reboot.
-- [ ] Establish a Debian update and maintenance routine.
-- [ ] Deploy Mealie and Audiobookshelf and verify persistent storage.
-- [ ] Configure backups for VM configuration, application data, and important media.
-- [ ] Document routine service health checks and recovery.
+- [ ] I will reboot my Debian VM and verify the Seagate mount source.
+- [ ] I will establish a Debian update and maintenance routine.
+- [ ] I will deploy Mealie and Audiobookshelf and verify that their data persists.
+- [ ] I will configure backups for VM configuration, application data, and important media.
+- [ ] I will document my routine service health checks and recovery process.
