@@ -1,10 +1,10 @@
 # Reverse Proxy
 
-Nginx Proxy Manager (NPM) provides HTTPS access to selected services on the Debian media-services VM.
+I use Nginx Proxy Manager (NPM) to provide HTTPS access to selected services on my Debian media-services VM.
 
 ## Deployment
 
-NPM runs in a separate Compose project from `/opt/media-stack`.
+I run NPM in a separate Compose project from `/opt/media-stack`.
 
 | Host port | Purpose |
 |---:|---|
@@ -12,7 +12,7 @@ NPM runs in a separate Compose project from `/opt/media-stack`.
 | 81 | Administration interface, LAN only |
 | 443 | HTTPS |
 
-Do not forward port 81 or application-management interfaces from the router.
+I reserve port 81 and application-management interfaces for LAN access; I do not forward them from my router.
 
 ## Configured services
 
@@ -25,9 +25,9 @@ Public hostnames are intentionally masked. TLS terminates at NPM; upstream traff
 
 ## Docker network
 
-NPM initially returned 502 Bad Gateway because its container and Jellyfin were on separate Docker networks. Connecting NPM to `media-stack_default` restored access.
+I initially received 502 Bad Gateway responses because NPM and Jellyfin were attached to separate Docker networks. I restored access by connecting NPM to `media-stack_default`.
 
-The separate NPM Compose project was updated to retain its default network and also join the external media network:
+I updated NPM's separate Compose project to retain its default network and also join the external media network:
 
 ```yaml
 services:
@@ -42,13 +42,13 @@ networks:
     name: media-stack_default
 ```
 
-The existing ports, volumes, environment, and database configuration were retained. The Compose file passed `docker compose config --quiet`. After recreation, NPM was confirmed on both `media-stack_default` and `nginx-proxy-manager_default`.
+I retained the existing ports, volumes, environment, and database configuration. I validated the Compose file with `docker compose config --quiet`. After recreating NPM, I confirmed that it was attached to both `media-stack_default` and `nginx-proxy-manager_default`.
 
-The separate NPM Compose file is maintained locally on the VM and is not included in this repository.
+I maintain the separate NPM Compose file locally on the VM and do not include it in this repository.
 
 ## NPM DNS
 
-NPM initially could not resolve the Let's Encrypt API from inside its container, although the Debian host could. Explicit upstream resolvers (`1.1.1.1` and `8.8.8.8`) were added to the NPM service. DNS resolution then succeeded. A later ACME challenge failure was traced to a mistyped value and corrected.
+NPM initially could not resolve the Let's Encrypt API from inside its container, although my Debian host could. I added explicit upstream resolvers (`1.1.1.1` and `8.8.8.8`) to the NPM service, which restored DNS resolution. I traced a later ACME challenge failure to a mistyped value and corrected it.
 
 See [Docker DNS and reverse-proxy troubleshooting](../../troubleshooting/docker-dns-and-reverse-proxy.md) for the diagnostic sequence.
 
@@ -60,6 +60,6 @@ See [Docker DNS and reverse-proxy troubleshooting](../../troubleshooting/docker-
 - [x] NPM shares the media Docker network.
 - [x] Network attachment persists after NPM container recreation.
 - [x] NPM resolves the Let's Encrypt API.
-- [ ] Verify network attachment after a full Debian VM reboot.
-- [ ] Select and test a Dynamic DNS updater.
-- [ ] Review router port-forwarding rules and document the public exposure boundary.
+- [ ] I will reboot my Debian VM and verify that NPM remains attached to both Docker networks.
+- [ ] I will select and test a Dynamic DNS updater.
+- [ ] I will review my router's port-forwarding rules and document which services I expose publicly.
