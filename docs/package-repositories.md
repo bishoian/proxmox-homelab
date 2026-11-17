@@ -29,7 +29,7 @@ The Proxmox VE and Ceph no-subscription channels display a warning that they are
 
 The Ceph repository is configured for future package availability and learning. Ceph itself is not installed as a cluster and is not part of the current single-node storage design.
 
-## Next steps
+## Validation record
 
 - [x] Refresh package lists from **Node → Updates → Refresh**.
 - [x] Confirm Debian, Proxmox VE no-subscription, and Ceph Tentacle no-subscription sources were reached and package lists were read successfully.
