@@ -4,17 +4,26 @@ A concise record of the homelab's major build and documentation milestones.
 
 ## 2026-11-16
 
+### Media-stack end-to-end verification and public endpoint privacy
+- Verified Radarr and Sonarr are both working and correctly importing/sorting media with the expected metadata.
+- Verified Seerr end to end, including its external request endpoint through Nginx Proxy Manager.
+- Confirmed Jellyfin automatically refreshes its library and successfully played a newly downloaded movie from a client.
+- Updated the project checklist and service documentation to reflect these completed validations; hardlink/inode verification remains a separate item.
+- Replaced public endpoint hostnames throughout the current documentation with masked forms: `m*******.com` and `requests.m*******.com`. No usable external server URL is published in the current documentation.
+
+## 2026-11-16
+
 ### Seerr request portal
 - Added Seerr to the media-stack Compose project using its persistent configuration directory and LAN port 5055.
 - Started the Seerr container successfully; `docker compose ps seerr` reported it running and healthy.
 - Completed local setup, selected the Jellyfin Movies and Shows libraries, and configured the Radarr and Sonarr servers.
-- Local Seerr access is working. The intended public endpoint is `requests.moxxboxx.com`; final certificate and external-client verification remain pending.
+- Seerr's local setup was completed at this stage; subsequent external endpoint verification is recorded in the later media-stack validation entry.
 
 ### Nginx Proxy Manager DNS troubleshooting
 - Compared Debian host DNS with DNS inside the NPM container. The host resolved `acme-v02.api.letsencrypt.org`, while the container initially failed through Docker's embedded resolver.
 - Added explicit Cloudflare and Google DNS resolvers to the NPM app service in its separate local Compose project.
 - Recreated NPM and confirmed the DNS-resolution failure cleared; the ACME request advanced to challenge validation.
-- The later challenge error was traced by the user to a mistyped value. The final Seerr HTTPS endpoint still needs external verification.
+- The later challenge error was traced by the user to a mistyped value; Seerr's external endpoint was subsequently verified.
 
 ### Mealie and Audiobookshelf service definitions
 - Added Mealie and Audiobookshelf to the version-controlled media-stack Compose file.
@@ -24,8 +33,8 @@ A concise record of the homelab's major build and documentation milestones.
 
 ### Media import and library observations
 - Filesystem inspection found a movie file in the configured media library root.
-- Downloaded TV season folders were still in the torrent area and the TV library root was empty; Sonarr import behavior remains to be corrected.
-- Jellyfin real-time monitoring was enabled for Movies and Shows, but the observed library update still required a manual scan. Automatic refresh and playback remain open validation items.
+- At this point, downloaded TV season folders were still in the torrent area and the TV library root was empty. Sonarr's import/sorting behavior was subsequently corrected and verified.
+- Jellyfin real-time monitoring was enabled for Movies and Shows. Automatic library refresh and playback were subsequently verified successfully.
 
 ### qBittorrent VPN isolation
 - Deployed Gluetun as the ExpressVPN OpenVPN gateway for qBittorrent.
@@ -38,7 +47,7 @@ A concise record of the homelab's major build and documentation milestones.
 - Tested the firewall kill switch by bringing `tun0` down. A DNS-based egress request failed, and a direct-IP HTTPS request to `1.1.1.1` returned HTTP 000 and timed out.
 - Recreated Gluetun and qBittorrent after the test; Gluetun returned healthy, qBittorrent returned running, and VPN egress was restored.
 - Rebooted the Debian VM and verified Gluetun returned healthy, qBittorrent retained `tun0`, VPN egress was restored, and Radarr/Sonarr both returned HTTP 200 from the qBittorrent Web UI.
-- The download/import workflow is only partially validated: one movie appeared in the library root, while TV season folders remained in the torrent area. Sonarr TV imports and hardlink behavior remain to be verified.
+- The initial download/import workflow was only partially validated at this point. Radarr and Sonarr sorting/imports and metadata were subsequently verified; hardlink/inode behavior remains a separate unverified item.
 
 ## 2026-11-16
 
@@ -228,22 +237,22 @@ A concise record of the homelab's major build and documentation milestones.
 ### Media application first-run configuration
 - Completed initial setup of Jellyfin and qBittorrent through their web interfaces.
 - Replaced qBittorrent's temporary first-start administrator password; no credentials are stored in the repository.
-- Completed initial setup of Radarr and Sonarr, configured their library root folders and qBittorrent download-client categories, and connected Prowlarr to Radarr and Sonarr. End-to-end synchronization, download/import behavior, hardlinks, and playback remain to be verified.
+- Completed initial setup of Radarr and Sonarr, configured their library root folders and qBittorrent download-client categories, and connected Prowlarr to Radarr and Sonarr. End-to-end synchronization, download/import behavior, hardlinks, and playback were not yet verified at this stage; subsequent validation is recorded above.
 
 ### Radarr, Sonarr, and Prowlarr configuration
 - Completed first-run setup of Radarr and Sonarr and configured their movie/TV root folders.
 - Configured qBittorrent as the download client in Radarr and Sonarr with separate `radarr` and `sonarr` categories.
 - Added Radarr and Sonarr as applications in Prowlarr using their application API keys.
-- Initial setup is now complete across Jellyfin, qBittorrent, Radarr, Sonarr, and Prowlarr. End-to-end synchronization, download/import behavior, hardlinks, Jellyfin library scans, and playback remain to be verified.
+- Initial setup is now complete across Jellyfin, qBittorrent, Radarr, Sonarr, and Prowlarr. Subsequent validation confirmed correct Radarr/Sonarr sorting and metadata, plus Jellyfin automatic refresh and playback; hardlink/inode behavior remains unverified.
 
 ### Reverse proxy and custom domain
 - Deployed Nginx Proxy Manager as a separate Docker Compose project on the Debian media-services VM.
-- Configured `moxxboxx.com` to proxy to Jellyfin at `jellyfin:8096`.
-- Successfully issued a Let's Encrypt certificate and verified Jellyfin loads through HTTPS at `https://moxxboxx.com`.
+- Configured `m*******.com` to proxy to Jellyfin at `jellyfin:8096`.
+- Successfully issued a Let's Encrypt certificate and verified Jellyfin loads through HTTPS at `https://m*******.com`.
 - Diagnosed the initial 502 Bad Gateway: NPM and Jellyfin were on separate Docker networks. Connected the NPM container to `media-stack_default`, restoring access.
 - Updated NPM's Compose file at `/home/ian/nginx-proxy-manager/docker-compose.yml` to declare `media-stack_default` as an external network while retaining NPM's default network and persistent configuration/certificate volumes.
 - Validated the Compose configuration with `docker compose config --quiet` and recreated the NPM container.
-- Verified the recreated container remained attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://moxxboxx.com` returned `HTTP/2 302` from OpenResty.
+- Verified the recreated container remained attached to both `media-stack_default` and `nginx-proxy-manager_default`; `curl -I https://m*******.com` returned `HTTP/2 302` from OpenResty.
 
 ### Planned network services
 - Added Dynamic DNS to the roadmap so the domain can follow changes to the home public IP address.
