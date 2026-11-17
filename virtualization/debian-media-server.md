@@ -46,13 +46,7 @@ I attached the Seagate Exos disk to VM 100 as SCSI1 using a persistent host-side
 
 Inside Debian, I confirmed that the disk appeared as a separate 5.5 TiB SCSI device. Before formatting it, I used `lsblk -f` and `wipefs --no-act` to check for existing filesystems or signatures; none were found.
 
-The disk was then:
-
-1. Partitioned with GPT using one full-capacity partition (`/dev/sdb1`).
-2. Formatted as ext4 and labeled `media`.
-3. Added to `/etc/fstab` by filesystem UUID, mounted at `/srv/media`, and tested with `mount -a`.
-4. Verified read/write with `findmnt` and `df -hT`.
-5. Populated with the shared torrent, usenet, movie, TV, and music directory structure.
+I then partitioned the disk with GPT using one full-capacity partition (`/dev/sdb1`), formatted it as ext4 with the label `media`, and added a UUID-based entry to `/etc/fstab`. I mounted it at `/srv/media`, tested the mount with `mount -a`, and confirmed read/write access with `findmnt` and `df -hT`. I created the shared torrent, usenet, movie, TV, and music directory structure.
 
 I set the data tree ownership to UID/GID 1000 (`ian:ian`) and directory permissions to `2775` with setgid inheritance. I verified the bind mount by running an Alpine container as UID/GID 1000:1000 and creating and deleting a test file.
 
