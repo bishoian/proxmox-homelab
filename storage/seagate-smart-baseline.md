@@ -72,11 +72,11 @@ I plan to run a completed extended SMART self-test during a later maintenance wi
 
 ## Follow-up
 
-- [x] Capture the initial SMART attribute table.
-- [x] Start the extended SMART self-test.
-- [x] Stop the test early and record the Aborted by host result.
-- [ ] Consider a completed extended SMART self-test during a later maintenance window.
-- [ ] Recheck key SMART attributes during routine maintenance.
-- [ ] Monitor temperature and error counters during initial use.
+- [x] I captured the initial SMART attribute table.
+- [x] I started the extended SMART self-test.
+- [x] I stopped the test early and recorded the Aborted by host result.
+- [ ] I will run a completed extended SMART self-test during a later maintenance window.
+- [ ] I will recheck key SMART attributes during routine maintenance.
+- [ ] I will monitor temperature and error counters during initial use.
 
-No partitioning, formatting, filesystem creation, or Proxmox storage-pool configuration has been performed during this inspection.
+I did not partition, format, create a filesystem, or configure a Proxmox storage pool during this SMART inspection.
