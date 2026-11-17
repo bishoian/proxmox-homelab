@@ -11,56 +11,56 @@ I use this checklist to separate work I have verified from work I still intend t
 
 ## 1. Proxmox host
 
-- [x] Install Proxmox VE on the Lenovo's internal NVMe.
-- [x] Enable VT-x and VT-d in BIOS.
-- [x] Verify the `pve` node and web interface.
-- [x] Confirm CPU, memory, NVMe layout, and 1 Gbps Ethernet link.
-- [x] Configure Proxmox VE and Ceph no-subscription repositories.
-- [x] Refresh package lists and apply available upgrades.
-- [x] Reboot and verify kernel `7.0.14-29-pve` and `pve-manager 9.2.27`.
+- [x] I installed Proxmox VE on the Lenovo's internal NVMe.
+- [x] I enabled VT-x and VT-d in BIOS.
+- [x] I verified the `pve` node and web interface.
+- [x] I confirmed the CPU, memory, NVMe layout, and 1 Gbps Ethernet link.
+- [x] I configured the Proxmox VE and Ceph no-subscription repositories.
+- [x] I refreshed package lists and applied available upgrades.
+- [x] I rebooted and verified kernel `7.0.14-29-pve` and `pve-manager 9.2.27`.
 - [ ] I will record the BIOS/UEFI version and RAM module layout.
 - [ ] I will document my host recovery and console-access process.
 
 ## 2. Storage
 
-- [x] Connect the TerraMaster D4-320 and detect the installed Seagate Exos disk.
-- [x] Review initial SMART attributes and record the overall `PASSED` status.
-- [x] Record the extended SMART test as aborted at 80% remaining. This is incomplete, not a pass.
-- [x] Identify the disk by a persistent host-side `/dev/disk/by-id` path.
-- [x] Pass the disk through to Debian VM 100 as SCSI1.
-- [x] Inspect the disk with `lsblk -f` and `wipefs --no-act` before formatting.
-- [x] Create a GPT partition and ext4 filesystem labeled `media`.
-- [x] Configure a UUID-based `/etc/fstab` mount at `/srv/media`.
-- [x] Verify the mount with `mount -a`, `findmnt`, and `df -hT`.
-- [x] Create the media/download directory structure and configure UID/GID 1000 permissions.
-- [x] Verify non-root container write access with an Alpine test container.
+- [x] I connected the TerraMaster D4-320 and confirmed that Proxmox detected the installed Seagate Exos disk.
+- [x] I reviewed the initial SMART attributes and recorded the overall `PASSED` status.
+- [x] I recorded the extended SMART test as aborted at 80% remaining. This is incomplete, not a pass.
+- [x] I identified the disk by a persistent host-side `/dev/disk/by-id` path.
+- [x] I passed the disk through to Debian VM 100 as SCSI1.
+- [x] I inspected the disk with `lsblk -f` and `wipefs --no-act` before formatting.
+- [x] I created a GPT partition and ext4 filesystem labeled `media`.
+- [x] I configured a UUID-based `/etc/fstab` mount at `/srv/media`.
+- [x] I verified the mount with `mount -a`, `findmnt`, and `df -hT`.
+- [x] I created the media/download directory structure and configured UID/GID 1000 permissions.
+- [x] I verified non-root container write access with an Alpine test container.
 - [ ] I will reboot the Debian VM and confirm that the expected device remains mounted at `/srv/media`.
 - [ ] I will run and record a complete extended SMART self-test during a maintenance window.
 - [ ] I will establish independent backups and perform a restore test.
 
 ## 3. Debian VM and Docker
 
-- [x] Create VM 100 with four vCPUs, 4 GiB RAM, a 64 GiB NVMe-backed system disk, VirtIO networking, and QEMU Guest Agent.
-- [x] Install Debian 13.7 and verify first boot.
-- [x] Verify SSH, DNS, package repository access, and sudo.
-- [x] Verify remote SSH login from Windows PowerShell.
-- [x] Verify QEMU Guest Agent communication from Proxmox.
-- [x] Install Docker Engine and Compose.
-- [x] Validate Docker with the official `hello-world` container.
-- [x] Create and validate the version-controlled media-stack Compose project.
+- [x] I created VM 100 with four vCPUs, 4 GiB RAM, a 64 GiB NVMe-backed system disk, VirtIO networking, and QEMU Guest Agent.
+- [x] I installed Debian 13.7 and verified its first boot.
+- [x] I verified SSH, DNS, package repository access, and sudo.
+- [x] I verified remote SSH login from Windows PowerShell.
+- [x] I verified QEMU Guest Agent communication from Proxmox.
+- [x] I installed Docker Engine and Compose.
+- [x] I validated Docker by running the official `hello-world` container.
+- [x] I created and validated the version-controlled media-stack Compose project.
 - [ ] I will define a routine for Debian updates and maintenance.
 
 ## 4. Media applications
 
-- [x] Deploy Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, and Gluetun.
-- [x] Configure Radarr and Sonarr library roots and qBittorrent download categories.
-- [x] Connect Prowlarr to Radarr and Sonarr; both application tests passed.
-- [x] Verify Radarr and Sonarr import and sort media with the expected metadata.
-- [x] Deploy and configure Seerr with Jellyfin, Radarr, and Sonarr.
-- [x] Verify Seerr's external HTTPS request portal.
-- [x] Enable Jellyfin real-time monitoring for Movies and Shows.
-- [x] Verify automatic Jellyfin library refresh without a manual scan.
-- [x] Verify Jellyfin playback using a newly downloaded movie.
+- [x] I deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, and Gluetun.
+- [x] I configured Radarr and Sonarr library roots and qBittorrent download categories.
+- [x] I connected Prowlarr to Radarr and Sonarr and confirmed that both application tests passed.
+- [x] I verified that Radarr and Sonarr import and sort media with the expected metadata.
+- [x] I deployed Seerr and connected it to Jellyfin, Radarr, and Sonarr.
+- [x] I verified Seerr's external HTTPS request portal.
+- [x] I enabled Jellyfin real-time monitoring for Movies and Shows.
+- [x] I verified automatic Jellyfin library refresh without a manual scan.
+- [x] I verified Jellyfin playback using a newly downloaded movie.
 - [ ] I will compare inode numbers between a downloaded file and its library copy to verify whether hardlinks are being used.
 - [ ] I will deploy Mealie and Audiobookshelf, then verify that their data persists across container recreation.
 - [ ] I will document how I check service health, apply updates, and recover services.
@@ -68,12 +68,12 @@ I use this checklist to separate work I have verified from work I still intend t
 
 ## 5. Reverse proxy and DNS
 
-- [x] Deploy Nginx Proxy Manager in a separate Compose project.
-- [x] Configure and verify Jellyfin HTTPS access.
-- [x] Configure and verify Seerr's external HTTPS request endpoint.
-- [x] Connect NPM to `media-stack_default` and make the attachment persistent in its Compose project.
-- [x] Verify NPM remains attached to both Docker networks after container recreation.
-- [x] Correct NPM container DNS resolution for the Let's Encrypt API.
+- [x] I deployed Nginx Proxy Manager in a separate Compose project.
+- [x] I configured and verified Jellyfin HTTPS access.
+- [x] I configured and verified Seerr's external HTTPS request endpoint.
+- [x] I connected NPM to `media-stack_default` and made the attachment persistent in its Compose project.
+- [x] I verified that NPM remains attached to both Docker networks after container recreation.
+- [x] I corrected NPM container DNS resolution for the Let's Encrypt API.
 - [ ] I will reboot the Debian VM and confirm that NPM reconnects to both Docker networks.
 - [ ] I will choose a Dynamic DNS provider and test that its updater follows changes to my WAN address.
 - [ ] I plan to deploy Pi-hole for LAN DNS filtering and local records.
@@ -83,14 +83,14 @@ Public hostnames are masked throughout this repository.
 
 ## 6. VPN isolation
 
-- [x] Configure Gluetun with ExpressVPN OpenVPN.
-- [x] Route qBittorrent through Gluetun's network namespace.
-- [x] Bind qBittorrent to `tun0`.
-- [x] Verify Radarr and Sonarr reach qBittorrent through `gluetun:8080`.
-- [x] Verify qBittorrent's public IP matches Gluetun's VPN egress.
-- [x] Bring `tun0` down and verify a direct-IP HTTPS request is blocked.
-- [x] Recreate the services and verify VPN recovery.
-- [x] Reboot the Debian VM and verify Gluetun, qBittorrent, and application connectivity recover.
+- [x] I configured Gluetun with ExpressVPN OpenVPN.
+- [x] I routed qBittorrent through Gluetun's network namespace.
+- [x] I bound qBittorrent to `tun0`.
+- [x] I verified that Radarr and Sonarr reach qBittorrent through `gluetun:8080`.
+- [x] I verified that qBittorrent's public IP matches Gluetun's VPN egress.
+- [x] I brought `tun0` down and verified that a direct-IP HTTPS request was blocked.
+- [x] I recreated the services and verified VPN recovery.
+- [x] I rebooted the Debian VM and verified that Gluetun, qBittorrent, and application connectivity recovered.
 - [ ] I will repeat the VPN outage test after future Gluetun or qBittorrent image updates.
 
 ## 7. Networking and future lab work
