@@ -6,26 +6,26 @@
 
 ## Symptom
 
-The D4-320 was connected over USB, but the installed Seagate drive did not appear under **Node → Disks** in Proxmox.
+I connected the D4-320 over USB, but the installed Seagate drive did not appear under **Node → Disks** in Proxmox.
 
 ## Diagnosis
 
-The enclosure's rear power switch was off. The USB cable was connected, but the DAS itself was not powered on.
+I found that the enclosure's rear power switch was off. The USB cable was connected, but the DAS itself had no power.
 
 ## Resolution
 
-1. Switched on the D4-320 using its rear power switch.
-2. Refreshed the Proxmox disk inventory.
+1. I switched on the D4-320 using its rear power switch.
+2. I refreshed the Proxmox disk inventory.
 
 ## Verification
 
-Proxmox detected the installed Seagate Exos ST6000NM0115 as a 6 TB disk (approximately 5.5 TiB). Its initial SMART overall status reported `PASSED`.
+Proxmox then detected my Seagate Exos ST6000NM0115 as a 6 TB disk (approximately 5.5 TiB). Its initial SMART overall status reported `PASSED`.
 
 The disk was later passed through to Debian VM 100, partitioned, formatted as ext4, and mounted at `/srv/media`. Detailed health observations and the incomplete extended test are recorded in the [SMART baseline](../storage/seagate-smart-baseline.md).
 
 ## Takeaway
 
-When a USB enclosure is connected but its disk is missing, check the enclosure's own power state before investigating drivers, cables, or disk compatibility.
+This issue reminded me to check the enclosure's own power state before spending time investigating drivers, cables, or disk compatibility.
 
 ## Related follow-up
 
