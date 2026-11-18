@@ -16,7 +16,7 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 - **Networking:** RealHD 8-port 2.5GbE managed switch; the M920q's onboard Ethernet currently negotiates at 1 Gbps.
 - **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, Seerr, Samba, Mealie, and Audiobookshelf are deployed. Mealie is healthy, and both household applications respond over the shared Docker network.
 - **File sharing:** Samba provides an authenticated SMB share from `/srv/shared` to Windows devices on my LAN.
-- **Remote access:** Nginx Proxy Manager provides verified HTTPS access to Jellyfin and Seerr. Public hostnames are intentionally masked in this repository.
+- **Remote access:** Nginx Proxy Manager provides verified HTTPS access to Jellyfin, Seerr, Mealie, and Audiobookshelf. Public hostnames are intentionally masked in this repository.
 
 ## What I have completed
 
@@ -33,12 +33,12 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 - I diagnosed and corrected Docker DNS failures affecting the media applications and Nginx Proxy Manager.
 - I corrected NPM's Docker network connectivity and made its media-network attachment persistent.
 - I deployed Mealie and Audiobookshelf in the media-stack Compose project. I verified Mealie's healthy status and received HTTP 200 responses from both services over `media-stack_default`.
-- I confirmed that the existing Jellyfin and Seerr HTTPS routes continue to work. Mealie and Audiobookshelf do not yet have NPM proxy hosts or verified external HTTPS access.
+- I configured NPM proxy hosts and renewed/verified HTTPS certificates for Mealie and Audiobookshelf. I confirmed both HTTPS routes work and completed each application's administrator and first-run setup.
 
 ## What I plan to do next
 
 - I plan to verify shared-storage and Samba recovery after a full Debian VM reboot, and test access from my girlfriend's PC when she moves in.
-- I plan to configure NPM HTTPS proxy hosts for Mealie and Audiobookshelf, complete first-run setup, and create separate household accounts.
+- I plan to verify recipe import, audiobook and podcast library scanning, playback, and application-data persistence after container recreation.
 - I plan to verify hardlink behavior between download and library paths.
 - I will confirm both Seagate mount sources after a VM reboot.
 - I plan to complete an extended SMART test. I stopped the first test at 20%, so I have recorded it as incomplete rather than passed.
