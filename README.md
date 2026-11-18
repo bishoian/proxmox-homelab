@@ -14,7 +14,7 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 - **Media VM:** VM 100, Debian 13.7, four vCPUs, 4 GiB RAM, 64 GiB system disk on NVMe-backed `local-lvm`.
 - **Bulk storage:** Two 6 TB Seagate Exos disks in the TerraMaster D4-320, passed through separately to Debian. I use one for media at `/srv/media` and the second for shared storage at `/srv/shared`.
 - **Networking:** RealHD 8-port 2.5GbE managed switch; the M920q's onboard Ethernet currently negotiates at 1 Gbps.
-- **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, Seerr, and Samba are deployed. Mealie and Audiobookshelf are defined in Compose but not yet deployed.
+- **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, Seerr, and Samba are deployed. Mealie and Audiobookshelf are prepared in Compose with explicit DNS and reverse-proxy-only access, but are not yet deployed.
 - **File sharing:** Samba provides an authenticated SMB share from `/srv/shared` to Windows devices on my LAN.
 - **Remote access:** Nginx Proxy Manager provides verified HTTPS access to Jellyfin and Seerr. Public hostnames are intentionally masked in this repository.
 
@@ -36,7 +36,7 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 ## What I plan to do next
 
 - I plan to verify shared-storage and Samba recovery after a full Debian VM reboot, and test access from my girlfriend's PC when she moves in.
-- I plan to deploy and configure Mealie and Audiobookshelf.
+- I plan to deploy Mealie and Audiobookshelf, configure their NPM HTTPS routes, and create separate accounts for remote household access.
 - I plan to verify hardlink behavior between download and library paths.
 - I will confirm the Seagate mount source after a VM reboot.
 - I plan to complete an extended SMART test. I stopped the first test at 20%, so I have recorded it as incomplete rather than passed.
