@@ -5,7 +5,7 @@
 
 I have Proxmox VE and my Debian media-services VM running. I verified that Radarr and Sonarr import and sort media with the expected metadata, that Jellyfin automatically refreshes its library and plays new media, and that Seerr's external HTTPS request portal works. I also tested the Gluetun/qBittorrent VPN path for fail-closed behavior and confirmed that it recovered after a full VM reboot. I installed the second 6 TB disk as independent shared storage, deployed Samba, and connected my Windows PC to the authenticated SMB share.
 
-I deployed Mealie and Audiobookshelf from the media-stack Compose project. Mealie reports healthy, and I received HTTP 200 responses from both services over `media-stack_default`. I also confirmed that my existing Jellyfin and Seerr HTTPS routes continue to work. I have not yet created NPM proxy hosts or verified external HTTPS access for Mealie and Audiobookshelf, and first-run application setup remains outstanding. My remaining work includes verifying both storage mounts after a VM reboot, testing the shared folder from my girlfriend's PC after she moves in, verifying hardlinks, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
+I deployed Mealie and Audiobookshelf from the media-stack Compose project. Mealie reports healthy, and both services returned HTTP 200 over `media-stack_default`. I configured their NPM proxy hosts, updated and verified their HTTPS certificates, and confirmed that both HTTPS routes work. I also completed the administrator and first-run setup steps for both applications. I still need to verify recipe import, audiobook and podcast library scanning, playback, and data persistence after container recreation. My remaining work includes verifying both storage mounts after a VM reboot, testing the shared folder from my girlfriend's PC after she moves in, verifying hardlinks, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
 
 I use this checklist to separate work I have verified from work I still intend to complete. The evidence log records key milestones and the results I observed.
 
@@ -77,7 +77,8 @@ I use this checklist to separate work I have verified from work I still intend t
 - [x] I verified Jellyfin playback using a newly downloaded movie.
 - [ ] I will compare inode numbers between a downloaded file and its library copy to verify whether hardlinks are being used.
 - [x] I deployed Mealie and Audiobookshelf from the media-stack Compose project. Mealie reports healthy, and both services returned HTTP 200 over `media-stack_default`.
-- [ ] I will complete first-run setup, configure the Mealie household and Audiobookshelf libraries/users, then verify recipe import, library scanning, playback, and data persistence across container recreation.
+- [x] I completed administrator and first-run setup for Mealie and Audiobookshelf.
+- [ ] I will verify recipe import, audiobook and podcast library scanning, playback, and data persistence after container recreation.
 - [ ] I will document how I check service health, apply updates, and recover services.
 - [ ] I will configure backups for application configuration and metadata, then test a restore.
 
@@ -89,8 +90,8 @@ I use this checklist to separate work I have verified from work I still intend t
 - [x] I connected NPM to `media-stack_default` and made the attachment persistent in its Compose project.
 - [x] I verified that NPM remains attached to both Docker networks after container recreation.
 - [x] I corrected NPM container DNS resolution for the Let's Encrypt API.
-- [ ] I will configure NPM proxy hosts for Mealie and Audiobookshelf, enabling WebSocket Support for Audiobookshelf.
-- [ ] I will verify both household apps over HTTPS from outside my LAN.
+- [x] I configured NPM proxy hosts and updated/verified HTTPS certificates for Mealie and Audiobookshelf.
+- [x] I verified that both household applications work through their HTTPS routes.
 - [ ] I will reboot the Debian VM and confirm that NPM reconnects to both Docker networks.
 - [ ] I will choose a Dynamic DNS provider and test that its updater follows changes to my WAN address.
 - [ ] I plan to deploy Pi-hole for LAN DNS filtering and local records.
@@ -134,7 +135,7 @@ Public hostnames are masked throughout this repository.
 | 2026-11-16 | Docker DNS corrections | Explicit resolvers restored lookups for Radarr, Sonarr, Prowlarr, and NPM |
 | 2026-11-16 | VPN kill-switch and reboot test | Direct-IP egress was blocked with `tun0` down; Gluetun and qBittorrent recovered after recreation and VM reboot |
 | 2026-11-17 | Shared storage and Samba | Installed and passed through second disk; created ext4 `/srv/shared`; deployed authenticated LAN-only SMB share; verified both local SMB accounts and Windows access from my PC |
-| 2026-11-17 | Mealie and Audiobookshelf | Deployed both services; Mealie reported healthy and both returned HTTP 200 over `media-stack_default`; first-run setup and NPM routes remain pending |
+| 2026-11-17 | Mealie and Audiobookshelf | Deployed both services; completed administrator and first-run setup; configured NPM proxy hosts and verified HTTPS certificates and routes; functional library/import/playback and persistence tests remain |
 | 2026-11-15 | Proxmox installation and update | Installed Proxmox VE 9.2.2, applied updates, rebooted, and verified kernel `7.0.14-29-pve` |
 | 2026-11-15 | Debian VM commissioning | Installed Debian 13.7; verified SSH, DNS, APT, sudo, and QEMU Guest Agent |
 | 2026-11-15 | Seagate storage commissioning | Passed through the disk, created GPT/ext4, mounted at `/srv/media`, and validated container write permissions |
