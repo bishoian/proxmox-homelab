@@ -31,7 +31,7 @@ I connect the D4-320 directly to the Lenovo over USB, so I treat it as direct-at
 
 ## Public service path
 
-I run Nginx Proxy Manager (NPM) in a separate Compose project on my Debian VM, publishing ports 80, 81, and 443. I have verified HTTPS access to Jellyfin and Seerr through NPM. I mask public hostnames in this repository.
+I run Nginx Proxy Manager (NPM) in a separate Compose project on my Debian VM, publishing ports 80, 81, and 443. I have verified HTTPS access to Jellyfin, Seerr, Mealie, and Audiobookshelf through NPM. I mask public hostnames in this repository.
 
 I connected NPM to the `media-stack_default` Docker network while retaining its own default network. I reserve port 81 for LAN administration and do not forward it from the internet.
 
