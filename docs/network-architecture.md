@@ -39,7 +39,7 @@ See [Reverse Proxy](../services/reverse-proxy/README.md) for the current configu
 
 ## Remote household applications
 
-I plan to provide remote HTTPS access to Mealie and Audiobookshelf through Nginx Proxy Manager. I will use separate subdomains, with the public names masked in this repository, and route both services over the existing `media-stack_default` Docker network.
+I deployed Mealie and Audiobookshelf and verified that both respond over the existing `media-stack_default` Docker network. I plan to provide remote HTTPS access through Nginx Proxy Manager using separate subdomains, with the public names masked in this repository.
 
 - Mealie upstream: `http://mealie:9000`. I will set its `BASE_URL` to its final HTTPS hostname and keep open registration disabled.
 - Audiobookshelf upstream: `http://audiobookshelf:80`. I will enable WebSocket Support in NPM for its proxy host.
@@ -47,7 +47,7 @@ I plan to provide remote HTTPS access to Mealie and Audiobookshelf through Nginx
 - DNS: each public subdomain must resolve to my home WAN address. Dynamic DNS is not configured yet, so I must keep the records updated if the address changes.
 - Security: I will use each application's own accounts, create a separate account for my girlfriend, and keep admin interfaces private. I will not expose SMB, NPM administration, or media-management ports to the internet.
 
-I removed direct host-port publications for Mealie and Audiobookshelf in Compose. NPM will be their intended access path. Deployment, certificate issuance, and testing from an external network remain outstanding.
+I removed direct host-port publications for Mealie and Audiobookshelf in Compose. NPM will be their intended access path. Their NPM proxy hosts, certificate issuance, and external-network testing remain outstanding.
 
 ## LAN file sharing
 
@@ -90,7 +90,7 @@ My VLAN design depends on my router or firewall supporting VLAN interfaces, inte
 
 ## Remaining network tasks
 
-- [ ] I will verify SMB access and automatic reconnection after a Debian VM reboot.
+- [ ] I will verify both storage mounts, SMB access, and automatic reconnection after a Debian VM reboot.
 - [ ] I will test the shared folder from my girlfriend's PC after she moves in.
 - [ ] I will trace the router-to-switch uplink and rack patching.
 - [ ] I will identify the switch model, hardware revision, firmware, and management interface.
