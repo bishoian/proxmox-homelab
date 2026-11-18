@@ -72,6 +72,8 @@ This verifies network-level fail-closed behavior, not automatic job-pausing beha
 
 Seerr is deployed and connected to the Jellyfin Movies and Shows libraries and the Radarr/Sonarr servers. Its external HTTPS request portal has been verified.
 
+I also deployed Mealie and Audiobookshelf in the media-stack Compose project. Mealie reports healthy, and both services returned HTTP 200 when tested over `media-stack_default`. Their first-run setup and NPM HTTPS proxy hosts remain outstanding.
+
 Nginx Proxy Manager runs in a separate Compose project and publishes ports 80, 81, and 443. The NPM administration interface on port 81 is intended for LAN access only. NPM shares the media stack's Docker network so it can reach Jellyfin and Seerr by service name. Both external HTTPS routes are verified; public hostnames are masked in this repository.
 
 See [Reverse Proxy](../services/reverse-proxy/README.md) and [Docker DNS and Reverse Proxy Troubleshooting](../troubleshooting/docker-dns-and-reverse-proxy.md).
@@ -80,6 +82,8 @@ See [Reverse Proxy](../services/reverse-proxy/README.md) and [Docker DNS and Rev
 
 - [ ] I will reboot my Debian VM and verify the Seagate mount source.
 - [ ] I will establish a Debian update and maintenance routine.
-- [ ] I will deploy Mealie and Audiobookshelf and verify that their data persists.
+- [x] I deployed Mealie and Audiobookshelf and verified their HTTP responses over the shared Docker network.
+- [ ] I will complete first-run setup and verify that their data persists after container recreation.
+- [ ] I will configure their NPM HTTPS proxy hosts and test external access.
 - [ ] I will configure backups for VM configuration, application data, and important media.
 - [ ] I will document my routine service health checks and recovery process.
