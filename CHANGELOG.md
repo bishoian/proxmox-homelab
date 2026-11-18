@@ -11,6 +11,14 @@ I use this changelog to record significant milestones in my homelab build. My cu
 - I deployed Samba in the media-stack Compose project with separate authenticated accounts and LAN-only SMB access.
 - I verified local SMB read/write operations for both accounts and connected my Windows PC to the share. My girlfriend's separate-PC test remains pending until she moves in.
 
+## 2026-11-17
+
+### Household services prepared for remote access
+- I retained the explicit Docker DNS resolvers for Mealie and Audiobookshelf.
+- I removed their direct host-port publications so Nginx Proxy Manager is their intended access path.
+- I configured Audiobookshelf's library mounts as read-only and documented its required WebSocket proxy setting.
+- I documented separate HTTPS hostnames, account setup, and external-network verification. The services and proxy hosts have not yet been deployed or tested remotely.
+
 ## 2026-11-16
 
 ### Media stack verification
