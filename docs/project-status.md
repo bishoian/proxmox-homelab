@@ -1,11 +1,11 @@
 # Project Status
 
 **Owner:** Ian Bishop  
-**Last updated:** 2026-11-16
+**Last updated:** 2026-11-17
 
-I have Proxmox VE and my Debian media-services VM running. I verified that Radarr and Sonarr import and sort media with the expected metadata, that Jellyfin automatically refreshes its library and plays new media, and that Seerr's external HTTPS request portal works. I also tested the Gluetun/qBittorrent VPN path for fail-closed behavior and confirmed that it recovered after a full VM reboot.
+I have Proxmox VE and my Debian media-services VM running. I verified that Radarr and Sonarr import and sort media with the expected metadata, that Jellyfin automatically refreshes its library and plays new media, and that Seerr's external HTTPS request portal works. I also tested the Gluetun/qBittorrent VPN path for fail-closed behavior and confirmed that it recovered after a full VM reboot. I installed the second 6 TB disk as independent shared storage, deployed Samba, and connected my Windows PC to the authenticated SMB share.
 
-I have added Mealie and Audiobookshelf to the Compose project, but I have not deployed them yet. My remaining work includes verifying hardlinks and mount persistence, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
+I have added Mealie and Audiobookshelf to the Compose project, but I have not deployed them yet. My remaining work includes verifying both storage mounts after a VM reboot, testing the shared folder from my girlfriend's PC after she moves in, verifying hardlinks, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
 
 I use this checklist to separate work I have verified from work I still intend to complete. The evidence log records key milestones and the results I observed.
 
@@ -37,6 +37,20 @@ I use this checklist to separate work I have verified from work I still intend t
 - [ ] I will reboot the Debian VM and confirm that the expected device remains mounted at `/srv/media`.
 - [ ] I will run and record a complete extended SMART self-test during a maintenance window.
 - [ ] I will establish independent backups and perform a restore test.
+
+### Shared storage and Samba
+
+- [x] I installed the second 6 TB Seagate disk in the D4-320 and passed it through to VM 100 as SCSI2.
+- [x] I checked its initial SMART report. The overall assessment passed, the captured error-related attributes were zero, and the drive reported 28°C. No self-test has been recorded yet.
+- [x] I created a GPT partition and ext4 filesystem labeled `shared`.
+- [x] I configured a UUID-based `/etc/fstab` mount at `/srv/shared` and verified it with `mount -a`, `findmnt`, and `df -hT`.
+- [x] I created folders for Games, ISOs, Backups, Documents, Installers, and General.
+- [x] I created the `shared` Linux group (GID 1500), configured setgid directory permissions, and added both Samba identities to the group.
+- [x] I deployed Samba in the media-stack Compose project. The container reached healthy status and publishes TCP 445 on the Debian VM's LAN interface only.
+- [x] I verified both accounts in Samba's account database and completed local SMB authentication and directory write tests for both.
+- [x] I connected my Windows PC to the share and mapped it as a persistent network drive.
+- [ ] I will verify that the shared filesystem and Samba service recover after a full Debian VM reboot.
+- [ ] I will test access from my girlfriend's PC after she moves in.
 
 ## 3. Debian VM and Docker
 
@@ -116,6 +130,7 @@ Public hostnames are masked throughout this repository.
 | 2026-11-16 | Seerr external verification | Request portal, reverse-proxy route, and HTTPS endpoint confirmed working |
 | 2026-11-16 | Docker DNS corrections | Explicit resolvers restored lookups for Radarr, Sonarr, Prowlarr, and NPM |
 | 2026-11-16 | VPN kill-switch and reboot test | Direct-IP egress was blocked with `tun0` down; Gluetun and qBittorrent recovered after recreation and VM reboot |
+| 2026-11-17 | Shared storage and Samba | Installed and passed through second disk; created ext4 `/srv/shared`; deployed authenticated LAN-only SMB share; verified both local SMB accounts and Windows access from my PC |
 | 2026-11-16 | Mealie and Audiobookshelf | Added service definitions to Compose; deployment remains pending |
 | 2026-11-15 | Proxmox installation and update | Installed Proxmox VE 9.2.2, applied updates, rebooted, and verified kernel `7.0.14-29-pve` |
 | 2026-11-15 | Debian VM commissioning | Installed Debian 13.7; verified SSH, DNS, APT, sudo, and QEMU Guest Agent |
