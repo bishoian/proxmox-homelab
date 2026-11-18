@@ -17,7 +17,7 @@ I host this Docker Compose project on my Debian 13 media-services VM at `/opt/me
 | Mealie | Recipes and meal planning | 9925 |
 | Audiobookshelf | Audiobooks and podcasts | 13378 |
 
-I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, and Seerr. I have added Mealie and Audiobookshelf to Compose, but have not deployed them yet.
+I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, Seerr, and Samba. I have prepared Mealie and Audiobookshelf in Compose, but have not deployed them yet.
 
 ## Storage and permissions
 
@@ -47,6 +47,18 @@ I deployed Samba as a separate container in this Compose project. It publishes S
 I verified that the Samba container became healthy, both accounts were present in Samba's account database and shared group, and both accounts could authenticate and create/remove test directories through a local SMB client. I also connected my Windows PC and verified access to the share. I have not tested my girlfriend's separate PC because she has not moved in yet.
 
 The Windows connection uses `\\<Debian-LAN-address>\Shared`; I mapped it as a persistent network drive on my PC. I do not publish the server's private LAN address, disk serials, or filesystem UUIDs here.
+
+## Mealie
+
+I have prepared Mealie as the recipe and meal-planning service for my household. I use the official SQLite-based container configuration, with application data persisted under `./config/mealie` on the VM's NVMe-backed disk. I set PUID/PGID to 1000, restrict open registration, and configure the initial administrator email and base URL through local environment variables.
+
+I will keep Mealie LAN-only during initial setup. Before I consider remote access, I will verify first-run account setup, recipe import, household settings, and persistence after container recreation.
+
+## Audiobookshelf
+
+I have prepared Audiobookshelf for audiobooks and podcasts. Its configuration database and metadata are persisted under `./config/audiobookshelf` on the VM's NVMe-backed disk. I keep the audiobook and podcast libraries on the Seagate media filesystem at `/srv/media/data/audiobooks` and `/srv/media/data/podcasts`, mounted read-only inside the container.
+
+I will create these host directories with UID/GID 1000 access before deployment. I will keep the service LAN-only until I have verified library scanning, playback, user setup, and persistence.
 
 ## Application verification
 
