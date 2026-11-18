@@ -150,8 +150,8 @@ services:
       DEFAULT_HOUSEHOLD: "Family"
       DEFAULT_EMAIL: ${MEALIE_DEFAULT_EMAIL:?Set MEALIE_DEFAULT_EMAIL in the local .env}
       BASE_URL: ${MEALIE_BASE_URL:?Set MEALIE_BASE_URL in the local .env}
-    ports:
-      - "9925:9000/tcp"
+    expose:
+      - "9000"
     volumes:
       - ./config/mealie:/app/data
     deploy:
@@ -169,13 +169,19 @@ services:
       - 8.8.8.8
     environment:
       TZ: America/Chicago
-    ports:
-      - "13378:80/tcp"
+    expose:
+      - "80"
     volumes:
       - ./config/audiobookshelf/config:/config
       - ./config/audiobookshelf/metadata:/metadata
-      - /srv/media/data/audiobooks:/audiobooks
-      - /srv/media/data/podcasts:/podcasts
+      - type: bind
+        source: /srv/media/data/audiobooks
+        target: /audiobooks
+        read_only: true
+      - type: bind
+        source: /srv/media/data/podcasts
+        target: /podcasts
+        read_only: true
     restart: unless-stopped
 
   samba:
