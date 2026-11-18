@@ -38,6 +38,10 @@ I created one GPT partition (`/dev/sdb1`), formatted it as ext4, and labeled it 
     ├── movies/
     ├── tv/
     └── music/
+
+/srv/media/data/
+├── audiobooks/
+└── podcasts/
 ```
 
 I set the directory tree ownership to UID/GID 1000 (`ian:ian`) and directory permissions to `2775` with setgid inheritance. I verified non-root access by running an Alpine container as UID/GID 1000:1000 and creating and deleting a test file through the bind mount.
@@ -64,7 +68,7 @@ I created the `shared` Linux group (GID 1500), added my account and a second acc
 
 I mapped the same host data tree to `/data` in Radarr, Sonarr, and qBittorrent, and mounted the media library read-only at `/media` in Jellyfin. I chose this shared-path layout because keeping downloads and library folders on one filesystem allows hardlinks and atomic moves when paths and permissions are configured consistently.
 
-I have not yet directly verified hardlink/inode behavior. I have separately verified application sorting, metadata, imports, Jellyfin library refresh, and playback.
+I created `/srv/media/data/audiobooks` and `/srv/media/data/podcasts` for Audiobookshelf and assigned them to UID/GID 1000. I have not yet directly verified hardlink/inode behavior. I have separately verified application sorting, metadata, imports, Jellyfin library refresh, and playback.
 
 Application configuration and databases remain on the VM's NVMe-backed system disk. The media disk is separate from the VM's virtual system disk, so a VM backup alone will not protect its contents.
 
