@@ -39,15 +39,15 @@ See [Reverse Proxy](../services/reverse-proxy/README.md) for the current configu
 
 ## Remote household applications
 
-I deployed Mealie and Audiobookshelf and verified that both respond over the existing `media-stack_default` Docker network. I plan to provide remote HTTPS access through Nginx Proxy Manager using separate subdomains, with the public names masked in this repository.
+I deployed Mealie and Audiobookshelf, completed their administrator and first-run setup, and configured separate NPM proxy hosts. I updated and verified their HTTPS certificates and confirmed that both routes work. I mask the public hostnames in this repository.
 
-- Mealie upstream: `http://mealie:9000`. I will set its `BASE_URL` to its final HTTPS hostname and keep open registration disabled.
-- Audiobookshelf upstream: `http://audiobookshelf:80`. I will enable WebSocket Support in NPM for its proxy host.
+- Mealie upstream: `http://mealie:9000`. Its administrator and first-run setup are complete; open registration remains disabled.
+- Audiobookshelf upstream: `http://audiobookshelf:80`. Its NPM proxy host uses WebSocket Support.
 - Public entry point: NPM on TCP 443, with the existing HTTP/ACME entry on TCP 80.
 - DNS: each public subdomain must resolve to my home WAN address. Dynamic DNS is not configured yet, so I must keep the records updated if the address changes.
 - Security: I will use each application's own accounts, create a separate account for my girlfriend, and keep admin interfaces private. I will not expose SMB, NPM administration, or media-management ports to the internet.
 
-I removed direct host-port publications for Mealie and Audiobookshelf in Compose. NPM will be their intended access path. Their NPM proxy hosts, certificate issuance, and external-network testing remain outstanding.
+I removed direct host-port publications for Mealie and Audiobookshelf in Compose. NPM will be their intended access path. Their NPM proxy hosts, HTTPS certificates, and HTTPS routes are configured and verified. Functional library/import/playback and persistence testing remain outstanding.
 
 ## LAN file sharing
 
