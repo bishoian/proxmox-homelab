@@ -37,6 +37,12 @@ I connected NPM to the `media-stack_default` Docker network while retaining its 
 
 See [Reverse Proxy](../services/reverse-proxy/README.md) for the current configuration and [Docker DNS and Reverse Proxy Troubleshooting](../troubleshooting/docker-dns-and-reverse-proxy.md) for the original 502 and DNS issues.
 
+## LAN file sharing
+
+I run Samba in the media-stack Compose project on my Debian VM. It shares the separate filesystem mounted at `/srv/shared` as `Shared` over TCP 445. I bind the published port to the Debian VM's LAN interface rather than exposing it through the reverse proxy or VPN container. I do not forward SMB from the WAN.
+
+I require individual Samba credentials and use a shared Linux group for read/write access. I verified local SMB operations for both configured accounts and connected my Windows PC to the share. I have not tested the second household PC yet. I omit the private LAN address and account credentials from this repository.
+
 ## qBittorrent VPN path
 
 qBittorrent shares Gluetun's network namespace and is bound to `tun0`. Gluetun provides the ExpressVPN OpenVPN tunnel and firewall. Radarr and Sonarr connect to qBittorrent through `gluetun:8080`.
@@ -72,6 +78,8 @@ My VLAN design depends on my router or firewall supporting VLAN interfaces, inte
 
 ## Remaining network tasks
 
+- [ ] I will verify SMB access and automatic reconnection after a Debian VM reboot.
+- [ ] I will test the shared folder from my girlfriend's PC after she moves in.
 - [ ] I will trace the router-to-switch uplink and rack patching.
 - [ ] I will identify the switch model, hardware revision, firmware, and management interface.
 - [ ] I will record switch port assignments and negotiated link speeds.
