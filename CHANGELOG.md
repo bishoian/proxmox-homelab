@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-17
+
+### Household applications deployed
+- I deployed Mealie and Audiobookshelf from the media-stack Compose project.
+- I confirmed that Mealie reported healthy and that both services returned HTTP 200 over `media-stack_default`.
+- I confirmed that the existing Jellyfin and Seerr HTTPS routes continue to work. Mealie and Audiobookshelf still need NPM proxy hosts, first-run setup, and external HTTPS verification.
+
 I use this changelog to record significant milestones in my homelab build. My current configuration and outstanding work are maintained in [Project Status](docs/project-status.md).
 
 ## 2026-11-17
