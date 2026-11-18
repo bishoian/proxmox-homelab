@@ -17,7 +17,7 @@ I host this Docker Compose project on my Debian 13 media-services VM at `/opt/me
 | Mealie | Recipes and meal planning | 9000 (Docker network only) |
 | Audiobookshelf | Audiobooks and podcasts | 80 (Docker network only) |
 
-I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, Seerr, and Samba. I have prepared Mealie and Audiobookshelf in Compose, including their Docker DNS settings and reverse-proxy-only network access, but I have not deployed them yet.
+I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, Seerr, Samba, Mealie, and Audiobookshelf. Mealie reports healthy, and I verified HTTP 200 responses from both Mealie and Audiobookshelf over `media-stack_default`. Their first-run application setup and NPM proxy hosts remain pending.
 
 ## Storage and permissions
 
@@ -50,39 +50,30 @@ The Windows connection uses `\\<Debian-LAN-address>\Shared`; I mapped it as a pe
 
 ## Mealie
 
-I have prepared Mealie as the recipe and meal-planning service for my household. I use the official SQLite-based container configuration, with application data persisted under `./config/mealie` on the VM's NVMe-backed disk. I set PUID/PGID to 1000, restrict open registration, and configure the initial administrator email and HTTPS base URL through local environment variables. I retain explicit DNS resolvers (`1.1.1.1` and `8.8.8.8`) because I previously diagnosed container DNS forwarding failures in this stack.
+I deployed Mealie as the recipe and meal-planning service for my household. I use the official SQLite-based container configuration, with application data persisted under `./config/mealie` on the VM's NVMe-backed disk. I set PUID/PGID to 1000, restrict open registration, and configure the initial administrator email and HTTPS base URL through local environment variables. I retain explicit DNS resolvers (`1.1.1.1` and `8.8.8.8`) because I previously diagnosed container DNS forwarding failures in this stack.
 
 I removed Mealie's direct host-port publication. NPM will reach it over `media-stack_default` at `http://mealie:9000`, while remote users will use its dedicated HTTPS hostname. I will create a separate household account for my girlfriend rather than sharing my administrator login. I will verify first-run setup, recipe import, household membership, HTTPS access, and persistence after container recreation.
 
 ## Audiobookshelf
 
-I have prepared Audiobookshelf for audiobooks and podcasts. Its configuration database and metadata are persisted under `./config/audiobookshelf` on the VM's NVMe-backed disk. I keep the audiobook and podcast libraries on the Seagate media filesystem at `/srv/media/data/audiobooks` and `/srv/media/data/podcasts`, mounted read-only inside the container.
+I deployed Audiobookshelf for audiobooks and podcasts. Its configuration database and metadata are persisted under `./config/audiobookshelf` on the VM's NVMe-backed disk. I keep the audiobook and podcast libraries on the Seagate media filesystem at `/srv/media/data/audiobooks` and `/srv/media/data/podcasts`, mounted read-only inside the container.
 
-I will create these host directories with UID/GID 1000 access before deployment. I will keep the service LAN-only until I have verified library scanning, playback, user setup, and persistence.
+I created the audiobook and podcast host directories and assigned them to UID/GID 1000 before deployment. I have not yet configured its libraries, users, playback, or persistence verification.
 
-## Deployment and remote access setup
+## Deployment and remote access
 
-Before I start the two services, I will:
+I deployed both services after adding their local environment settings and creating the required persistent directories. I validated the Compose configuration, started only `mealie` and `audiobookshelf`, and confirmed that both containers were running. Mealie reported healthy, and temporary curl containers on `media-stack_default` received HTTP 200 from `http://mealie:9000` and `http://audiobookshelf:80`.
 
-1. Update the local `.env` file with my Mealie administrator email and the final HTTPS URL, for example `https://recipes.<my-domain>`. I will not put the real domain or email in the public example file.
-2. Create the Audiobookshelf library directories and make them readable by UID/GID 1000:
+I have not completed first-run setup or created their NPM proxy hosts yet. My next steps are:
 
-   ```bash
-   sudo install -d -o 1000 -g 1000 /srv/media/data/audiobooks /srv/media/data/podcasts
-   ```
+1. Complete Mealie's initial setup and confirm its administrator/household settings.
+2. Create Audiobookshelf's administrator account and configure the audiobook and podcast libraries.
+3. In NPM, create the two proxy hosts documented in [Reverse Proxy](../reverse-proxy/README.md), using Docker service names rather than the VM's LAN IP.
+4. Verify both HTTPS routes from a device outside my LAN.
+5. Create separate household accounts and verify access.
+6. Recreate the containers and confirm that application data persists.
 
-3. Validate the Compose configuration and start the two services:
-
-   ```bash
-   docker compose config --quiet
-   docker compose up -d mealie audiobookshelf
-   docker compose ps
-   ```
-
-4. In NPM, create the two proxy hosts documented in [Reverse Proxy](../reverse-proxy/README.md). I will use the Docker service names as upstream hostnames, not the VM's LAN IP.
-5. Complete first-run setup, create a separate Mealie household account and Audiobookshelf user for my girlfriend, and test access from a device using mobile data or another external network.
-
-I will not mark remote access complete until both HTTPS routes work outside my LAN and both services retain their data after container recreation. I will keep the published application ports removed from Compose so NPM remains the intended entry point.
+I will not mark remote access complete until both HTTPS routes work outside my LAN and both services retain their data after container recreation. I keep direct host-port publications removed so NPM remains the intended entry point.
 
 ## Application verification
 
@@ -113,7 +104,8 @@ ExpressVPN does not provide VPN-server port forwarding, which can limit incoming
 
 - [ ] I will verify the `/srv/shared` mount and Samba service after a full Debian VM reboot.
 - [ ] I will test the share from my girlfriend's PC after she moves in.
-- [ ] I will deploy Mealie and Audiobookshelf, complete first-run setup, and verify persistent storage.
+- [x] I deployed Mealie and Audiobookshelf and verified HTTP 200 responses over `media-stack_default`; Mealie reports healthy.
+- [ ] I will complete first-run setup, configure libraries and household users, and verify persistent storage after container recreation.
 - [ ] I will configure dedicated NPM HTTPS proxy hosts for both apps and test them from an external network.
 - [ ] I will create separate household and audiobook accounts for my girlfriend and verify her remote access.
 - [ ] I will verify hardlink/inode behavior between download and library paths.
