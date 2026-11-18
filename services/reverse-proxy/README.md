@@ -30,11 +30,11 @@ I deployed two additional household applications and am preparing their NPM prox
 | Service | Redacted hostname | Docker upstream | NPM settings | Status |
 |---|---|---|---|---|
 | Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | Deployed; proxy host and HTTPS verification pending |
-| Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Request certificate, enable Force SSL, HTTP/2, and WebSocket Support | Prepared in Compose; proxy host and deployment pending |
+| Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Request certificate, enable Force SSL, HTTP/2, and WebSocket Support | Deployed; proxy host and HTTPS verification pending |
 
 Both services remain on `media-stack_default`, which NPM already joins. I removed their direct host-port publications so the intended public path is NPM on TCP 443 rather than separate exposed application ports. Their Compose DNS settings retain the explicit upstream resolvers I use for containers that need outbound DNS.
 
-For Mealie, I will set the local `MEALIE_BASE_URL` to its final HTTPS URL before deployment. I will keep public registration disabled and create a separate household account for my girlfriend. I will use Mealie's built-in authentication rather than sharing the administrator account.
+For Mealie, I will confirm that the local `MEALIE_BASE_URL` matches its final HTTPS URL before creating the proxy host. I will keep public registration disabled and create a separate household account for my girlfriend. I will use Mealie's built-in authentication rather than sharing the administrator account.
 
 For Audiobookshelf, I will enable WebSocket Support in the NPM proxy-host settings. Audiobookshelf requires WebSocket connections, and its documentation recommends a reverse proxy or VPN for remote access. I will create a separate user with only the library permissions she needs.
 
