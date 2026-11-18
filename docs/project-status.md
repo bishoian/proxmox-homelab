@@ -76,7 +76,7 @@ I use this checklist to separate work I have verified from work I still intend t
 - [x] I verified automatic Jellyfin library refresh without a manual scan.
 - [x] I verified Jellyfin playback using a newly downloaded movie.
 - [ ] I will compare inode numbers between a downloaded file and its library copy to verify whether hardlinks are being used.
-- [ ] I will deploy Mealie and Audiobookshelf, then verify that their data persists across container recreation.
+- [ ] I will deploy Mealie and Audiobookshelf, complete first-run setup, then verify recipe import, library scanning, playback, and data persistence across container recreation.
 - [ ] I will document how I check service health, apply updates, and recover services.
 - [ ] I will configure backups for application configuration and metadata, then test a restore.
 
