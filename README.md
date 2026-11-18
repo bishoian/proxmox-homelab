@@ -14,7 +14,7 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 - **Media VM:** VM 100, Debian 13.7, four vCPUs, 4 GiB RAM, 64 GiB system disk on NVMe-backed `local-lvm`.
 - **Bulk storage:** Two 6 TB Seagate Exos disks in the TerraMaster D4-320, passed through separately to Debian. I use one for media at `/srv/media` and the second for shared storage at `/srv/shared`.
 - **Networking:** RealHD 8-port 2.5GbE managed switch; the M920q's onboard Ethernet currently negotiates at 1 Gbps.
-- **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, Seerr, and Samba are deployed. Mealie and Audiobookshelf are prepared in Compose with explicit DNS and reverse-proxy-only access, but are not yet deployed.
+- **Containers:** Jellyfin, Radarr, Sonarr, Prowlarr, Gluetun, qBittorrent, Seerr, Samba, Mealie, and Audiobookshelf are deployed. Mealie is healthy, and both household applications respond over the shared Docker network.
 - **File sharing:** Samba provides an authenticated SMB share from `/srv/shared` to Windows devices on my LAN.
 - **Remote access:** Nginx Proxy Manager provides verified HTTPS access to Jellyfin and Seerr. Public hostnames are intentionally masked in this repository.
 
@@ -32,13 +32,15 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 - I routed qBittorrent through Gluetun and ExpressVPN. A direct-IP test confirmed that outbound traffic is blocked when the VPN interface is down, and the stack recovered after a full Debian VM reboot.
 - I diagnosed and corrected Docker DNS failures affecting the media applications and Nginx Proxy Manager.
 - I corrected NPM's Docker network connectivity and made its media-network attachment persistent.
+- I deployed Mealie and Audiobookshelf in the media-stack Compose project. I verified Mealie's healthy status and received HTTP 200 responses from both services over `media-stack_default`.
+- I confirmed that the existing Jellyfin and Seerr HTTPS routes continue to work. Mealie and Audiobookshelf do not yet have NPM proxy hosts or verified external HTTPS access.
 
 ## What I plan to do next
 
 - I plan to verify shared-storage and Samba recovery after a full Debian VM reboot, and test access from my girlfriend's PC when she moves in.
-- I plan to deploy Mealie and Audiobookshelf, configure their NPM HTTPS routes, and create separate accounts for remote household access.
+- I plan to configure NPM HTTPS proxy hosts for Mealie and Audiobookshelf, complete first-run setup, and create separate household accounts.
 - I plan to verify hardlink behavior between download and library paths.
-- I will confirm the Seagate mount source after a VM reboot.
+- I will confirm both Seagate mount sources after a VM reboot.
 - I plan to complete an extended SMART test. I stopped the first test at 20%, so I have recorded it as incomplete rather than passed.
 - I plan to establish independent backups and test a restore.
 - I plan to add service monitoring and document my routine maintenance process.
