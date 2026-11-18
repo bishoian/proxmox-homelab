@@ -22,7 +22,9 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 
 - I installed and updated Proxmox VE, then verified the active kernel and package versions after reboot.
 - I built a Debian 13 VM, configured SSH and QEMU Guest Agent, and verified host-to-guest agent communication.
-- I passed the Seagate disk through to Debian, created an ext4 filesystem, configured a UUID-based mount, and validated container write access using UID/GID 1000.
+- I passed the first Seagate disk through to Debian, created an ext4 filesystem, configured a UUID-based mount, and validated container write access using UID/GID 1000.
+- I installed the second Seagate disk, passed it through separately to Debian, created a GPT/ext4 filesystem, and mounted it at `/srv/shared` using a UUID-based `/etc/fstab` entry.
+- I created a shared Linux group and deployed Samba in Docker with separate authenticated accounts. I verified local SMB read/write operations for both accounts and connected my Windows PC to the share.
 - I deployed the Docker media stack and configured connections between Prowlarr, Radarr, Sonarr, qBittorrent, Seerr, and Jellyfin.
 - I verified that Radarr and Sonarr import and sort media correctly with the expected metadata.
 - I verified that Jellyfin automatically refreshes its library and plays newly downloaded media.
