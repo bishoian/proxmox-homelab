@@ -38,7 +38,7 @@ For Mealie, I will set the local `MEALIE_BASE_URL` to its final HTTPS URL before
 
 For Audiobookshelf, I will enable WebSocket Support in the NPM proxy-host settings. Audiobookshelf requires WebSocket connections, and its documentation recommends a reverse proxy or VPN for remote access. I will create a separate user with only the library permissions she needs.
 
-I will create public DNS records for both subdomains pointing to my home WAN address. I will use the existing NPM/Let's Encrypt entry point and the existing router forwards for TCP 80/443; I will not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
+I will create public DNS records for both subdomains pointing to my home WAN address. I will use the existing NPM/Let's Encrypt entry point and the existing router forwards for TCP 80/443; I will not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. For Mealie uploads, I will review NPM's request-body limit if larger recipe imports or image uploads are rejected. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
 
 I will verify each service over HTTPS from a device outside my home LAN before marking remote access complete. I will also confirm that direct access to the old application ports is no longer published.
 
