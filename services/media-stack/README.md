@@ -58,7 +58,7 @@ I removed Mealie's direct host-port publication. NPM reaches it over `media-stac
 
 I deployed Audiobookshelf for audiobooks and podcasts. Its configuration database and metadata are persisted under `./config/audiobookshelf` on the VM's NVMe-backed disk. I keep the audiobook and podcast libraries on the Seagate media filesystem at `/srv/media/data/audiobooks` and `/srv/media/data/podcasts`, mounted read-only inside the container. I completed its administrator and first-run setup, configured its NPM proxy host with WebSocket Support, and verified its HTTPS route.
 
-I created the audiobook and podcast host directories and assigned them to UID/GID 1000 before deployment. I have not yet configured its libraries, users, playback, or persistence verification.
+I created the audiobook and podcast host directories and assigned them to UID/GID 1000 before deployment. I still need to verify library configuration and scanning, playback, and data persistence after container recreation.
 
 ## Deployment and remote access
 
@@ -70,7 +70,7 @@ I completed first-run administrator setup for both applications, configured thei
 2. Configure Audiobookshelf's audiobook and podcast libraries and verify scanning and playback.
 3. Recreate the containers and confirm that application data persists.
 
-I will not mark remote access complete until both HTTPS routes work outside my LAN and both services retain their data after container recreation. I keep direct host-port publications removed so NPM remains the intended entry point.
+I have verified both HTTPS routes. I will continue validating application functionality and data persistence after container recreation. I keep direct host-port publications removed so NPM remains the intended entry point.
 
 ## Application verification
 
