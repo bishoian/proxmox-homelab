@@ -37,6 +37,18 @@ I connected NPM to the `media-stack_default` Docker network while retaining its 
 
 See [Reverse Proxy](../services/reverse-proxy/README.md) for the current configuration and [Docker DNS and Reverse Proxy Troubleshooting](../troubleshooting/docker-dns-and-reverse-proxy.md) for the original 502 and DNS issues.
 
+## Remote household applications
+
+I plan to provide remote HTTPS access to Mealie and Audiobookshelf through Nginx Proxy Manager. I will use separate subdomains, with the public names masked in this repository, and route both services over the existing `media-stack_default` Docker network.
+
+- Mealie upstream: `http://mealie:9000`. I will set its `BASE_URL` to its final HTTPS hostname and keep open registration disabled.
+- Audiobookshelf upstream: `http://audiobookshelf:80`. I will enable WebSocket Support in NPM for its proxy host.
+- Public entry point: NPM on TCP 443, with the existing HTTP/ACME entry on TCP 80.
+- DNS: each public subdomain must resolve to my home WAN address. Dynamic DNS is not configured yet, so I must keep the records updated if the address changes.
+- Security: I will use each application's own accounts, create a separate account for my girlfriend, and keep admin interfaces private. I will not expose SMB, NPM administration, or media-management ports to the internet.
+
+I removed direct host-port publications for Mealie and Audiobookshelf in Compose. NPM will be their intended access path. Deployment, certificate issuance, and testing from an external network remain outstanding.
+
 ## LAN file sharing
 
 I run Samba in the media-stack Compose project on my Debian VM. It shares the separate filesystem mounted at `/srv/shared` as `Shared` over TCP 445. I bind the published port to the Debian VM's LAN interface rather than exposing it through the reverse proxy or VPN container. I do not forward SMB from the WAN.
