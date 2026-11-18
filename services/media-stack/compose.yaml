@@ -175,3 +175,20 @@ services:
       - /srv/media/data/audiobooks:/audiobooks
       - /srv/media/data/podcasts:/podcasts
     restart: unless-stopped
+
+  samba:
+    image: ghcr.io/servercontainers/samba:smbd-only-latest
+    container_name: samba
+    restart: unless-stopped
+    env_file:
+      - ./samba-accounts.env
+    environment:
+      SAMBA_CONF_WORKGROUP: WORKGROUP
+      SAMBA_CONF_SERVER_STRING: Media Server Shared Storage
+      SAMBA_CONF_LOG_LEVEL: "2"
+      SAMBA_VOLUME_CONFIG_shared: >-
+        [Shared]; path=/shares/shared; valid users = ian, <SECOND_SAMBA_USER>; guest ok = no; read only = no; browseable = yes; force group = shared; create mask = 0660; directory mask = 2770; inherit permissions = yes
+    volumes:
+      - /srv/shared:/shares/shared
+    ports:
+      - "${SAMBA_BIND_IP:?Set SAMBA_BIND_IP in the local .env}:445:445/tcp"
