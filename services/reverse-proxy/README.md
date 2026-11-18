@@ -30,7 +30,7 @@ I deployed two additional household applications and configured their NPM proxy 
 | Service | Redacted hostname | Docker upstream | NPM settings | Status |
 |---|---|---|---|---|
 | Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | HTTPS certificate and route verified |
-| Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Request certificate, enable Force SSL, HTTP/2, and WebSocket Support | Deployed; proxy host and HTTPS verification pending |
+| Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Force SSL, HTTP/2, and WebSocket Support | HTTPS certificate and route verified |
 
 Both services remain on `media-stack_default`, which NPM already joins. I removed their direct host-port publications so the intended public path is NPM on TCP 443 rather than separate exposed application ports. Their Compose DNS settings retain the explicit upstream resolvers I use for containers that need outbound DNS.
 
@@ -38,7 +38,7 @@ For Mealie, I configured the application through its administrator and first-run
 
 For Audiobookshelf, I configured its NPM proxy host with WebSocket Support and verified the HTTPS route. I completed its administrator and first-run setup. I will verify library scanning and playback.
 
-I will create public DNS records for both subdomains pointing to my home WAN address. I will use the existing NPM/Let's Encrypt entry point and the existing router forwards for TCP 80/443; I will not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. For Mealie uploads, I will review NPM's request-body limit if larger recipe imports or image uploads are rejected. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
+The public DNS records for both subdomains resolve to my home WAN address, and I verified their HTTPS routes through NPM. I use the existing NPM/Let's Encrypt entry point and router forwards for TCP 80/443; I do not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. For Mealie uploads, I will review NPM's request-body limit if larger recipe imports or image uploads are rejected. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
 
 Both services are running and respond over `media-stack_default`; Mealie reports healthy. I completed administrator and first-run setup for both applications, configured their NPM proxy hosts, and verified their HTTPS certificates and routes. I will continue with functional library/import/playback testing and persistence checks. I will also confirm that direct access to application ports is not published.
 
