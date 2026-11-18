@@ -1,6 +1,7 @@
 # Local credentials and environment overrides
 **/samba-accounts.env
 **/*-accounts.env
+**/*-accounts.env*
 .env
 .env.*
 **/.env
