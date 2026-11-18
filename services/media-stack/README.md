@@ -14,10 +14,10 @@ I host this Docker Compose project on my Debian 13 media-services VM at `/opt/me
 | Gluetun | ExpressVPN gateway and firewall | Shared with qBittorrent |
 | Seerr | Media request portal | 5055 |
 | Samba | Authenticated LAN file sharing for `/srv/shared` | 445 (LAN only) |
-| Mealie | Recipes and meal planning | 9925 |
-| Audiobookshelf | Audiobooks and podcasts | 13378 |
+| Mealie | Recipes and meal planning | 9000 (Docker network only) |
+| Audiobookshelf | Audiobooks and podcasts | 80 (Docker network only) |
 
-I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, Seerr, and Samba. I have prepared Mealie and Audiobookshelf in Compose, but have not deployed them yet.
+I have deployed Jellyfin, Radarr, Sonarr, Prowlarr, qBittorrent, Gluetun, Seerr, and Samba. I have prepared Mealie and Audiobookshelf in Compose, including their Docker DNS settings and reverse-proxy-only network access, but I have not deployed them yet.
 
 ## Storage and permissions
 
@@ -50,9 +50,9 @@ The Windows connection uses `\\<Debian-LAN-address>\Shared`; I mapped it as a pe
 
 ## Mealie
 
-I have prepared Mealie as the recipe and meal-planning service for my household. I use the official SQLite-based container configuration, with application data persisted under `./config/mealie` on the VM's NVMe-backed disk. I set PUID/PGID to 1000, restrict open registration, and configure the initial administrator email and base URL through local environment variables.
+I have prepared Mealie as the recipe and meal-planning service for my household. I use the official SQLite-based container configuration, with application data persisted under `./config/mealie` on the VM's NVMe-backed disk. I set PUID/PGID to 1000, restrict open registration, and configure the initial administrator email and HTTPS base URL through local environment variables. I retain explicit DNS resolvers (`1.1.1.1` and `8.8.8.8`) because I previously diagnosed container DNS forwarding failures in this stack.
 
-I will keep Mealie LAN-only during initial setup. Before I consider remote access, I will verify first-run account setup, recipe import, household settings, and persistence after container recreation.
+I removed Mealie's direct host-port publication. NPM will reach it over `media-stack_default` at `http://mealie:9000`, while remote users will use its dedicated HTTPS hostname. I will create a separate household account for my girlfriend rather than sharing my administrator login. I will verify first-run setup, recipe import, household membership, HTTPS access, and persistence after container recreation.
 
 ## Audiobookshelf
 
@@ -90,6 +90,8 @@ ExpressVPN does not provide VPN-server port forwarding, which can limit incoming
 - [ ] I will verify the `/srv/shared` mount and Samba service after a full Debian VM reboot.
 - [ ] I will test the share from my girlfriend's PC after she moves in.
 - [ ] I will deploy Mealie and Audiobookshelf, complete first-run setup, and verify persistent storage.
+- [ ] I will configure dedicated NPM HTTPS proxy hosts for both apps and test them from an external network.
+- [ ] I will create separate household and audiobook accounts for my girlfriend and verify her remote access.
 - [ ] I will verify hardlink/inode behavior between download and library paths.
 - [ ] I will repeat the VPN outage test after future Gluetun or qBittorrent image updates.
 - [ ] I will document my routine service updates, health checks, and recovery process.
