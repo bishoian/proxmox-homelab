@@ -25,22 +25,22 @@ Public hostnames are intentionally masked. TLS terminates at NPM; upstream traff
 
 ## Planned household services
 
-I deployed two additional household applications and am preparing their NPM proxy hosts for remote access. I will use separate subdomains under my existing domain and keep the actual hostnames masked in this repository:
+I deployed two additional household applications and configured their NPM proxy hosts. I updated and verified both HTTPS certificates and confirmed that both routes work. I use separate subdomains under my existing domain and keep the actual hostnames masked in this repository:
 
 | Service | Redacted hostname | Docker upstream | NPM settings | Status |
 |---|---|---|---|---|
-| Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | Deployed; proxy host and HTTPS verification pending |
+| Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | HTTPS certificate and route verified |
 | Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Request certificate, enable Force SSL, HTTP/2, and WebSocket Support | Deployed; proxy host and HTTPS verification pending |
 
 Both services remain on `media-stack_default`, which NPM already joins. I removed their direct host-port publications so the intended public path is NPM on TCP 443 rather than separate exposed application ports. Their Compose DNS settings retain the explicit upstream resolvers I use for containers that need outbound DNS.
 
-For Mealie, I will confirm that the local `MEALIE_BASE_URL` matches its final HTTPS URL before creating the proxy host. I will keep public registration disabled and create a separate household account for my girlfriend. I will use Mealie's built-in authentication rather than sharing the administrator account.
+For Mealie, I configured the application through its administrator and first-run setup. I will verify recipe import and household functionality, and keep public registration disabled.
 
-For Audiobookshelf, I will enable WebSocket Support in the NPM proxy-host settings. Audiobookshelf requires WebSocket connections, and its documentation recommends a reverse proxy or VPN for remote access. I will create a separate user with only the library permissions she needs.
+For Audiobookshelf, I configured its NPM proxy host with WebSocket Support and verified the HTTPS route. I completed its administrator and first-run setup. I will verify library scanning and playback.
 
 I will create public DNS records for both subdomains pointing to my home WAN address. I will use the existing NPM/Let's Encrypt entry point and the existing router forwards for TCP 80/443; I will not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. For Mealie uploads, I will review NPM's request-body limit if larger recipe imports or image uploads are rejected. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
 
-Both services are running and respond over `media-stack_default`; Mealie reports healthy. I have not yet created their NPM proxy hosts or verified their HTTPS routes. I will test each service from outside my home LAN before marking remote access complete. I will also confirm that direct access to application ports is not published.
+Both services are running and respond over `media-stack_default`; Mealie reports healthy. I completed administrator and first-run setup for both applications, configured their NPM proxy hosts, and verified their HTTPS certificates and routes. I will continue with functional library/import/playback testing and persistence checks. I will also confirm that direct access to application ports is not published.
 
 ## Docker network
 
@@ -81,7 +81,8 @@ See [Docker DNS and reverse-proxy troubleshooting](../../troubleshooting/docker-
 - [x] NPM resolves the Let's Encrypt API.
 - [ ] I will reboot my Debian VM and verify that NPM remains attached to both Docker networks.
 - [ ] I will select and test a Dynamic DNS updater.
-- [ ] I will create DNS records and NPM HTTPS proxy hosts for Mealie and Audiobookshelf.
-- [ ] I will test both household services over HTTPS from an external network.
-- [ ] I will complete first-run setup and verify each application's authentication and persistent data.
+- [x] I configured DNS records and NPM HTTPS proxy hosts for Mealie and Audiobookshelf.
+- [x] I updated and verified both HTTPS certificates and routes.
+- [x] I completed administrator and first-run setup for both applications.
+- [ ] I will verify recipe import, library scanning, playback, and persistent data after container recreation.
 - [ ] I will review my router's port-forwarding rules and document which services I expose publicly.
