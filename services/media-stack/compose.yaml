@@ -174,13 +174,8 @@ services:
     volumes:
       - ./config/audiobookshelf/config:/config
       - ./config/audiobookshelf/metadata:/metadata
-      - type: bind
-        source: /srv/media/data/audiobooks
-        target: /audiobooks
-        read_only: true
-      - type: bind
-        source: /srv/media/data/podcasts
-        target: /podcasts
+      - /srv/media/data/audiobooks:/audiobooks
+      - /srv/media/data/podcasts:/podcasts
     restart: unless-stopped
 
   samba:
