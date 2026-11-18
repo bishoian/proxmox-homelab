@@ -5,7 +5,7 @@
 
 I have Proxmox VE and my Debian media-services VM running. I verified that Radarr and Sonarr import and sort media with the expected metadata, that Jellyfin automatically refreshes its library and plays new media, and that Seerr's external HTTPS request portal works. I also tested the Gluetun/qBittorrent VPN path for fail-closed behavior and confirmed that it recovered after a full VM reboot. I installed the second 6 TB disk as independent shared storage, deployed Samba, and connected my Windows PC to the authenticated SMB share.
 
-I have added Mealie and Audiobookshelf to the Compose project, but I have not deployed them yet. My remaining work includes verifying both storage mounts after a VM reboot, testing the shared folder from my girlfriend's PC after she moves in, verifying hardlinks, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
+I have prepared Mealie and Audiobookshelf in Compose with explicit DNS resolvers and reverse-proxy-only access, but I have not deployed them yet. I have documented their intended NPM HTTPS routes; DNS records, proxy hosts, certificates, first-run setup, and external testing remain outstanding. My remaining work includes verifying both storage mounts after a VM reboot, testing the shared folder from my girlfriend's PC after she moves in, verifying hardlinks, establishing backups and monitoring, selecting Dynamic DNS, deploying Pi-hole, and documenting my network.
 
 I use this checklist to separate work I have verified from work I still intend to complete. The evidence log records key milestones and the results I observed.
 
@@ -88,6 +88,8 @@ I use this checklist to separate work I have verified from work I still intend t
 - [x] I connected NPM to `media-stack_default` and made the attachment persistent in its Compose project.
 - [x] I verified that NPM remains attached to both Docker networks after container recreation.
 - [x] I corrected NPM container DNS resolution for the Let's Encrypt API.
+- [ ] I will configure Mealie and Audiobookshelf proxy hosts on NPM, with WebSocket support enabled for Audiobookshelf.
+- [ ] I will verify both household apps over HTTPS from outside my LAN.
 - [ ] I will reboot the Debian VM and confirm that NPM reconnects to both Docker networks.
 - [ ] I will choose a Dynamic DNS provider and test that its updater follows changes to my WAN address.
 - [ ] I plan to deploy Pi-hole for LAN DNS filtering and local records.
