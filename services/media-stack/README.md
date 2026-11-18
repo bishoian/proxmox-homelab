@@ -13,6 +13,7 @@ I host this Docker Compose project on my Debian 13 media-services VM at `/opt/me
 | qBittorrent | Download client | 8080 via Gluetun |
 | Gluetun | ExpressVPN gateway and firewall | Shared with qBittorrent |
 | Seerr | Media request portal | 5055 |
+| Samba | Authenticated LAN file sharing for `/srv/shared` | 445 (LAN only) |
 | Mealie | Recipes and meal planning | 9925 |
 | Audiobookshelf | Audiobooks and podcasts | 13378 |
 
@@ -36,6 +37,16 @@ I keep the Compose definition in version control at [compose.yaml](compose.yaml)
 Use the VM's LAN address with the ports above. These administration interfaces should remain LAN-only. Do not forward them directly from the router. qBittorrent's Web UI is published through Gluetun on TCP 8080; Radarr and Sonarr connect to it at `http://gluetun:8080`.
 
 Replace qBittorrent's temporary first-start administrator password during setup. Never commit credentials.
+
+## Shared storage and Samba
+
+I added the second D4-320 disk as a separate ext4 filesystem mounted at `/srv/shared`. I keep it independent from the media/download filesystem at `/srv/media`. I created top-level folders for Games, ISOs, Backups, Documents, Installers, and General.
+
+I deployed Samba as a separate container in this Compose project. It publishes SMB over TCP 445 on the Debian VM's LAN interface only and shares `/srv/shared` as `Shared`. I require individual credentials, disable guest access, and grant both accounts access through a shared Linux group (GID 1500). The account environment file is stored only on the VM, protected as root-owned mode `600`, and excluded from Git.
+
+I verified that the Samba container became healthy, both accounts were present in Samba's account database and shared group, and both accounts could authenticate and create/remove test directories through a local SMB client. I also connected my Windows PC and verified access to the share. I have not tested my girlfriend's separate PC because she has not moved in yet.
+
+The Windows connection uses `\\<Debian-LAN-address>\Shared`; I mapped it as a persistent network drive on my PC. I do not publish the server's private LAN address, disk serials, or filesystem UUIDs here.
 
 ## Application verification
 
@@ -64,6 +75,8 @@ ExpressVPN does not provide VPN-server port forwarding, which can limit incoming
 
 ## Remaining work
 
+- [ ] I will verify the `/srv/shared` mount and Samba service after a full Debian VM reboot.
+- [ ] I will test the share from my girlfriend's PC after she moves in.
 - [ ] I will deploy Mealie and Audiobookshelf, complete first-run setup, and verify persistent storage.
 - [ ] I will verify hardlink/inode behavior between download and library paths.
 - [ ] I will repeat the VPN outage test after future Gluetun or qBittorrent image updates.
