@@ -2,13 +2,13 @@
 
 **Host:** Lenovo ThinkCentre M920q Tiny  
 **Enclosure:** TerraMaster D4-320 USB DAS  
-**Data disk:** 1 × Seagate Exos ST6000NM0115, 6 TB  
+**Data disks:** 2 × Seagate Exos ST6000NM0115, 6 TB each  
 **Consumer:** Debian media-services VM 100  
-**Status:** Configured and in use; reboot mount-source verification and independent backup planning remain open.
+**Status:** Media and shared-storage filesystems are configured; reboot mount-source verification and independent backup planning remain open.
 
 ## Design
 
-I dedicated the first 6 TB disk to media and downloads for my Debian VM. I have reserved the second matching disk for later expansion. The initial design uses a standalone ext4 filesystem, not RAID, MergerFS, or a pooled volume.
+I dedicated the first 6 TB disk to media and downloads for my Debian VM and installed the second matching disk as independent shared storage. Each disk has its own standalone ext4 filesystem. I have not configured RAID, MergerFS, or a pooled volume.
 
 I pass the physical disk through to VM 100 as SCSI1 using a persistent `/dev/disk/by-id` identifier. I omit the exact identifier and serial from this public repository. Debian manages the partition table, filesystem, mount, and directories.
 
@@ -17,8 +17,8 @@ I pass the physical disk through to VM 100 as SCSI1 using a persistent `/dev/dis
 | Device | Location | Purpose |
 |---|---|---|
 | Lenovo 256 GB NVMe | Proxmox host | Hypervisor and Debian VM system disk |
-| First Seagate Exos 6 TB | D4-320, passed through to Debian | Media library and downloads |
-| Second Seagate Exos 6 TB | Reserved | Future expansion |
+| First Seagate Exos 6 TB | D4-320, passed through to Debian as SCSI1 | Media library and downloads at `/srv/media` |
+| Second Seagate Exos 6 TB | D4-320, passed through to Debian as SCSI2 | Shared files at `/srv/shared` |
 
 ## Filesystem and directory layout
 
@@ -41,6 +41,24 @@ I created one GPT partition (`/dev/sdb1`), formatted it as ext4, and labeled it 
 ```
 
 I set the directory tree ownership to UID/GID 1000 (`ian:ian`) and directory permissions to `2775` with setgid inheritance. I verified non-root access by running an Alpine container as UID/GID 1000:1000 and creating and deleting a test file through the bind mount.
+
+## Shared storage
+
+I passed the second disk through to VM 100 as a separate SCSI device. In Debian, I created one GPT partition, formatted it as ext4, and labeled it `shared`. I configured a UUID-based `/etc/fstab` entry for `/srv/shared` and verified the mount with `mount -a`, `findmnt`, and `df -hT`. I have not yet verified the mount after a full VM reboot.
+
+I created this directory structure:
+
+```text
+/srv/shared/
+├── Games/
+├── ISOs/
+├── Backups/
+├── Documents/
+├── Installers/
+└── General/
+```
+
+I created the `shared` Linux group (GID 1500), added my account and a second account to it, and configured the shared directories with group ownership and setgid permissions. I deployed Samba in Docker to publish the `Shared` SMB share over TCP 445 on the LAN interface. I verified local SMB read/write access for both accounts and connected my Windows PC. The second household PC has not been tested yet.
 
 ## Container path strategy
 
@@ -65,6 +83,11 @@ The initial SMART overall status was `PASSED`, and the captured attributes showe
 - [x] Configure and test the UUID-based `/etc/fstab` mount at `/srv/media`.
 - [x] Create the shared directory structure and configure UID/GID 1000 permissions.
 - [x] Verify non-root container write access.
-- [ ] I will reboot my Debian VM and confirm that the expected disk remains mounted at `/srv/media`.
+- [x] Install the second 6 TB disk and pass it through to VM 100 as SCSI2.
+- [x] Create a GPT/ext4 filesystem labeled `shared` and configure its UUID-based mount at `/srv/shared`.
+- [x] Create shared directories and configure group-based permissions for Samba access.
+- [x] Deploy Samba and verify authenticated local SMB access for both accounts and Windows access from my PC.
+- [ ] I will reboot my Debian VM and confirm that both expected disks remain mounted at `/srv/media` and `/srv/shared`.
+- [ ] I will verify Samba starts and the Windows share reconnects after the VM reboot.
 - [ ] I will compare inode numbers between a downloaded file and its library copy to verify hardlink behavior.
 - [ ] I will define and test independent backups for my VM configuration and important media data.
