@@ -148,6 +148,8 @@ services:
       ALLOW_SIGNUP: "false"
       DEFAULT_GROUP: "Home"
       DEFAULT_HOUSEHOLD: "Family"
+      DEFAULT_EMAIL: ${MEALIE_DEFAULT_EMAIL:?Set MEALIE_DEFAULT_EMAIL in the local .env}
+      BASE_URL: ${MEALIE_BASE_URL:?Set MEALIE_BASE_URL in the local .env}
     ports:
       - "9925:9000/tcp"
     volumes:
@@ -172,8 +174,13 @@ services:
     volumes:
       - ./config/audiobookshelf/config:/config
       - ./config/audiobookshelf/metadata:/metadata
-      - /srv/media/data/audiobooks:/audiobooks
-      - /srv/media/data/podcasts:/podcasts
+      - type: bind
+        source: /srv/media/data/audiobooks
+        target: /audiobooks
+        read_only: true
+      - type: bind
+        source: /srv/media/data/podcasts
+        target: /podcasts
     restart: unless-stopped
 
   samba:
