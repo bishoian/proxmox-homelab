@@ -2,10 +2,12 @@
 
 ## 2026-11-17
 
-### Household applications deployed
+### Household applications configured and exposed over HTTPS
 - I deployed Mealie and Audiobookshelf from the media-stack Compose project.
 - I confirmed that Mealie reported healthy and that both services returned HTTP 200 over `media-stack_default`.
-- I confirmed that the existing Jellyfin and Seerr HTTPS routes continue to work. Mealie and Audiobookshelf still need NPM proxy hosts, first-run setup, and external HTTPS verification.
+- I completed administrator and first-run setup for both applications.
+- I configured their NPM proxy hosts, updated and verified their HTTPS certificates, and confirmed that both HTTPS routes work.
+- Functional recipe import, audiobook/podcast library scanning, playback, and persistence checks remain on my validation list.
 
 I use this changelog to record significant milestones in my homelab build. My current configuration and outstanding work are maintained in [Project Status](docs/project-status.md).
 
@@ -24,7 +26,7 @@ I use this changelog to record significant milestones in my homelab build. My cu
 - I retained the explicit Docker DNS resolvers for Mealie and Audiobookshelf.
 - I removed their direct host-port publications so Nginx Proxy Manager is their intended access path.
 - I configured Audiobookshelf's library mounts as read-only and documented its required WebSocket proxy setting.
-- At this point, I had prepared their Compose definitions and documented separate HTTPS hostnames, account setup, and external-network verification. I deployed both services later, as recorded in the entry above; their NPM proxy hosts and external HTTPS tests remain pending.
+- At this point, I had prepared their Compose definitions and documented separate HTTPS hostnames, account setup, and external-network verification. I deployed and configured both services later, as recorded in the newer entry above.
 
 ## 2026-11-16
 
