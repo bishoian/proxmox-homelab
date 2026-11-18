@@ -60,6 +60,30 @@ I have prepared Audiobookshelf for audiobooks and podcasts. Its configuration da
 
 I will create these host directories with UID/GID 1000 access before deployment. I will keep the service LAN-only until I have verified library scanning, playback, user setup, and persistence.
 
+## Deployment and remote access setup
+
+Before I start the two services, I will:
+
+1. Update the local `.env` file with my Mealie administrator email and the final HTTPS URL, for example `https://recipes.<my-domain>`. I will not put the real domain or email in the public example file.
+2. Create the Audiobookshelf library directories and make them readable by UID/GID 1000:
+
+   ```bash
+   sudo install -d -o 1000 -g 1000 /srv/media/data/audiobooks /srv/media/data/podcasts
+   ```
+
+3. Validate the Compose configuration and start the two services:
+
+   ```bash
+   docker compose config --quiet
+   docker compose up -d mealie audiobookshelf
+   docker compose ps
+   ```
+
+4. In NPM, create the two proxy hosts documented in [Reverse Proxy](../reverse-proxy/README.md). I will use the Docker service names as upstream hostnames, not the VM's LAN IP.
+5. Complete first-run setup, create a separate Mealie household account and Audiobookshelf user for my girlfriend, and test access from a device using mobile data or another external network.
+
+I will not mark remote access complete until both HTTPS routes work outside my LAN and both services retain their data after container recreation. I will keep the published application ports removed from Compose so NPM remains the intended entry point.
+
 ## Application verification
 
 - I verified that Radarr and Sonarr import and sort media with the expected metadata.
