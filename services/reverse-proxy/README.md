@@ -25,11 +25,11 @@ Public hostnames are intentionally masked. TLS terminates at NPM; upstream traff
 
 ## Planned household services
 
-I am preparing two additional NPM proxy hosts for remote household access. I will use separate subdomains under my existing domain and keep the actual hostnames masked in this repository:
+I deployed two additional household applications and am preparing their NPM proxy hosts for remote access. I will use separate subdomains under my existing domain and keep the actual hostnames masked in this repository:
 
 | Service | Redacted hostname | Docker upstream | NPM settings | Status |
 |---|---|---|---|---|
-| Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | Prepared in Compose; proxy host and deployment pending |
+| Mealie | `recipes.m*******.com` | `http://mealie:9000` | Request certificate, enable Force SSL and HTTP/2 | Deployed; proxy host and HTTPS verification pending |
 | Audiobookshelf | `books.m*******.com` | `http://audiobookshelf:80` | Request certificate, enable Force SSL, HTTP/2, and WebSocket Support | Prepared in Compose; proxy host and deployment pending |
 
 Both services remain on `media-stack_default`, which NPM already joins. I removed their direct host-port publications so the intended public path is NPM on TCP 443 rather than separate exposed application ports. Their Compose DNS settings retain the explicit upstream resolvers I use for containers that need outbound DNS.
@@ -40,7 +40,7 @@ For Audiobookshelf, I will enable WebSocket Support in the NPM proxy-host settin
 
 I will create public DNS records for both subdomains pointing to my home WAN address. I will use the existing NPM/Let's Encrypt entry point and the existing router forwards for TCP 80/443; I will not forward the application ports, NPM's administration port 81, SMB 445, or any media-management interface. For Mealie uploads, I will review NPM's request-body limit if larger recipe imports or image uploads are rejected. Since I have not deployed Dynamic DNS yet, I will need to keep the public records current if my WAN address changes.
 
-I will verify each service over HTTPS from a device outside my home LAN before marking remote access complete. I will also confirm that direct access to the old application ports is no longer published.
+Both services are running and respond over `media-stack_default`; Mealie reports healthy. I have not yet created their NPM proxy hosts or verified their HTTPS routes. I will test each service from outside my home LAN before marking remote access complete. I will also confirm that direct access to application ports is not published.
 
 ## Docker network
 
@@ -83,4 +83,5 @@ See [Docker DNS and reverse-proxy troubleshooting](../../troubleshooting/docker-
 - [ ] I will select and test a Dynamic DNS updater.
 - [ ] I will create DNS records and NPM HTTPS proxy hosts for Mealie and Audiobookshelf.
 - [ ] I will test both household services over HTTPS from an external network.
+- [ ] I will complete first-run setup and verify each application's authentication and persistent data.
 - [ ] I will review my router's port-forwarding rules and document which services I expose publicly.
