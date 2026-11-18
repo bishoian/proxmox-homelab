@@ -90,5 +90,5 @@ The initial SMART overall status was `PASSED`, and the captured attributes showe
 - [ ] I will reboot my Debian VM and confirm that both expected disks remain mounted at `/srv/media` and `/srv/shared`.
 - [ ] I will verify Samba starts and the Windows share reconnects after the VM reboot.
 - [ ] I will compare inode numbers between a downloaded file and its library copy to verify hardlink behavior.
-- [x] I created the `audiobooks` and `podcasts` library paths for Audiobookshelf.
+- [ ] I will create `/srv/media/data/audiobooks` and `/srv/media/data/podcasts` with UID/GID 1000 access before starting Audiobookshelf.
 - [ ] I will define and test independent backups for my VM configuration and important media data.
