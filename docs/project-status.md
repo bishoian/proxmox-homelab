@@ -23,7 +23,7 @@ I use this checklist to separate work I have verified from work I still intend t
 
 ## 2. Storage
 
-- [x] I connected the TerraMaster D4-320 and confirmed that Proxmox detected the installed Seagate Exos disk.
+- [x] I connected the TerraMaster D4-320 and confirmed that Proxmox detected both installed Seagate Exos disks.
 - [x] I reviewed the initial SMART attributes and recorded the overall `PASSED` status.
 - [x] I recorded the extended SMART test as aborted at 80% remaining. This is incomplete, not a pass.
 - [x] I identified the disk by a persistent host-side `/dev/disk/by-id` path.
