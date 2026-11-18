@@ -54,7 +54,7 @@ I use a Lenovo ThinkCentre M920q Tiny as my Proxmox host. A Debian VM runs my me
 | Switch | RealHD, 8 × 2.5GbE and 1 × 10G SFP+ |
 | Rack | GeeekPi DeskPi RackMate T1 Plus, 8U, 10-inch |
 
-The D4-320 is direct-attached storage, not a NAS. The first disk is dedicated to the Debian VM; no RAID or pooled storage is configured.
+The D4-320 is direct-attached storage, not a NAS. I pass both disks independently to Debian: one backs `/srv/media`, and the other backs `/srv/shared`. I have not configured RAID or pooled storage.
 
 ## Architecture
 
@@ -73,8 +73,10 @@ Debian 13 VM (media-server)
    |                         \
 Docker media stack            Nginx Proxy Manager
    |                         |
-Seagate ext4 storage          HTTPS reverse proxy
-   |
+Media + Samba services        HTTPS reverse proxy
+   |             \
+Media ext4      Shared ext4
+   |             |
 TerraMaster D4-320 (USB)
 ```
 
