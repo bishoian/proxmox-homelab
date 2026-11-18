@@ -2,6 +2,15 @@
 
 I use this changelog to record significant milestones in my homelab build. My current configuration and outstanding work are maintained in [Project Status](docs/project-status.md).
 
+## 2026-11-17
+
+### Shared storage and LAN file sharing
+- I installed the second 6 TB Seagate disk in the D4-320, passed it through to Debian VM 100 as a separate SCSI device, and checked its initial SMART status.
+- I created a GPT partition and ext4 filesystem labeled `shared`, then configured a UUID-based mount at `/srv/shared`.
+- I created a shared Linux group and directory structure for games, disc images, backups, documents, installers, and general files.
+- I deployed Samba in the media-stack Compose project with separate authenticated accounts and LAN-only SMB access.
+- I verified local SMB read/write operations for both accounts and connected my Windows PC to the share. My girlfriend's separate-PC test remains pending until she moves in.
+
 ## 2026-11-16
 
 ### Media stack verification
