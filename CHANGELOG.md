@@ -20,11 +20,11 @@ I use this changelog to record significant milestones in my homelab build. My cu
 
 ## 2026-11-17
 
-### Household services prepared for remote access
+### Household services prepared for deployment
 - I retained the explicit Docker DNS resolvers for Mealie and Audiobookshelf.
 - I removed their direct host-port publications so Nginx Proxy Manager is their intended access path.
 - I configured Audiobookshelf's library mounts as read-only and documented its required WebSocket proxy setting.
-- I documented separate HTTPS hostnames, account setup, and external-network verification. The services and proxy hosts have not yet been deployed or tested remotely.
+- At this point, I had prepared their Compose definitions and documented separate HTTPS hostnames, account setup, and external-network verification. I deployed both services later, as recorded in the entry above; their NPM proxy hosts and external HTTPS tests remain pending.
 
 ## 2026-11-16
 
